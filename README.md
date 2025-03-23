@@ -1,6 +1,7 @@
 # Audio-Synthesizer
 
-Kenneth Gordon
-Bryant Watson
-Hayoung Im
-Adrian Sucahyo
+## Group Members
+- Kenneth Gordon
+- Bryant Watson
+- Hayoung Im
+- Adrian Sucahyo
