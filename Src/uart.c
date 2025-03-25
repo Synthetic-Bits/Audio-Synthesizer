@@ -56,7 +56,7 @@ void configureUART1(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     HAL_GPIO_Init(GPIOB, &initStr);
 
     // Set the baud rate of communication to the one specified by the user.
-    USART1->BRR = 0x0000FFFF & (HAL_RCC_GetHCLKFreq() / baudRate);
+    USART1->BRR = (HAL_RCC_GetHCLKFreq() / baudRate) & 0x0000FFFF;
 
     // Enable the receive register not empty interrupt (if interrupts are enabled).
     if (enableInterrupts == UART_ENABLE_INTERRUPTS)
@@ -98,7 +98,7 @@ void configureUART2(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     HAL_GPIO_Init(GPIOA, &initStr);
 
     // Set the baud rate of communication to the one specified by the user.
-    USART2->BRR = 0x0000FFFF & (HAL_RCC_GetHCLKFreq() / baudRate);
+    USART2->BRR = (HAL_RCC_GetHCLKFreq() / baudRate) & 0x0000FFFF;
 
     // Enable the receive register not empty interrupt (if interrupts are enabled).
     if (enableInterrupts == UART_ENABLE_INTERRUPTS)
@@ -199,22 +199,17 @@ void testUART()
     initializeLEDs();
 
     // Configure the UART peripherals.
-    // configureUART1(115200, UART_ENABLE_INTERRUPTS, 2);
-    configureUART2(115200, UART_ENABLE_INTERRUPTS, 2);
+    configureUART1(115200, UART_DISABLE_INTERRUPTS, 2);
+    configureUART2(115200, UART_DISABLE_INTERRUPTS, 2);
 
-    char *test = "HIIIII!";
-    sendUART2(test);
-    receiveUART2Blocking(5, test);
+    // Send data from UART1 to UART2 and see if it was successfully sent and received.
+    char *testDataUART1 = "Hello from UART1!\n\r";
+    sendUART1(testDataUART1);
 
-    // // Send data from UART1 to UART2 and see if it was successfully sent and received.
-    // char *testDataUART1 = "Hello from UART1!\n\r";
-    // sendUART1(testDataUART1);
-
-    // char test[5];
-    // receiveUART1Blocking(5, test);
+    char test[5];
+    receiveUART1Blocking(5, test);
 
     /*
-
     int index = 0;
     char currentCharacter = testDataUART1[index];
     while(currentCharacter != '\x0')
