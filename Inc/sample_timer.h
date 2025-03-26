@@ -18,8 +18,6 @@
 #ifndef _SAMPLE_TIMER_H_
 #define _SAMPLE_TIMER_H_
 
-#define SAMPLE_FREQUENCY (uint16_t)(0x1 << 14) // 16,384 Samples / Second
-
 typedef void (*sample_timer_cb_t)(uint16_t count);
 
 /* ========================================================================== */
@@ -27,6 +25,11 @@ typedef void (*sample_timer_cb_t)(uint16_t count);
 /*    Control Functions                                                       */
 /*                                                                            */
 /* ========================================================================== */
+
+/**
+ * @brief Reset the current count in the sample timer
+ */
+void sample_timer_reset();
 
 /**
  * @brief Halt the sample timer
@@ -51,13 +54,7 @@ void sample_timer_start();
 uint8_t sample_timer_register_cb(sample_timer_cb_t cb);
 
 /**
- * @brief Setup all the control registers for the Sample Timer
- * @note Must be called before sample_timer_init()
- */
-void sample_timer_setup();
-
-/**
- * @brief Intialize the sample timer component()
+ * @brief Intialize the sample timer component
  */
 void sample_timer_init();
 
