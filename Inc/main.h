@@ -1,3 +1,12 @@
+/**
+ * main.h
+ * 
+ * This file contains the public defines and definitions for the synthesizer's main code file.
+ * 
+ * Authors:  Kenneth Gordon, Bryant Watson, Hayoung Im, and Adrian Sucahyo
+ * Date:  March 25, 2025
+ */
+
 #pragma once
 #include <stdint.h>
 
@@ -11,6 +20,7 @@ void HAL_RCC_GPIOC_CLK_Enable(void);
 // USART
 void HAL_RCC_USART1_CLK_Enable(void);
 void HAL_RCC_USART2_CLK_Enable(void);
+void HAL_RCC_USART3_CLK_Enable(void);
 
 // -=-= Misc Configuration Functions =-=-
 

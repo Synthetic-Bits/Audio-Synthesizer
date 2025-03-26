@@ -1,14 +1,28 @@
+/**
+ * uart.c
+ * 
+ * This file contains the implementations for the synthesizer's UART functions.
+ * 
+ * Authors:  Kenneth Gordon, Bryant Watson, Hayoung Im, and Adrian Sucahyo
+ * Date:  March 25, 2025
+ */
+
+// C includes
 #include "assert.h"
 #include "gpio.h"
 #include "main.h"
 #include "uart.h"
 #include <stm32f0xx_hal.h>
 
-// Defines for the TX and RX pins of UART1 and UART2
+// Defines for the TX pins of UART1, UART2, and UART3
 #define UART1_TX_PIN GPIO_PIN_6
 #define UART2_TX_PIN GPIO_PIN_2
+#define UART3_TX_PIN GPIO_PIN_4
+
+// Defines for the RX pins of UART1, UART2, and UART3
 #define UART1_RX_PIN GPIO_PIN_7
 #define UART2_RX_PIN GPIO_PIN_3
+#define UART3_RX_PIN GPIO_PIN_5
 
 // Define the size of the globalReceiveBuffer
 #define GLOBAL_RECEIVE_BUFFER_SIZE 1024
@@ -33,6 +47,18 @@ void USART2_IRQHandler()
 {
     // Add the received data to the global buffer.
     globalReceiveBuffer[globalReceiveBufferIndex] = USART2->RDR;
+
+    // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
+    globalReceiveBufferIndex++;
+
+    // Check that the buffer hasn't overflown
+    assert(globalReceiveBufferIndex < GLOBAL_RECEIVE_BUFFER_SIZE);
+}
+
+void USART3_4_IRQHandler()
+{
+    // Add the received data to the global buffer.
+    globalReceiveBuffer[globalReceiveBufferIndex] = USART3->RDR;
 
     // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
     globalReceiveBufferIndex++;
@@ -125,6 +151,48 @@ void configureUART2(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     }
 }
 
+void configureUART3(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority)
+{
+    // Enable the RCC for GPIOC and USART3.
+    HAL_RCC_GPIOC_CLK_Enable();
+    HAL_RCC_USART3_CLK_Enable();
+
+    // Set the GPIO pins for TX (PC4) and RX (PC5) into AF mode.
+    GPIO_InitTypeDef initStr = {UART3_TX_PIN | UART3_RX_PIN,
+                                GPIO_MODE_AF_PP,
+                                GPIO_NOPULL,
+                                GPIO_SPEED_FREQ_LOW,
+                                GPIO_AF1_USART3};
+    HAL_GPIO_Init(GPIOC, &initStr);
+
+    // Set the baud rate of communication to the one specified by the user.
+    USART3->BRR = (HAL_RCC_GetHCLKFreq() / baudRate) & 0x0000FFFF;
+
+    // Enable the receive register not empty interrupt (if interrupts are enabled).
+    if (enableInterrupts == UART_ENABLE_INTERRUPTS)
+    {
+        USART3->CR1 &= ~(USART_CR1_RXNEIE);
+        USART3->CR1 |=   USART_CR1_RXNEIE;
+    }
+
+    // Enable the transmitter and receiver hardware in USART3.
+    USART3->CR1 &= ~(USART_CR1_TE);
+    USART3->CR1 |=   USART_CR1_TE;
+    USART3->CR1 &= ~(USART_CR1_RE);
+    USART3->CR1 |=   USART_CR1_RE;
+
+    // Enable the USART3 peripheral.
+    USART3->CR1 &= ~(USART_CR1_UE);
+    USART3->CR1 |=   USART_CR1_UE;
+
+    // Lastly, enable the USART3 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
+    if (enableInterrupts == UART_ENABLE_INTERRUPTS)
+    {
+        NVIC_EnableIRQ(USART3_4_IRQn);
+        NVIC_SetPriority(USART3_4_IRQn, interruptPriority);
+    }
+}
+
 void sendUART1(char *sendBuffer)
 {
     int index = 0;
@@ -163,6 +231,25 @@ void sendUART2(char *sendBuffer)
     }
 }
 
+void sendUART3(char *sendBuffer)
+{
+    int index = 0;
+    char currentByte = sendBuffer[index];
+    while (currentByte != '\x0')
+    {
+        // Wait for the transmit register to be empty by polling the TXE bit in the ISR.
+        while (!(USART3->ISR & USART_ISR_TXE))
+            __NOP();
+
+        // Write the characterToSend into the TDR.
+        USART3->TDR = currentByte;
+
+        // Prepare the loop for the next byte.
+        index++;
+        currentByte = sendBuffer[index];
+    }    
+}
+
 void receiveUART1Blocking(int nBytes, char *receiveBuffer)
 {
     // Loop until all of the bytes have been read.
@@ -193,21 +280,42 @@ void receiveUART2Blocking(int nBytes,  char *receiveBuffer)
     }
 }
 
-void testUART()
+void receiveUART3Blocking(int nBytes, char *receiveBuffer)
+{
+    // Loop until all of the bytes have been read.
+    for (int i = 0; i < nBytes; i++)
+    {
+        // Wait for the transmit register to be empty by polling the RXNE bit in the ISR.
+        while(!(USART3->ISR & USART_ISR_RXNE))
+            __NOP();
+
+        // Save the receivedByte in the receiveBuffer.
+        char receivedByte = USART3->RDR;
+        receiveBuffer[i] = receivedByte;
+    }    
+}
+
+void testUART(void)
 {
     // Initialize the LEDs for debugging.
     initializeLEDs();
 
     // Configure the UART peripherals.
-    configureUART1(115200, UART_DISABLE_INTERRUPTS, 2);
-    configureUART2(115200, UART_DISABLE_INTERRUPTS, 2);
+    configureUART3(115200, UART_ENABLE_INTERRUPTS, 2);
 
-    // Send data from UART1 to UART2 and see if it was successfully sent and received.
-    char *testDataUART1 = "Hello from UART1!\n\r";
-    sendUART1(testDataUART1);
+    // Send information through USART3
+    char *dataToSend = "This is test text!\n\r";
+    sendUART3(dataToSend);
 
-    char test[5];
-    receiveUART1Blocking(5, test);
+    while (globalReceiveBufferIndex < 10)
+        __NOP();
+
+    // Read the information received by the interrupt
+    for (int i = 0; i < globalReceiveBufferIndex; i++)
+    {
+        char currentChar = globalReceiveBuffer[i];
+        sendUART3(&currentChar);
+    }
 
     /*
     int index = 0;
