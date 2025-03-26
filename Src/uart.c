@@ -295,7 +295,7 @@ void receiveUART3Blocking(int nBytes, char *receiveBuffer)
     }    
 }
 
-void testUART(void)
+void testUART1_2(void)
 {
     // Initialize the LEDs for debugging.
     initializeLEDs();

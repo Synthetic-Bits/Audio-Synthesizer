@@ -42,7 +42,7 @@ int main(void)
   SystemClock_Config();
 
   // Make sure that the UART code works!
-  testUART();
+  testUART1_2();
   
   while(1)
   {
