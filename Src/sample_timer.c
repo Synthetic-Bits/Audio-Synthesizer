@@ -6,7 +6,7 @@
  ******************************************************************************
  * @attention
  *
- * Copyright (c) 2025 Sythetic Bits.
+ * Copyright (c) 2025 Synthetic Bits.
  * All rights reserved.
  *
  * This software is licensed under terms that can be found in the LICENSE file
@@ -32,10 +32,9 @@
 void sample_timer_stop();
 void sample_timer_start();
 
-void __sample_timer_handler(uint16_t counter);
+static void __sample_timer_handler(uint16_t counter);
 
-uint8_t sample_timer_register_cb(sample_timer_cb_t cb);
-void sample_timer_setup();
+void sample_timer_register_cb(sample_timer_cb_t cb);
 void sample_timer_init();
 
 /* ========================================================================== */
@@ -44,11 +43,11 @@ void sample_timer_init();
 /*                                                                            */
 /* ========================================================================== */
 
-#define SAMPLE_TIMER        TIM2
-#define SAMPLE_TIMER_IRQ    TIM2_IRQn // Ensure to update the IRQ cb if necessary
+#define SAMPLE_TIMER TIM2
+#define SAMPLE_TIMER_IRQ TIM2_IRQn // Ensure to update the IRQ cb if necessary
 
-#define SAMPLE_TIMER_PSC (1)
-#define SAMPLE_TIMER_ARR (2928) // 16 kHz
+#define SAMPLE_TIMER_PSC (0)
+#define SAMPLE_TIMER_ARR (2927) // 16 kHz
 
 static sample_timer_cb_t event_cb = __sample_timer_handler;
 
@@ -62,8 +61,9 @@ static volatile uint16_t counter;
 
 void TIM2_IRQHandler()
 {
-    SAMPLE_TIMER->SR &= ~(0x0001); // Clear the interrupt request
-    event_cb(counter);
+  SAMPLE_TIMER->SR &= ~(0x0001); // Clear the interrupt request
+  event_cb(counter);
+  counter++;
 }
 
 /* ========================================================================== */
@@ -74,17 +74,17 @@ void TIM2_IRQHandler()
 
 void sample_timer_reset()
 {
-    counter = 0;
+  counter = 0;
 }
 
 void sample_timer_stop()
 {
-    SAMPLE_TIMER->CR1 &= ~(0x0001); // Disable the Timer
+  SAMPLE_TIMER->CR1 &= ~(0x0001); // Disable the Timer
 }
 
 void sample_timer_start()
 {
-    SAMPLE_TIMER->CR1 |= (0x1); // Enable the Timer
+  SAMPLE_TIMER->CR1 |= (0x1); // Enable the Timer
 }
 
 /* ========================================================================== */
@@ -101,19 +101,22 @@ static void __sample_timer_handler(uint16_t counter)
   return;
 }
 
-uint8_t sample_timer_register_cb(sample_timer_cb_t cb)
+void sample_timer_register_cb(sample_timer_cb_t cb)
 {
-    event_cb = cb;
+  event_cb = cb;
 }
 
 void sample_timer_init()
 {
-    SAMPLE_TIMER->PSC = SAMPLE_TIMER_PSC;
-    SAMPLE_TIMER->ARR = SAMPLE_TIMER_ARR;
+  // Enable the RCC for the Timer
+  HAL_RCC_TIM2_CLK_Enable();
 
-    counter = 0;
+  SAMPLE_TIMER->PSC = SAMPLE_TIMER_PSC;
+  SAMPLE_TIMER->ARR = SAMPLE_TIMER_ARR;
 
-    SAMPLE_TIMER->DIER |= (0x1); // Enable the UDE
+  counter = 0;
 
-    NVIC_EnableIRQ(SAMPLE_TIMER_IRQ);
+  SAMPLE_TIMER->DIER |= (0x1); // Enable the UDE
+
+  NVIC_EnableIRQ(SAMPLE_TIMER_IRQ);
 }

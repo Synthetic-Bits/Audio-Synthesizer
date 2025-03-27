@@ -51,7 +51,7 @@ void sample_timer_start();
  * @brief Register the Sample Timer Update Callback
  * @param cb Pointer to the function to invoke when timer is updated
  */
-uint8_t sample_timer_register_cb(sample_timer_cb_t cb);
+void sample_timer_register_cb(sample_timer_cb_t cb);
 
 /**
  * @brief Intialize the sample timer component

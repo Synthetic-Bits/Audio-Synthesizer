@@ -2,6 +2,46 @@
 #include <stm32f0xx_hal.h>
 
 /**
+ * @brief Enable the GPIOA Clock using the RCC.
+ */
+void HAL_RCC_GPIOA_CLK_Enable()
+{
+  RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+}
+
+/**
+ * @brief Enable the GPIOB Clock using the RCC.
+ */
+void HAL_RCC_GPIOB_CLK_Enable()
+{
+  RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+}
+
+/**
+ * @brief Enable the GPIOC Clock using the RCC.
+ */
+void HAL_RCC_GPIOC_CLK_Enable()
+{
+  RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
+}
+
+/**
+ * @brief Enable the RCC Clock for TIM2
+ */
+void HAL_RCC_TIM2_CLK_Enable()
+{
+  RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
+}
+
+/**
+ * @brief Enable the RCC Clock for TIM3
+ */
+void HAL_RCC_TIM3_CLK_Enable()
+{
+  RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
+}
+
+/**
   * @brief  This function is executed in case of error occurrence.
   * @param  None
   * @retval None
