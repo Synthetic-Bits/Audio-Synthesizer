@@ -23,7 +23,7 @@
 
 #include "sample_timer.h"
 #include "channel_common.h"
-#include "channel1_timer.h"
+#include "channel1_4_timer.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -33,7 +33,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-extern volatile channel_state_t channel1_state;
+extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -41,7 +41,7 @@ extern volatile channel_state_t channel1_state;
 
 void sample_timer_handler(uint16_t counter)
 {
-  channel1_update();
+  channel1_4_update();
 }
 
 /* ========================================================================== */
@@ -59,22 +59,52 @@ int main(void)
   sample_timer_init();
   
   // ==== OUTPUT CHANNELS ====
-  // Channel 1
-  channel1_timer_init();
+  // Channels 1 - 4
+  channel1_4_timer_init();
 
   // Channel 1 Settings
-  channel1_enable();
-  channel1_set_waveform(WAVEFORM_SINE);
-  channel1_on_off(1);
-  channel1_frequency(20);
-  channel1_volume(127);
+  channel1_4_enable(CHANNEL1);
+  channel1_4_set_waveform(CHANNEL1, WAVEFORM_SINE);
+  channel1_4_on_off(CHANNEL1, 1);
+  channel1_4_frequency(CHANNEL1, 100);
+  channel1_4_volume(CHANNEL1, 127);
 
+  // Channel 2 Settings
+  channel1_4_enable(CHANNEL2);
+  channel1_4_set_waveform(CHANNEL2, WAVEFORM_TRIG);
+  channel1_4_on_off(CHANNEL2, 1);
+  channel1_4_frequency(CHANNEL2, 100);
+  channel1_4_volume(CHANNEL2, 127);
+
+  // Channel 3 Settings
+  channel1_4_enable(CHANNEL3);
+  channel1_4_set_waveform(CHANNEL3, WAVEFORM_RAMP);
+  channel1_4_on_off(CHANNEL3, 1);
+  channel1_4_frequency(CHANNEL3, 100);
+  channel1_4_volume(CHANNEL3, 127);
+
+  // Channel 4 Settings
+  channel1_4_enable(CHANNEL4);
+  channel1_4_set_waveform(CHANNEL4, WAVEFORM_SQUARE);
+  channel1_4_on_off(CHANNEL4, 1);
+  channel1_4_frequency(CHANNEL4, 100);
+  channel1_4_volume(CHANNEL4, 127);
+
+  // Start the sample timer (advance the sampled waveforms)
   sample_timer_start();
+
+  uint16_t current_f = 100;
 
   while(1)
   {
-    HAL_Delay(50);
-    channel1_state.freq += 20;
-    channel1_state.freq = channel1_state.freq % 10000;
+    HAL_Delay(100);
+
+    current_f += 100;
+    current_f = current_f % 10000;
+
+    channel1_state.freq = current_f;
+    channel2_state.freq = current_f;
+    channel3_state.freq = current_f;
+    channel4_state.freq = current_f;
   };
 }

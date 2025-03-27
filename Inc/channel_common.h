@@ -26,6 +26,16 @@
     WAVEFORM_SQUARE
  } waveforms_t;
 
+ typedef enum
+ {
+     CHANNEL1,
+     CHANNEL2,
+     CHANNEL3,
+     CHANNEL4,
+     CHANNEL5,
+     CHANNEL6
+ } channel_t;
+
  typedef struct
  {
     uint32_t count;
@@ -33,7 +43,9 @@
     uint8_t vol;
     uint8_t on_off;
     uint8_t enabled;
+    channel_t channel;
     waveforms_t waveform;
+    const unsigned char *waveform_data;
  } channel_state_t;
 
  #endif /* _CHANNEL_COMMON_H_ */
