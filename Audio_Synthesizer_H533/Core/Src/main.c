@@ -2,6 +2,7 @@
  ******************************************************************************
  * @file           : main.c
  * @brief          : Main program body
+ * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson, Hayoung In
  ******************************************************************************
  * @attention
  *
