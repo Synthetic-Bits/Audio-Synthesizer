@@ -67,7 +67,7 @@ GenerateClassCluster=0
 DocumentUniqueId=YPCTKUSS
 
 [Document2]
-DocumentPath=..\..\..\Altium-Component-Library\Components\TD.PcbLib
+DocumentPath=..\..\..\..\Altium-Component-Library\Components\TD.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -84,7 +84,7 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document3]
-DocumentPath=..\..\..\Altium-Component-Library\Components\TD.SchLib
+DocumentPath=..\..\..\..\Altium-Component-Library\Components\TD.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
