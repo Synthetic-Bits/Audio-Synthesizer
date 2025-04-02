@@ -10,8 +10,8 @@
  
  #include <stdlib.h>
  #include <stdint.h>
- #include "channel_common.h"  // channel_t, waveforms_t 등 포함
- #include "audio_config.h"    // SAMPLE_FREQUENCY, MIDI_MAX_VAL 등 포함
+ #include "channel_common.h"
+ #include "audio_config.h"
  
  /* Exported Functions --------------------------------------------------------*/
  
