@@ -60,14 +60,14 @@ typedef struct {
     uint16_t channel;
     uint16_t keynumber;
     uint16_t velocity;
-    // uint16_t forceonkey;
-    // uint16_t addressofcontrol;
-    // uint16_t valueofcontroloutput;
-    // uint16_t programmeselect;
-    // uint16_t pressurevalue;
-    // uint16_t pitchbendmsb;
-    // uint16_t pitchbendlsb;
-    // uint16_t number_of_channels;
+    uint16_t forceonkey;
+    uint16_t addressofcontrol;
+    uint16_t valueofcontroloutput;
+    uint16_t programmeselect;
+    uint16_t pressurevalue;
+    uint16_t pitchbendmsb;
+    uint16_t pitchbendlsb;
+    uint16_t number_of_channels;
 } MIDI;
 
 //------------------------------------------------------------------------------
@@ -77,41 +77,41 @@ static uint16_t inline get_statuscode(char data[])
 }
 
 //helper functions--------------------------------------------------------------
-/*
-static void channel_mode_messages_handler(char data[]){ //inline????
-    if((data[index + 1] == 0b01111010) && (data[index + 2] == 0b00000000))
-    {
-        //printf("Local Control  Off\n");
-        //Local Control  Off
-    }
-    if((data[index + 1] == 0b01111010) && (data[index + 2] == 0b01111111))
-    {
-        //printf("Local Control  On\n");
-        //Local Control  On
-    }
-    if((data[index + 1] == 0b01111011) && (data[index + 2] == 0b00000000))
-    {
-        //printf("All Notes Off\n");
-        //All Notes Off
-    }
-    if((data[index + 1] == 0b01111100) && (data[index + 2] == 0b00000000))
-    {
-        //printf("Omni Mode Off\n");
-        //Omni Mode Off
-    }
-    if((data[index + 1] == 0b01111101) && (data[index + 2] == 0b00000000))
-    {
-        //printf("Omni Mode ON\n");
-        //Omni Mode ON
-    }
-    if(data[index + 1] == 0b01111110)
-    {
-        number_of_channels = (data[index + 2] & NUMBER_OF_CHANNELS_msk);
-        //printf("Mono mode On\n\tnumber of channels:0x%02X\n", number_of_channels);
-        //Mono mode On
-    }
+
+static void channel_mode_messages_handler(char data[], MIDI midi){ //inline????
+    // if((data[index + 1] == 0b01111010) && (data[index + 2] == 0b00000000))
+    // {
+    //     //printf("Local Control  Off\n");
+    //     //Local Control  Off
+    // }
+    // if((data[index + 1] == 0b01111010) && (data[index + 2] == 0b01111111))
+    // {
+    //     //printf("Local Control  On\n");
+    //     //Local Control  On
+    // }
+    // if((data[index + 1] == 0b01111011) && (data[index + 2] == 0b00000000))
+    // {
+    //     //printf("All Notes Off\n");
+    //     //All Notes Off
+    // }
+    // if((data[index + 1] == 0b01111100) && (data[index + 2] == 0b00000000))
+    // {
+    //     //printf("Omni Mode Off\n");
+    //     //Omni Mode Off
+    // }
+    // if((data[index + 1] == 0b01111101) && (data[index + 2] == 0b00000000))
+    // {
+    //     //printf("Omni Mode ON\n");
+    //     //Omni Mode ON
+    // }
+    // if(data[index + 1] == 0b01111110)
+    // {
+    //     number_of_channels = (data[index + 2] & NUMBER_OF_CHANNELS_msk);
+    //     //printf("Mono mode On\n\tnumber of channels:0x%02X\n", number_of_channels);
+    //     //Mono mode On
+    // }
 }
-static void system_message_handler(char data[]){
+static void system_message_handler(char data[], MIDI midi){
     uint16_t message_type = data[index] & 0x0f;
     switch(message_type)
     {
@@ -152,8 +152,9 @@ static void system_message_handler(char data[]){
             //printf("SYSTEM_RESET\n");
             break;
     }
+    index++;
 }
-*/
+
 
 //inline functions--------------------------------------------------------------
 MIDI set_channel(char data[], MIDI midi)
@@ -174,50 +175,50 @@ MIDI set_velocity(char data[], MIDI midi)
     index++;
     return midi;
 }
-/*
+
 MIDI set_forceonkey(char data[], MIDI midi)
 {
-    forceonkey = (data[index] & FORCEONKEY_msk);
+    midi.forceonkey = (data[index] & FORCEONKEY_msk);
     index++;
     return midi;
 }
 MIDI set_addressofcontrol(char data[], MIDI midi)
 {
-    addressofcontrol = (data[index] & ADDRESS_OF_CONTROL_msk);
+    midi.addressofcontrol = (data[index] & ADDRESS_OF_CONTROL_msk);
     index++;
     return midi;
 }
 MIDI set_valueofcontroloutput(char data[], MIDI midi)
 {
-    valueofcontroloutput = (data[index] & VALUE_OF_CONTROL_OUTPUT_msk);
+    midi.valueofcontroloutput = (data[index] & VALUE_OF_CONTROL_OUTPUT_msk);
     index++;
     return midi;
 }
 MIDI set_programmeselect(char data[], MIDI midi)
 {
-    programmeselect = (data[index] & PROGRAMME_SELECT_msk);
+    midi.programmeselect = (data[index] & PROGRAMME_SELECT_msk);
     index++;
     return midi;
 }
 MIDI set_pressurevalue(char data[], MIDI midi)
 {
-    pressurevalue = (data[index] & PRESSURE_VALUE_msk);
+    midi.pressurevalue = (data[index] & PRESSURE_VALUE_msk);
     index++;
     return midi;
 }
 MIDI set_pitchbendlsb(char data[], MIDI midi)
 {
-    pitchbendlsb = (data[index] & PITCH_BEND_LSB_msk);
+    midi.pitchbendlsb = (data[index] & PITCH_BEND_LSB_msk);
     index++;
     return midi;
 }
 MIDI set_pitchbendmsb(char data[], MIDI midi)
 {
-    pitchbendmsb = (data[index] & PITCH_BEND_MSB_msk);
+    midi.pitchbendmsb = (data[index] & PITCH_BEND_MSB_msk);
     index++;
     return midi;
 }
-*/
+
 
 //main function------------------------------------------------------------------
 MIDI get_midi(char data[]) 
@@ -228,26 +229,28 @@ MIDI get_midi(char data[])
     {
         switch(get_statuscode(data))
         {
-            // case SYSTEM_MESSAGE:
-            //     //TODO
-            //     break;
+            case SYSTEM_MESSAGE:
+                system_message_handler(data, midi);
+                //TODO
+                break;
             case NOTE_ON_EVENT: 
                 midi = set_channel(data, midi);
                 midi = set_keynumber(data, midi);
                 midi = set_velocity(data, midi);
                 if(midi.keynumber == 0x24) {
-                    HAL_GPIO_WritePin(PORT_LED, PIN_LED_RED, 1);
+                    HAL_GPIO_WritePin(PORT_LED, PIN_LED_RED, GPIO_PIN_SET);
+                    //Red LED ON
                 }
                 else if (midi.keynumber == 0x25){
-                    HAL_GPIO_WritePin(PIN_LED_GREEN, PIN_LED_RED, 1);
+                    HAL_GPIO_WritePin(PORT_LED, PIN_LED_GREEN, GPIO_PIN_SET);
                     //Greed LED ON
                 }
                 else if (midi.keynumber == 0x26){
-                    HAL_GPIO_WritePin(PIN_LED_BLUE, PIN_LED_RED, 1);
+                    HAL_GPIO_WritePin(PORT_LED, PIN_LED_BLUE, GPIO_PIN_SET);
                     //Blue LED ON
                 }
                 else if (midi.keynumber == 0x27){
-                    HAL_GPIO_WritePin(PIN_LED_ORANGE, PIN_LED_RED, 1);
+                    HAL_GPIO_WritePin(PORT_LED, PIN_LED_ORANGE, GPIO_PIN_SET);
                     //Orange LED ON
                 }
                 //printf("NOTE_ON_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity); 
@@ -272,39 +275,37 @@ MIDI get_midi(char data[])
                     //Orange LED ON
                 }
                 //printf("NOTE_OFF_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity); 
-                break;
-            /*    
+                break;   
             case POLYPHONIC_KEY_PRESSURE:
-                set_channel(data);
-                set_keynumber(data);
-                set_forceonkey(data);
+                set_channel(data, midi);
+                set_keynumber(data, midi);
+                set_forceonkey(data, midi);
                 //printf("POLYPHONIC_KEY_PRESSURE: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tforceonkey:0x%02X\n\n", channel, keynumber,forceonkey); 
                 break;
             case CONTROL_CHANGE:
-                set_channel(data);
+                set_channel(data, midi);
 
-                channel_mode_messages_handler(data); //
+                channel_mode_messages_handler(data, midi); //
 
-                set_addressofcontrol(data);
-                set_valueofcontroloutput(data);
+                set_addressofcontrol(data, midi);
+                set_valueofcontroloutput(data, midi);
                 //printf("CONTROL_CHANGE: \n\tchannel:0x%02X\n\taddress of control:0x%02X\n\tvalue of controloutput:0x%02X\n\n", channel, addressofcontrol, forceonkey); 
             case PROGRAM_CHANGE: 
-                set_channel(data);
-                set_programmeselect(data);
+                set_channel(data, midi);
+                set_programmeselect(data, midi);
                 //printf("PROGRAM_CHANGE \n\tchannel:0x%02X\n\taddress of control:0x%02X\n\n", channel,programmeselect); 
                 break;
             case CHANNEL_PRESSURE: 
-                set_channel(data);
-                set_pressurevalue(data);
+                set_channel(data, midi);
+                set_pressurevalue(data, midi);
                 //printf("PROGRAM_CHANGE: \n\tchannel:0x%02X\n\tpressurevalue:0x%02X\n\n", channel, pressurevalue); 
                 break;
             case PITCH_BEND: 
-                set_channel(data);
-                set_pitchbendlsb(data);
-                set_pitchbendmsb(data);
+                set_channel(data, midi);
+                set_pitchbendlsb(data, midi);
+                set_pitchbendmsb(data, midi);
                 //printf("PITCH_BEND: \n\tchannel:0x%02X\n\tpitch bend lsb_msk:0x%02X\n\tpitch bend msb_msk:0x%02X\n\n", channel, pitchbendlsb, pitchbendmsb); 
                 break;
-            */
         }
     }
 

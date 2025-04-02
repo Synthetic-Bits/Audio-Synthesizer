@@ -24,6 +24,7 @@
 
 #include "uart.h"
 #include "midi.h"
+#include "gpio.h"
 
 #include "sample_timer.h"
 #include "channel_common.h"
@@ -39,7 +40,7 @@
 
 extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state;
 extern volatile int globalReceiveBufferIndex;
-extern volatile char globalReceiveBuffer[1024];
+extern volatile char globalReceiveBuffer[];
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -53,14 +54,17 @@ void sample_timer_handler(uint16_t counter)
 void checkpoint_1()
 {
   // Create a constant that holds the size of UART packets
-  const int packetSize = 2;
+  const int packetSize = 8;
+
+  // Configure the LEDs
+  initializeLEDs();
 
   // Configure the UART3 peripheral to get MIDI signals
   configureUART3(115200, UART_ENABLE_INTERRUPTS, 2);
 
   while (1)
   {
-    if (globalReceiveBufferIndex > packetSize)
+    if (globalReceiveBufferIndex >= packetSize)
     {
       // Reset the global receive buffer's index
       globalReceiveBufferIndex = 0;
