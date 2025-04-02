@@ -236,18 +236,18 @@ MIDI get_midi(char data[])
                 midi = set_keynumber(data, midi);
                 midi = set_velocity(data, midi);
                 if(midi.keynumber == 0x24) {
-                    HAL_GPIO_TogglePin(PORT_LED, PIN_LED_RED);
+                    HAL_GPIO_WritePin(PORT_LED, PIN_LED_RED, 1);
                 }
                 else if (midi.keynumber == 0x25){
-                    HAL_GPIO_TogglePin(PORT_LED, PIN_LED_RED);
+                    HAL_GPIO_WritePin(PIN_LED_GREEN, PIN_LED_RED, 1);
                     //Greed LED ON
                 }
                 else if (midi.keynumber == 0x26){
-                    HAL_GPIO_TogglePin(PORT_LED, PIN_LED_RED);
+                    HAL_GPIO_WritePin(PIN_LED_BLUE, PIN_LED_RED, 1);
                     //Blue LED ON
                 }
                 else if (midi.keynumber == 0x27){
-                    HAL_GPIO_TogglePin(PORT_LED, PIN_LED_RED);
+                    HAL_GPIO_WritePin(PIN_LED_ORANGE, PIN_LED_RED, 1);
                     //Orange LED ON
                 }
                 //printf("NOTE_ON_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity); 
@@ -257,16 +257,19 @@ MIDI get_midi(char data[])
                 midi = set_keynumber(data, midi);
                 midi = set_velocity(data, midi);
                 if(midi.keynumber == 0x24) {
-                    //Red LED OFF
+                    HAL_GPIO_WritePin(PORT_LED, PIN_LED_RED, 0);
                 }
                 else if (midi.keynumber == 0x25){
-                    //Greed LED OFF
+                    HAL_GPIO_WritePin(PIN_LED_GREEN, PIN_LED_RED, 0);
+                    //Greed LED ON
                 }
                 else if (midi.keynumber == 0x26){
-                    //Blue LED OFF
+                    HAL_GPIO_WritePin(PIN_LED_BLUE, PIN_LED_RED, 0);
+                    //Blue LED ON
                 }
                 else if (midi.keynumber == 0x27){
-                    //Orange LED OFF
+                    HAL_GPIO_WritePin(PIN_LED_ORANGE, PIN_LED_RED, 0);
+                    //Orange LED ON
                 }
                 //printf("NOTE_OFF_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity); 
                 break;
@@ -307,8 +310,3 @@ MIDI get_midi(char data[])
 
     return midi;
 }
-
-// int main(){
-//     char data[7] = {0b10010000, 0b00100100, 0b01000000, 0b10010000, 0b00100101, 0b01000000, 0b00000000}; 
-//     get_midi(data);
-// }
