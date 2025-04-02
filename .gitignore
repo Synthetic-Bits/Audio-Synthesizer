@@ -1,7 +1,6 @@
 build
 *.elf
 *.bin
-.vscode
 *.o
 *.i
 *.d

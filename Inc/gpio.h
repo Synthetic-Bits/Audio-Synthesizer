@@ -1,35 +1,37 @@
 /**
  ******************************************************************************
- * @file           : main.h
- * @brief          : Main Header
+ * @file           : gpio.h
+ * @brief          : GPIO Interface Header
  ******************************************************************************
  */
 
 /* Includes ------------------------------------------------------------------*/
 
-#pragma once
-#include <stdint.h>
-
 /* ========================================================================== */
 /*                                                                            */
-/*    RCC Clock Functions                                                     */
+/*    Definitions                                                             */
 /*                                                                            */
 /* ========================================================================== */
 
-// GPIO
-void HAL_RCC_GPIOA_CLK_Enable(void);
-void HAL_RCC_GPIOB_CLK_Enable(void);
-void HAL_RCC_GPIOC_CLK_Enable(void);
+#ifndef _GPIO_H_
+#define _GPIO_H_
 
-// USART
-void HAL_RCC_USART1_CLK_Enable(void);
-void HAL_RCC_USART2_CLK_Enable(void);
-void HAL_RCC_USART3_CLK_Enable(void);
+#define RED_LED_PIN GPIO_PIN_6
+#define BLUE_LED_PIN GPIO_PIN_7
+#define ORANGE_LED_PIN GPIO_PIN_8
+#define GREEN_LED_PIN GPIO_PIN_9
 
 /* ========================================================================== */
 /*                                                                            */
-/*    Misc Configuration Functions                                            */
+/*    Initialization Functions                                                */
 /*                                                                            */
 /* ========================================================================== */
 
-void SystemClock_Config(void);
+/**
+ * @brief Function that initializes the LEDs on the microcontroller.
+ * @param None.
+ * @retval None.
+ */
+void initializeLEDs();
+
+#endif /* _GPIO_H_ */
