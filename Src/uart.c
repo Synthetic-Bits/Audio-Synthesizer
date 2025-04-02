@@ -1,18 +1,34 @@
 /**
- * uart.c
- * 
- * This file contains the implementations for the synthesizer's UART functions.
- * 
- * Authors:  Kenneth Gordon, Bryant Watson, Hayoung Im, and Adrian Sucahyo
- * Date:  March 25, 2025
- */
+ ******************************************************************************
+* @file    uart.c
+* @brief   UART Interface
+* @author  Kenneth Gordon
+******************************************************************************
+* @attention
+*
+* Copyright (c) 2025 Synthetic Bits.
+* All rights reserved.
+*
+* This software is licensed under terms that can be found in the LICENSE file
+* in the root directory of this software component.
+* If no LICENSE file comes with this software, it is provided AS-IS.
+*
+******************************************************************************
+*/
 
-// C includes
-#include "assert.h"
+/* Includes ------------------------------------------------------------------*/
 #include "gpio.h"
 #include "main.h"
 #include "uart.h"
+
+/* Private includes ----------------------------------------------------------*/
 #include <stm32f0xx_hal.h>
+
+/* ========================================================================== */
+/*                                                                            */
+/*    Pin Definitions                                                         */
+/*                                                                            */
+/* ========================================================================== */
 
 // Defines for the TX pins of UART1, UART2, and UART3
 #define UART1_TX_PIN GPIO_PIN_6
@@ -27,9 +43,21 @@
 // Define the size of the globalReceiveBuffer
 #define GLOBAL_RECEIVE_BUFFER_SIZE 1024
 
+/* ========================================================================== */
+/*                                                                            */
+/*    Global Variables                                                        */
+/*                                                                            */
+/* ========================================================================== */
+
 // Global definitions for the globalReceiveBuffer (used in interrupts).
 int globalReceiveBufferIndex = 0;
 char globalReceiveBuffer[1024];
+
+/* ========================================================================== */
+/*                                                                            */
+/*    IRQ Handlers                                                            */
+/*                                                                            */
+/* ========================================================================== */
 
 void USART1_IRQHandler()
 {
@@ -66,6 +94,12 @@ void USART3_4_IRQHandler()
     // Check that the buffer hasn't overflown
     assert(globalReceiveBufferIndex < GLOBAL_RECEIVE_BUFFER_SIZE);
 }
+
+/* ========================================================================== */
+/*                                                                            */
+/*    Configuration Functions                                                 */
+/*                                                                            */
+/* ========================================================================== */
 
 void configureUART1(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority)
 {
@@ -193,6 +227,12 @@ void configureUART3(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     }
 }
 
+/* ========================================================================== */
+/*                                                                            */
+/*    Sending Functions                                                       */
+/*                                                                            */
+/* ========================================================================== */
+
 void sendUART1(char *sendBuffer)
 {
     int index = 0;
@@ -249,6 +289,12 @@ void sendUART3(char *sendBuffer)
         currentByte = sendBuffer[index];
     }    
 }
+
+/* ========================================================================== */
+/*                                                                            */
+/*    Blocking Receiving Functions                                            */
+/*                                                                            */
+/* ========================================================================== */
 
 void receiveUART1Blocking(int nBytes, char *receiveBuffer)
 {

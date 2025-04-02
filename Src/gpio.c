@@ -1,15 +1,33 @@
 /**
- * gpio.c
- * 
- * This file contains the implementations for the synthesizer's GPIO functions.
- * 
- * Authors:  Kenneth Gordon, Bryant Watson, Hayoung Im, and Adrian Sucahyo
- * Date:  March 24, 2025
- */
+ ******************************************************************************
+* @file    gpio.c
+* @brief   GPIO Interface
+* @author  Kenneth Gordon
+******************************************************************************
+* @attention
+*
+* Copyright (c) 2025 Synthetic Bits.
+* All rights reserved.
+*
+* This software is licensed under terms that can be found in the LICENSE file
+* in the root directory of this software component.
+* If no LICENSE file comes with this software, it is provided AS-IS.
+*
+******************************************************************************
+*/
 
+/* Includes ------------------------------------------------------------------*/
 #include "gpio.h"
 #include "main.h"
+
+/* Private includes ----------------------------------------------------------*/
 #include <stm32f0xx.h>
+
+/* ========================================================================== */
+/*                                                                            */
+/*    Initialization Functions                                                */
+/*                                                                            */
+/* ========================================================================== */
 
 void initializeLEDs()
 {
