@@ -44,6 +44,24 @@ void HAL_RCC_GPIOC_CLK_Enable(void)
 }
 
 /**
+ * @brief Enable the RCC Clock for TIM2
+ */
+void HAL_RCC_TIM2_CLK_Enable()
+{
+  RCC->APB1ENR &= ~(RCC_APB1ENR_TIM2EN);
+  RCC->APB1ENR |=  (RCC_APB1ENR_TIM2EN);
+}
+
+/**
+ * @brief Enable the RCC Clock for TIM3
+ */
+void HAL_RCC_TIM3_CLK_Enable()
+{
+  RCC->APB1ENR &= ~(RCC_APB1ENR_TIM3EN);
+  RCC->APB1ENR |=  (RCC_APB1ENR_TIM3EN);
+}
+
+/**
  * @brief Enable the RCC clock for the USART1 peripheral.
  * @param None
  * @retval None

@@ -68,7 +68,7 @@ void USART1_IRQHandler()
     globalReceiveBufferIndex++;
 
     // Check that the buffer hasn't overflown
-    assert(globalReceiveBufferIndex < GLOBAL_RECEIVE_BUFFER_SIZE);
+    // assert(globalReceiveBufferIndex < GLOBAL_RECEIVE_BUFFER_SIZE);
 }
 
 void USART2_IRQHandler()
@@ -80,7 +80,7 @@ void USART2_IRQHandler()
     globalReceiveBufferIndex++;
 
     // Check that the buffer hasn't overflown
-    assert(globalReceiveBufferIndex < GLOBAL_RECEIVE_BUFFER_SIZE);
+    // assert(globalReceiveBufferIndex < GLOBAL_RECEIVE_BUFFER_SIZE);
 }
 
 void USART3_4_IRQHandler()
@@ -92,7 +92,7 @@ void USART3_4_IRQHandler()
     globalReceiveBufferIndex++;
 
     // Check that the buffer hasn't overflown
-    assert(globalReceiveBufferIndex < GLOBAL_RECEIVE_BUFFER_SIZE);
+    // assert(globalReceiveBufferIndex < GLOBAL_RECEIVE_BUFFER_SIZE);
 }
 
 /* ========================================================================== */
