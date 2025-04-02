@@ -1,21 +1,29 @@
 /**
- * uart.h
- * 
- * This file contains the public defines and definitions for the synthesizer's UART functions.
- * 
- * Authors:  Kenneth Gordon, Bryant Watson, Hayoung Im, and Adrian Sucahyo
- * Date:  March 25, 2025
+ ******************************************************************************
+ * @file           : uart.h
+ * @brief          : UART Interface Header
+ ******************************************************************************
  */
 
-// C include guard
-#ifndef UART_H
-#define UART_H
+/* Includes ------------------------------------------------------------------*/
 
-// Defines that control whether or not interrupts are enabled.
+/* ========================================================================== */
+/*                                                                            */
+/*    Definitions                                                             */
+/*                                                                            */
+/* ========================================================================== */
+
+#ifndef _UART_H_
+#define _UART_H_
+
 #define UART_DISABLE_INTERRUPTS 0
 #define UART_ENABLE_INTERRUPTS 1
 
-// -=-= Configuration Functions =-=-
+/* ========================================================================== */
+/*                                                                            */
+/*    Configuration Functions                                                 */
+/*                                                                            */
+/* ========================================================================== */
 
 /**
  * @brief This function configures the USART1 peripheral for use in the synthesizer.
@@ -41,7 +49,11 @@ void configureUART2(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
  */
 void configureUART3(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority);
 
-// -=-= Sending Functions =-=-
+/* ========================================================================== */
+/*                                                                            */
+/*    Sending Functions                                                       */
+/*                                                                            */
+/* ========================================================================== */
 
 /**
  * @brief This function sends all of the contents in a user specified buffer on the USART1 peripheral.
@@ -64,7 +76,11 @@ void sendUART2(char *sendBuffer);
  */
 void sendUART3(char *sendBuffer);
 
-// -=-= Blocking Receiving Functions =-=-
+/* ========================================================================== */
+/*                                                                            */
+/*    Blocking Receiving Functions                                            */
+/*                                                                            */
+/* ========================================================================== */
 
 /**
  * @brief This function receives a set number of bytes on the USART1 peripheral while blocking program execution.
@@ -90,13 +106,4 @@ void receiveUART2Blocking(int nBytes,  char *receiveBuffer);
  */
 void receiveUART3Blocking(int nBytes, char *receiveBuffer);
 
-// -=-= Testing Functions =-=-
-
-/**
- * @brief This function tests the USART1 and USART2 peripherals in a loop-back mode.
- * @param None.
- * @retval None.
- */
-void testUART1_2(void);
-
-#endif // UART_H
+#endif /* _UART_H_ */
