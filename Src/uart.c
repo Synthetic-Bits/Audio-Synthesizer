@@ -50,8 +50,8 @@
 /* ========================================================================== */
 
 // Global definitions for the globalReceiveBuffer (used in interrupts).
-int globalReceiveBufferIndex = 0;
-char globalReceiveBuffer[1024];
+volatile int globalReceiveBufferIndex = 0;
+volatile char globalReceiveBuffer[1024];
 
 /* ========================================================================== */
 /*                                                                            */

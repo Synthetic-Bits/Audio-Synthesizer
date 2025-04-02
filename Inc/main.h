@@ -32,9 +32,26 @@ void HAL_RCC_USART3_CLK_Enable(void);
 
 /* ========================================================================== */
 /*                                                                            */
+/*    Checkpoint Functions                                                    */
+/*                                                                            */
+/* ========================================================================== */
+
+/**
+ * @brief This function runs the first checkpoint of the synthesizer project.
+ * @param None
+ * @retval None
+ */
+void checkpoint_1(void);
+
+/* ========================================================================== */
+/*                                                                            */
 /*    Misc Configuration Functions                                            */
 /*                                                                            */
 /* ========================================================================== */
 
-// System Clock Config
+/**
+ * @brief This function configures the system clock on the microcontroller.
+ * @param None
+ * @retval None
+ */
 void SystemClock_Config(void);
