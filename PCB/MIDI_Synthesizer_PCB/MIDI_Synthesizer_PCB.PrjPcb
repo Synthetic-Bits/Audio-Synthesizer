@@ -67,7 +67,7 @@ GenerateClassCluster=0
 DocumentUniqueId=YPCTKUSS
 
 [Document2]
-DocumentPath=..\..\..\..\Altium-Component-Library\Components\TD.PcbLib
+DocumentPath=..\..\..\Altium-Component-Library\Components\TD.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -81,10 +81,10 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=OHKBIKLP
 
 [Document3]
-DocumentPath=..\..\..\..\Altium-Component-Library\Components\TD.SchLib
+DocumentPath=..\..\..\Altium-Component-Library\Components\TD.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -98,7 +98,7 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=LCVYSIOC
 
 [Document4]
 DocumentPath=Low_Pass_Filter.SchDoc
@@ -133,6 +133,23 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=RYGWLWTI
+
+[Document6]
+DocumentPath=MIDI_Synthesizer_PCB.BomDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
 
 [Configuration1]
 Name=Sources

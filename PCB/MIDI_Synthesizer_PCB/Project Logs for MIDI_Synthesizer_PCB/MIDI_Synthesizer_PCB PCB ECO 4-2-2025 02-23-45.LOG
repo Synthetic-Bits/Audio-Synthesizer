@@ -1,0 +1,33 @@
+Change Component Footprint: Designator=D1 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D3 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D4 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D5 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D6 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D7 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D8 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D9 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D10 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D11 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D12 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D13 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D14 Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D15_A Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D15_B Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D15_C Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D15_D Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D15_E Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D15_F Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D15_G Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Change Component Footprint: Designator=D15_H Old Footprint=LEDM2012X80N New Footprint=LEDM1608X90N
+Added Rule: Name=Schematic Supply Nets_7
+Added Rule: Name=Schematic Supply Nets_8
+Added Rule: Name=Schematic Supply Nets_9
+Added Rule: Name=Schematic Supply Nets_10
+Added Rule: Name=Schematic Supply Nets_11
+Added Rule: Name=Schematic Supply Nets_12
+Added Rule: Name=Schematic Supply Nets_13
+Added Rule: Name=Schematic Supply Nets_14
+Added Rule: Name=Schematic Supply Nets_15
+Added Rule: Name=Schematic Supply Nets_16
+Added Rule: Name=Schematic Supply Nets_17
+Added Rule: Name=Schematic Supply Nets_18
