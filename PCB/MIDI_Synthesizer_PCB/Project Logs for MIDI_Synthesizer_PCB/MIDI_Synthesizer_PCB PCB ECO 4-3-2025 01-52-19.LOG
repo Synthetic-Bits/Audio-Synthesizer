@@ -1,0 +1,2 @@
+Change Component Footprint: Designator=C12 Old Footprint=CAP0805 New Footprint=CAP1206
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H21 Header
