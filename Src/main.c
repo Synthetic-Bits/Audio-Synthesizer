@@ -62,10 +62,14 @@ void checkpoint_1()
   // Configure the UART3 peripheral to get MIDI signals
   configureUART3(115200, UART_ENABLE_INTERRUPTS, 2);
 
+  // Loop forever
   while (1)
   {
     if (globalReceiveBufferIndex >= packetSize)
     {
+      // Disable UART interrupts while we process the packet
+      NVIC_DisableIRQ(USART3_4_IRQn);
+
       // Reset the global receive buffer's index
       globalReceiveBufferIndex = 0;
 
@@ -74,7 +78,11 @@ void checkpoint_1()
       for (int i = 0; i < packetSize; i++)
         data[i] = globalReceiveBuffer[i];
 
+      // Process the UART data as MIDI
       get_midi(data);
+
+      // Enable UART interrupts again as the data has been copied and processed
+      NVIC_EnableIRQ(USART3_4_IRQn);
     }
   }
 }
