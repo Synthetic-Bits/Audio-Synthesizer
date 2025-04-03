@@ -16,6 +16,20 @@
 #ifndef _PINS_H_
 #define _PINS_H_
 
+// Timer Channels 1-4
+#define CHANNEL1_GPIO_PIN // TBD
+#define CHANNEL2_GPIO_PIN // TBD
+#define CHANNEL3_GPIO_PIN // TBD
+#define CHANNEL4_GPIO_PIN // TBD
+
+// Timer Channels 5-7
+#define CHANNEL5_GPIO_PIN // TBD
+#define CHANNEL6_GPIO_PIN // TBD
+#define CHANNEL7_GPIO_PIN // TBD
+
+// Timer Channel 8
+#define CHANNEL8_GPIO_PIN // TBD
+
 // LEDs
 #define RED_LED_PIN GPIO_PIN_6    // PC6
 #define BLUE_LED_PIN GPIO_PIN_7   // PC7
