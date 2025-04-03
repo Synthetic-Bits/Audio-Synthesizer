@@ -29,6 +29,7 @@ void HAL_RCC_TIM3_CLK_Enable(void);
 void HAL_RCC_USART1_CLK_Enable(void);
 void HAL_RCC_USART2_CLK_Enable(void);
 void HAL_RCC_USART3_CLK_Enable(void);
+void HAL_RCC_USART4_CLK_Enable(void);
 
 /* ========================================================================== */
 /*                                                                            */

@@ -49,6 +49,14 @@ void configureUART2(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
  */
 void configureUART3(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority);
 
+/**
+ * @brief This function configures the USART4 peripheral for use in the synthesizer.
+ * @param baudRate The baud rate for the USART peripheral.
+ * @param enableInterrupts Whether or not interrupts should be enabled for the peripheral.
+ * @param interruptPriority The interrupt prioirty of the peripheral.  Should be set even if interrupts are disabled for this peripheral.
+ */
+void configureUART4(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority);
+
 /* ========================================================================== */
 /*                                                                            */
 /*    Sending Functions                                                       */
@@ -75,6 +83,13 @@ void sendUART2(char *sendBuffer);
  * @retval None.
  */
 void sendUART3(char *sendBuffer);
+
+/**
+ * @brief This function sends all of the contents in a user specified buffer on the USART4 peripheral.
+ * @param sendBuffer The buffer containing the data that should be sent.
+ * @retval None.
+ */
+void sendUART4(char *sendBuffer);
 
 /* ========================================================================== */
 /*                                                                            */
@@ -105,5 +120,13 @@ void receiveUART2Blocking(int nBytes,  char *receiveBuffer);
  * @retval None.
  */
 void receiveUART3Blocking(int nBytes, char *receiveBuffer);
+
+/**
+ * @brief This function receives a set number of bytes on the USART4 peripheral while blocking program execution.
+ * @param nBytes The number of bytes to receive before stopping program blocking.
+ * @param receiveBuffer The buffer to store received information in.
+ * @retval None.
+ */
+void receiveUART4Blocking(int nBytes, char *receiveBuffer);
 
 #endif /* _UART_H_ */

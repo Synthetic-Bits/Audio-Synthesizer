@@ -30,15 +30,17 @@
 /*                                                                            */
 /* ========================================================================== */
 
-// Defines for the TX pins of UART1, UART2, and UART3
+// Defines for the TX pins of UART1, UART2, UART3, and UART4
 #define UART1_TX_PIN GPIO_PIN_6
 #define UART2_TX_PIN GPIO_PIN_2
 #define UART3_TX_PIN GPIO_PIN_4
+#define UART4_TX_PIN GPIO_PIN_10
 
-// Defines for the RX pins of UART1, UART2, and UART3
+// Defines for the RX pins of UART1, UART2, UART3, and UART4
 #define UART1_RX_PIN GPIO_PIN_7
 #define UART2_RX_PIN GPIO_PIN_3
 #define UART3_RX_PIN GPIO_PIN_5
+#define UART4_RX_PIN GPIO_PIN_11
 
 // Define the size of the globalReceiveBuffer
 #define GLOBAL_RECEIVE_BUFFER_SIZE 1024
@@ -85,14 +87,56 @@ void USART2_IRQHandler()
 
 void USART3_4_IRQHandler()
 {
-    // Add the received data to the global buffer.
-    globalReceiveBuffer[globalReceiveBufferIndex] = USART3->RDR;
+    // Check if USART3 or USART4 triggered the interrupt.
+    if ((USART3->ISR & USART_ISR_RXNE_Msk))
+    {
+        // Add the received data to the global buffer.
+        globalReceiveBuffer[globalReceiveBufferIndex] = USART3->RDR;
 
-    // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
-    globalReceiveBufferIndex++;
+        // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
+        globalReceiveBufferIndex++;
+        if (globalReceiveBufferIndex > GLOBAL_RECEIVE_BUFFER_SIZE)
+        {
+            // We overflowed, set up the LED indicators
+            initializeLEDs();
+            HAL_GPIO_WritePin(GPIOC, GREEN_LED_PIN, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOC, ORANGE_LED_PIN, GPIO_PIN_SET);
 
-    // Check that the buffer hasn't overflown
-    // assert(globalReceiveBufferIndex < GLOBAL_RECEIVE_BUFFER_SIZE);
+            // Loop infinitely
+            while (1) { }
+        }
+    }
+    else if ((USART4->ISR & USART_ISR_RXNE_Msk))
+    {
+        // Add the received data to the global buffer.
+        globalReceiveBuffer[globalReceiveBufferIndex] = USART4->RDR;
+
+        // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
+        globalReceiveBufferIndex++;
+        if (globalReceiveBufferIndex > GLOBAL_RECEIVE_BUFFER_SIZE)
+        {
+            // We overflowed, set up the LED indicators
+            initializeLEDs();
+            HAL_GPIO_WritePin(GPIOC, GREEN_LED_PIN, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOC, ORANGE_LED_PIN, GPIO_PIN_SET);
+
+            // Loop infinitely
+            while (1) { }
+        }
+    }
+    else
+    {
+        // Error state, how did you even get here?
+        // Set up the LED indicators for the error
+        initializeLEDs();
+        HAL_GPIO_WritePin(GPIOC, RED_LED_PIN, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOC, GREEN_LED_PIN, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOC, BLUE_LED_PIN, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOC, ORANGE_LED_PIN, GPIO_PIN_SET);
+
+        // Loop infinitely
+        while(1) { }
+    }
 }
 
 /* ========================================================================== */
@@ -227,6 +271,48 @@ void configureUART3(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     }
 }
 
+void configureUART4(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority)
+{
+    // Enable the RCC for GPIOC and USART4.
+    HAL_RCC_GPIOC_CLK_Enable();
+    HAL_RCC_USART4_CLK_Enable();
+
+    // Set the GPIO pins for TX (PC10) and RX (PC11) into AF mode.
+    GPIO_InitTypeDef initStr = {UART4_TX_PIN | UART4_RX_PIN,
+                                GPIO_MODE_AF_PP,
+                                GPIO_NOPULL,
+                                GPIO_SPEED_FREQ_LOW,
+                                GPIO_AF4_USART4};
+    HAL_GPIO_Init(GPIOC, &initStr);
+
+    // Set the baud rate of communication to the one specified by the user.
+    USART4->BRR = (HAL_RCC_GetHCLKFreq() / baudRate) & 0x0000FFFF;
+
+    // Enable the receive register not empty interrupt (if interrupts are enabled).
+    if (enableInterrupts == UART_ENABLE_INTERRUPTS)
+    {
+        USART4->CR1 &= ~(USART_CR1_RXNEIE);
+        USART4->CR1 |=   USART_CR1_RXNEIE;
+    }
+
+    // Enable the transmitter and receiver hardware in USART4.
+    USART4->CR1 &= ~(USART_CR1_TE);
+    USART4->CR1 |=   USART_CR1_TE;
+    USART4->CR1 &= ~(USART_CR1_RE);
+    USART4->CR1 |=   USART_CR1_RE;
+
+    // Enable the USART4 peripheral.
+    USART4->CR1 &= ~(USART_CR1_UE);
+    USART4->CR1 |=   USART_CR1_UE;
+
+    // Lastly, enable the USART4 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
+    if (enableInterrupts == UART_ENABLE_INTERRUPTS)
+    {
+        NVIC_EnableIRQ(USART3_4_IRQn);
+        NVIC_SetPriority(USART3_4_IRQn, interruptPriority);
+    }
+}
+
 /* ========================================================================== */
 /*                                                                            */
 /*    Sending Functions                                                       */
@@ -290,6 +376,25 @@ void sendUART3(char *sendBuffer)
     }    
 }
 
+void sendUART4(char *sendBuffer)
+{
+    int index = 0;
+    char currentByte = sendBuffer[index];
+    while (currentByte != '\x0')
+    {
+        // Wait for the transmit register to be empty by polling the TXE bit in the ISR.
+        while (!(USART4->ISR & USART_ISR_TXE))
+            __NOP();
+
+        // Write the characterToSend into the TDR.
+        USART4->TDR = currentByte;
+
+        // Prepare the loop for the next byte.
+        index++;
+        currentByte = sendBuffer[index];
+    }    
+}
+
 /* ========================================================================== */
 /*                                                                            */
 /*    Blocking Receiving Functions                                            */
@@ -337,6 +442,21 @@ void receiveUART3Blocking(int nBytes, char *receiveBuffer)
 
         // Save the receivedByte in the receiveBuffer.
         char receivedByte = USART3->RDR;
+        receiveBuffer[i] = receivedByte;
+    }    
+}
+
+void receiveUART4Blocking(int nBytes, char *receiveBuffer)
+{
+    // Loop until all of the bytes have been read.
+    for (int i = 0; i < nBytes; i++)
+    {
+        // Wait for the transmit register to be empty by polling the RXNE bit in the ISR.
+        while(!(USART4->ISR & USART_ISR_RXNE))
+            __NOP();
+
+        // Save the receivedByte in the receiveBuffer.
+        char receivedByte = USART4->RDR;
         receiveBuffer[i] = receivedByte;
     }    
 }
