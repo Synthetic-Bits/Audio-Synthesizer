@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "gpio.h"
 #include "main.h"
+#include "pins.h"
 #include "uart.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -26,19 +27,9 @@
 
 /* ========================================================================== */
 /*                                                                            */
-/*    Pin Definitions                                                         */
+/*    Definitions                                                             */
 /*                                                                            */
 /* ========================================================================== */
-
-// Defines for the TX pins of UART1, UART2, and UART3
-#define UART1_TX_PIN GPIO_PIN_6
-#define UART2_TX_PIN GPIO_PIN_2
-#define UART3_TX_PIN GPIO_PIN_4
-
-// Defines for the RX pins of UART1, UART2, and UART3
-#define UART1_RX_PIN GPIO_PIN_7
-#define UART2_RX_PIN GPIO_PIN_3
-#define UART3_RX_PIN GPIO_PIN_5
 
 // Define the size of the globalReceiveBuffer
 #define GLOBAL_RECEIVE_BUFFER_SIZE 1024
