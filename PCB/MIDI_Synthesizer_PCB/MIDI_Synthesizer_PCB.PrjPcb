@@ -186,58 +186,62 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [GeneratedDocument1]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.DRR
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\Design Rule Check - MIDI_Synthesizer_PCB.html
 DItemRevisionGUID=
 
 [GeneratedDocument2]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.EXTREP
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.DRR
 DItemRevisionGUID=
 
 [GeneratedDocument3]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GBL
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.EXTREP
 DItemRevisionGUID=
 
 [GeneratedDocument4]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GBO
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GBL
 DItemRevisionGUID=
 
 [GeneratedDocument5]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GBP
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GBO
 DItemRevisionGUID=
 
 [GeneratedDocument6]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GBS
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GBP
 DItemRevisionGUID=
 
 [GeneratedDocument7]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GM
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GBS
 DItemRevisionGUID=
 
 [GeneratedDocument8]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GTL
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GM
 DItemRevisionGUID=
 
 [GeneratedDocument9]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GTO
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GTL
 DItemRevisionGUID=
 
 [GeneratedDocument10]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GTP
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GTO
 DItemRevisionGUID=
 
 [GeneratedDocument11]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GTS
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GTP
 DItemRevisionGUID=
 
 [GeneratedDocument12]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.LDP
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.GTS
 DItemRevisionGUID=
 
 [GeneratedDocument13]
-DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.REP
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.LDP
 DItemRevisionGUID=
 
 [GeneratedDocument14]
+DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.REP
+DItemRevisionGUID=
+
+[GeneratedDocument15]
 DocumentPath=Project Outputs for MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.TXT
 DItemRevisionGUID=
 
