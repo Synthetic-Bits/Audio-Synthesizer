@@ -1,0 +1,20 @@
+Added Pin To Net: NetName=PB6 Pin=H9-1
+Added Pin To Net: NetName=PB7 Pin=H9-2
+Added Pin To Net: NetName=AVDD Pin=H9-3
+Added Pin To Net: NetName=GND Pin=H9-4
+Added Pin To Net: NetName=PA5 Pin=H9-5
+Added Pin To Net: NetName=PA6 Pin=H9-6
+Added Pin To Net: NetName=PA7 Pin=H9-7
+Added Pin To Net: NetName=PC9 Pin=H9-8
+Added Pin To Net: NetName=PC6 Pin=H9-9
+Added Pin To Net: NetName=PC7 Pin=H9-10
+Added Pin To Net: NetName=PA8 Pin=H13-1
+Added Pin To Net: NetName=PB10 Pin=H13-2
+Added Pin To Net: NetName=PB4 Pin=H13-3
+Added Pin To Net: NetName=PB5 Pin=H13-4
+Added Pin To Net: NetName=PB3 Pin=H13-5
+Added Pin To Net: NetName=PC8 Pin=H13-6
+Added Pin To Net: NetName=PB14 Pin=H13-7
+Added Pin To Net: NetName=PB15 Pin=H13-8
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H9 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H13 Header

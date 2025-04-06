@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"cortex-debug.armToolchainPath": "C:\\PROGRAM FILES (X86)\\ARM GNU TOOLCHAIN ARM-NONE-EABI\\13.3 REL1\\BIN",
+		"cortex-debug.openocdPath": "C:\\INTELFPGA_LITE\\23.1STD\\QUARTUS\\BIN64\\OPENOCD.EXE",
+		"files.associations": {
+			"stm32h5xx_hal.h": "c",
+			"stm32h5xx.h": "c"
+		}
+	}
+}
