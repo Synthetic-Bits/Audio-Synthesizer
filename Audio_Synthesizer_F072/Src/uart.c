@@ -55,6 +55,12 @@
 volatile int globalReceiveBufferIndex = 0;
 volatile char globalReceiveBuffer[1024];
 
+// Variables that keep track of if the USART peripherals are configured.
+static int USART1_configured = 0;
+static int USART2_configured = 0;
+static int USART3_configured = 0;
+static int USART4_configured = 0;
+
 /* ========================================================================== */
 /*                                                                            */
 /*    IRQ Handlers                                                            */
@@ -179,12 +185,15 @@ void configureUART1(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     USART1->CR1 &= ~(USART_CR1_UE);
     USART1->CR1 |=   USART_CR1_UE;
 
-    // Lastly, enable the USART1 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
+    // Enable the USART1 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
     if (enableInterrupts == UART_ENABLE_INTERRUPTS)
     {
         NVIC_EnableIRQ(USART1_IRQn);
         NVIC_SetPriority(USART1_IRQn, interruptPriority);
     }
+
+    // Lastly, indicate that this peripheral has been configured
+    USART1_configured = 1;
 }
 
 void configureUART2(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority)
@@ -221,12 +230,15 @@ void configureUART2(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     USART2->CR1 &= ~(USART_CR1_UE);
     USART2->CR1 |=   USART_CR1_UE;
 
-    // Lastly, enable the USART2 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
+    // Enable the USART2 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
     if (enableInterrupts == UART_ENABLE_INTERRUPTS)
     {
         NVIC_EnableIRQ(USART2_IRQn);
         NVIC_SetPriority(USART2_IRQn, interruptPriority);
     }
+
+    // Lastly, indicate that this peripheral has been configured
+    USART2_configured = 1;
 }
 
 void configureUART3(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority)
@@ -263,12 +275,15 @@ void configureUART3(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     USART3->CR1 &= ~(USART_CR1_UE);
     USART3->CR1 |=   USART_CR1_UE;
 
-    // Lastly, enable the USART3 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
+    // Enable the USART3 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
     if (enableInterrupts == UART_ENABLE_INTERRUPTS)
     {
         NVIC_EnableIRQ(USART3_4_IRQn);
         NVIC_SetPriority(USART3_4_IRQn, interruptPriority);
     }
+
+    // Lastly, indicate that this peripheral has been configured
+    USART3_configured = 1;
 }
 
 void configureUART4(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority)
@@ -305,12 +320,15 @@ void configureUART4(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     USART4->CR1 &= ~(USART_CR1_UE);
     USART4->CR1 |=   USART_CR1_UE;
 
-    // Lastly, enable the USART4 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
+    // Enable the USART4 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
     if (enableInterrupts == UART_ENABLE_INTERRUPTS)
     {
         NVIC_EnableIRQ(USART3_4_IRQn);
         NVIC_SetPriority(USART3_4_IRQn, interruptPriority);
     }
+
+    // Lastly, indicate that this peripheral has been configured
+    USART4_configured = 1;
 }
 
 /* ========================================================================== */
@@ -459,4 +477,25 @@ void receiveUART4Blocking(int nBytes, char *receiveBuffer)
         char receivedByte = USART4->RDR;
         receiveBuffer[i] = receivedByte;
     }    
+}
+
+/* ========================================================================== */
+/*                                                                            */
+/*    Miscellaneous Functions                                                 */
+/*                                                                            */
+/* ========================================================================== */
+
+/**
+ * @brief This function initializes the UART4 peripheral and acts as a drop-in replacement for print().
+ * @param text The text to print using UART4.
+ * @retval None.
+ */
+void printu(char *text)
+{
+    // Configure USART4 if needed.
+    if (USART4_configured == 0)
+        configureUART4(115200, UART_DISABLE_INTERRUPTS, 2);
+    
+    // Send the text using USART4.
+    sendUART4(text);
 }

@@ -129,4 +129,17 @@ void receiveUART3Blocking(int nBytes, char *receiveBuffer);
  */
 void receiveUART4Blocking(int nBytes, char *receiveBuffer);
 
+/* ========================================================================== */
+/*                                                                            */
+/*    Miscellaneous Functions                                                 */
+/*                                                                            */
+/* ========================================================================== */
+
+/**
+ * @brief This function initializes the UART4 peripheral and acts as a drop-in replacement for print().
+ * @param text The text to print using UART4.
+ * @retval None.
+ */
+void printu(char *text);
+
 #endif /* _UART_H_ */
