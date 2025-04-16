@@ -78,7 +78,8 @@ void checkpoint_1()
         data[i] = globalReceiveBuffer[i];
 
       // Process the UART data as MIDI
-      get_midi(data);
+      setup_midi();
+      set_midi(data);
 
       // Enable UART interrupts again as the data has been copied and processed
       NVIC_EnableIRQ(USART3_4_IRQn);
