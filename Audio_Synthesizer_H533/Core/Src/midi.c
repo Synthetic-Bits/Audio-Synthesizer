@@ -1,16 +1,16 @@
 #include <stdint.h>
 #include <stdio.h>
-//#include <stm32f0xx_hal.h>
-//#include <channel_common.h>
-#include <midi.h>
+//#include <stm32f0xx_hal.h> ??
+#include "midi.h"
+#include "sample_timer.h"
+#include "channel_common.h"
+#include "channel1_4_timer.h"
 
-// #include "uart.h"
-// #include "midi.h"
-// #include "gpio.h"
+// #include "uart.h" ??
+// #include "midi.h" ?? 
+// #include "gpio.h" ??
 
-// #include "sample_timer.h"
-// #include "channel_common.h"
-// #include "channel1_4_timer.h"
+
 
 //status codes------------------------------------------------------------------
 #define NOTE_ON_EVENT           (0b1001)
