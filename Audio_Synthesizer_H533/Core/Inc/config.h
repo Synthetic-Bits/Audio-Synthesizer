@@ -28,10 +28,10 @@
 #define CHANNEL1_4_TIMER TIM3 // Ensure to update the RCC if necessary
 
 #define CHANNEL1_4_GPIO_PORT GPIOC
-#define CHANNEL1_GPIO_PIN GPIO_PIN_6
-#define CHANNEL2_GPIO_PIN GPIO_PIN_7
-#define CHANNEL3_GPIO_PIN GPIO_PIN_8
-#define CHANNEL4_GPIO_PIN GPIO_PIN_9
+#define CHANNEL1_GPIO_PIN GPIO_PIN_9
+#define CHANNEL2_GPIO_PIN GPIO_PIN_6
+#define CHANNEL3_GPIO_PIN GPIO_PIN_7
+#define CHANNEL4_GPIO_PIN GPIO_PIN_8
 
 /* ========================================================================== */
 /*                                                                            */
