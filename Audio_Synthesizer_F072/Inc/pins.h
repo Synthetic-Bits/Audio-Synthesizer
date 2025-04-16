@@ -46,4 +46,7 @@
 #define UART3_TX_PIN GPIO_PIN_4 // PC4
 #define UART3_RX_PIN GPIO_PIN_5 // PC5
 
+#define UART4_TX_PIN GPIO_PIN_10 // PC10
+#define UART4_RX_PIN GPIO_PIN_11 // PC11
+
 #endif /* _PINS_H_ */
