@@ -189,7 +189,7 @@ MIDI set_channel(char data[], MIDI midi)
 
     if (midi_channel > 8 || midi_channel < 0)
     {
-        midi.channel = CHANNEL0; // default channel if channel is out of range
+        midi.channel = CHANNEL1; // default channel if channel is out of range
     }
     else
     {
