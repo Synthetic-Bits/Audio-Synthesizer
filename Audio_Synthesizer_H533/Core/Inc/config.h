@@ -2,6 +2,8 @@
  ******************************************************************************
  * @file           : config.h
  * @brief          : Pin and Component Config Header
+ * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson,
+ *                   and Hayoung Im
  ******************************************************************************
  */
 

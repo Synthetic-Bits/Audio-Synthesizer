@@ -1,8 +1,9 @@
 /**
  ******************************************************************************
  * @file           : main.h
- * @brief          : Header for main.c file.
- *                   This file contains the common defines of the application.
+ * @brief          : Header for main.c file.  This file contains the common
+ *                   defines of the application.
+ * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson, Hayoung Im
  ******************************************************************************
  * @attention
  *
@@ -30,19 +31,18 @@ extern "C"
 #include "stm32h5xx_nucleo.h"
 #include <stdio.h>
 
-  /* Private includes ----------------------------------------------------------*/
+/* Private includes ----------------------------------------------------------*/
 
-  /* Exported types ------------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/
 
-  /* Exported constants --------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
 
-  /* Exported macro ------------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
 
-  /* Exported functions prototypes ---------------------------------------------*/
-  void Error_Handler(void);
-
-  void SystemClock_Config(void);
-  void MX_ICACHE_Init(void);
+/* Exported functions prototypes ---------------------------------------------*/
+void Error_Handler(void);
+void SystemClock_Config(void);
+void MX_ICACHE_Init(void);
 
 /* Private defines -----------------------------------------------------------*/
 #define SWDIO_Pin GPIO_PIN_13

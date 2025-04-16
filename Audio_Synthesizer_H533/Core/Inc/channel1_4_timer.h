@@ -2,6 +2,8 @@
  ******************************************************************************
  * @file           : channel_timer.h
  * @brief          : Channel1 Timer Control Interface Header
+ * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson,
+ *                   and Hayoung Im
  ******************************************************************************
  */
 

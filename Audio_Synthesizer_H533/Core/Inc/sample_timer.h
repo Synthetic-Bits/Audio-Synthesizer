@@ -2,6 +2,8 @@
  ******************************************************************************
  * @file           : sample_timer.h
  * @brief          : Sample Timer Control Interface Header
+ * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson,
+ *                   and Hayoung Im
  ******************************************************************************
  */
 

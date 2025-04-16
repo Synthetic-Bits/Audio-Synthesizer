@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    rcc.c
  * @brief   RCC Timer Control Interface
- * @author  Adrian Sucahyo, Kenneth Gordon, Bryant Watson, Hayoung In
+ * @authors Adrian Sucahyo, Kenneth Gordon, Bryant Watson, and Hayoung Im
  ******************************************************************************
  * @attention
  *
@@ -15,8 +15,8 @@
  *
  ******************************************************************************
  */
-/* Includes ------------------------------------------------------------------*/
 
+/* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "rcc.h"
 

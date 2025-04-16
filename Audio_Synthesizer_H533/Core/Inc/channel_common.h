@@ -2,6 +2,8 @@
  ******************************************************************************
  * @file           : channel_common.h
  * @brief          : Common Channel Component Defintions
+ * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson,
+ *                   and Hayoung Im
  ******************************************************************************
  */
 

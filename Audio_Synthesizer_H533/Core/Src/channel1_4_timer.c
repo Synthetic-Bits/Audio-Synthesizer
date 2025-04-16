@@ -1,8 +1,8 @@
 /**
  ******************************************************************************
  * @file    CHANNEL1_4_TIMER.c
- * @brief   Channel1 Timer Control Interface
- * @author  Adrian Sucahyo
+ * @brief   Channels 1-4 Timer Control Interface
+ * @authors Adrian Sucahyo, Kenneth Gordon, Bryant Watson, and Hayoung Im
  ******************************************************************************
  * @attention
  *
@@ -61,7 +61,6 @@ void channel1_4_timer_init();
 
 #define CHANNEL1_4_TIMER_PSC (1 - 1)
 #define CHANNEL1_4_TIMER_ARR ((0x1 << 10) - 1) // ~240 kHz (244 kHz)
-
 #define CHANNEL1_4_SAMPLE_RESOL_BITS_DIFF (6) // 65565 -> 1024 (RSH 7)
 
 volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state;
@@ -76,48 +75,48 @@ void channel1_4_enable(channel_t channel)
 {
   switch (channel)
   {
-  case CHANNEL1:
-    channel1_state.enabled = 1;
-    CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC1E;
-    break;
-  case CHANNEL2:
-    channel2_state.enabled = 1;
-    CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC2E;
-    break;
-  case CHANNEL3:
-    channel3_state.enabled = 1;
-    CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC3E;
-    break;
-  case CHANNEL4:
-    channel4_state.enabled = 1;
-    CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC4E;
-    break;
-  default:
-    return;
+    case CHANNEL1:
+      channel1_state.enabled = 1;
+      CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC1E;
+      break;
+    case CHANNEL2:
+      channel2_state.enabled = 1;
+      CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC2E;
+      break;
+    case CHANNEL3:
+      channel3_state.enabled = 1;
+      CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC3E;
+      break;
+    case CHANNEL4:
+      channel4_state.enabled = 1;
+      CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC4E;
+      break;
+    default:
+      return;
   }
 }
 void channel1_4_disable(channel_t channel)
 {
   switch (channel)
   {
-  case CHANNEL1:
-    channel1_state.enabled = 0;
-    CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC1E;
-    break;
-  case CHANNEL2:
-    channel2_state.enabled = 0;
-    CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC2E;
-    break;
-  case CHANNEL3:
-    channel3_state.enabled = 0;
-    CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC3E;
-    break;
-  case CHANNEL4:
-    channel4_state.enabled = 0;
-    CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC4E;
-    break;
-  default:
-    return;
+    case CHANNEL1:
+      channel1_state.enabled = 0;
+      CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC1E;
+      break;
+    case CHANNEL2:
+      channel2_state.enabled = 0;
+      CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC2E;
+      break;
+    case CHANNEL3:
+      channel3_state.enabled = 0;
+      CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC3E;
+      break;
+    case CHANNEL4:
+      channel4_state.enabled = 0;
+      CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC4E;
+      break;
+    default:
+      return;
   }
 }
 
@@ -127,42 +126,42 @@ void channel1_4_set_waveform(channel_t channel, waveforms_t wave)
 
   switch (wave)
   {
-  case WAVEFORM_SINE:
-    curr_wave = sine_base;
-    break;
-  case WAVEFORM_TRIG:
-    curr_wave = trig_base;
-    break;
-  case WAVEFORM_RAMP:
-    curr_wave = ramp_base;
-    break;
-  case WAVEFORM_SQUARE:
-    curr_wave = sine_base; // Waveform is calculated
-    break;
-  default:
-    return;
+    case WAVEFORM_SINE:
+      curr_wave = sine_base;
+      break;
+    case WAVEFORM_TRIG:
+      curr_wave = trig_base;
+      break;
+    case WAVEFORM_RAMP:
+      curr_wave = ramp_base;
+      break;
+    case WAVEFORM_SQUARE:
+      curr_wave = sine_base; // Waveform is calculated
+      break;
+    default:
+      return;
   }
 
   switch (channel)
   {
-  case CHANNEL1:
-    channel1_state.waveform = wave;
-    channel1_state.waveform_data = curr_wave;
-    break;
-  case CHANNEL2:
-    channel2_state.waveform = wave;
-    channel2_state.waveform_data = curr_wave;
-    break;
-  case CHANNEL3:
-    channel3_state.waveform = wave;
-    channel3_state.waveform_data = curr_wave;
-    break;
-  case CHANNEL4:
-    channel4_state.waveform = wave;
-    channel4_state.waveform_data = curr_wave;
-    break;
-  default:
-    return;
+    case CHANNEL1:
+      channel1_state.waveform = wave;
+      channel1_state.waveform_data = curr_wave;
+      break;
+    case CHANNEL2:
+      channel2_state.waveform = wave;
+      channel2_state.waveform_data = curr_wave;
+      break;
+    case CHANNEL3:
+      channel3_state.waveform = wave;
+      channel3_state.waveform_data = curr_wave;
+      break;
+    case CHANNEL4:
+      channel4_state.waveform = wave;
+      channel4_state.waveform_data = curr_wave;
+      break;
+    default:
+      return;
   }
 }
 
@@ -170,44 +169,44 @@ void channel1_4_on_off(channel_t channel, uint8_t state)
 {
   switch (channel)
   {
-  case CHANNEL1:
-    if (state)
-    {
-      channel1_state.on_off = 1;
-      channel1_state.count = 0; // Reset the counter when starting a new tone
-    }
-    else
-      channel1_state.on_off = 0;
-    break;
-  case CHANNEL2:
-    if (state)
-    {
-      channel2_state.on_off = 1;
-      channel2_state.count = 0; // Reset the counter when starting a new tone
-    }
-    else
-      channel2_state.on_off = 0;
-    break;
-  case CHANNEL3:
-    if (state)
-    {
-      channel3_state.on_off = 1;
-      channel3_state.count = 0; // Reset the counter when starting a new tone
-    }
-    else
-      channel3_state.on_off = 0;
-    break;
-  case CHANNEL4:
-    if (state)
-    {
-      channel4_state.on_off = 1;
-      channel4_state.count = 0; // Reset the counter when starting a new tone
-    }
-    else
-      channel4_state.on_off = 0;
-    break;
-  default:
-    return;
+    case CHANNEL1:
+      if (state)
+      {
+        channel1_state.on_off = 1;
+        channel1_state.count = 0; // Reset the counter when starting a new tone
+      }
+      else
+        channel1_state.on_off = 0;
+      break;
+    case CHANNEL2:
+      if (state)
+      {
+        channel2_state.on_off = 1;
+        channel2_state.count = 0; // Reset the counter when starting a new tone
+      }
+      else
+        channel2_state.on_off = 0;
+      break;
+    case CHANNEL3:
+      if (state)
+      {
+        channel3_state.on_off = 1;
+        channel3_state.count = 0; // Reset the counter when starting a new tone
+      }
+      else
+        channel3_state.on_off = 0;
+      break;
+    case CHANNEL4:
+      if (state)
+      {
+        channel4_state.on_off = 1;
+        channel4_state.count = 0; // Reset the counter when starting a new tone
+      }
+      else
+        channel4_state.on_off = 0;
+      break;
+    default:
+      return;
   }
 }
 
@@ -215,20 +214,20 @@ void channel1_4_volume(channel_t channel, uint8_t volume)
 {
   switch (channel)
   {
-  case CHANNEL1:
-    channel1_state.vol = volume;
-    break;
-  case CHANNEL2:
-    channel2_state.vol = volume;
-    break;
-  case CHANNEL3:
-    channel3_state.vol = volume;
-    break;
-  case CHANNEL4:
-    channel4_state.vol = volume;
-    break;
-  default:
-    return;
+    case CHANNEL1:
+      channel1_state.vol = volume;
+      break;
+    case CHANNEL2:
+      channel2_state.vol = volume;
+      break;
+    case CHANNEL3:
+      channel3_state.vol = volume;
+      break;
+    case CHANNEL4:
+      channel4_state.vol = volume;
+      break;
+    default:
+      return;
   }
 }
 
@@ -236,20 +235,20 @@ void channel1_4_frequency(channel_t channel, uint16_t freq)
 {
   switch (channel)
   {
-  case CHANNEL1:
-    channel1_state.freq = freq;
-    break;
-  case CHANNEL2:
-    channel2_state.freq = freq;
-    break;
-  case CHANNEL3:
-    channel3_state.freq = freq;
-    break;
-  case CHANNEL4:
-    channel4_state.freq = freq;
-    break;
-  default:
-    return;
+    case CHANNEL1:
+      channel1_state.freq = freq;
+      break;
+    case CHANNEL2:
+      channel2_state.freq = freq;
+      break;
+    case CHANNEL3:
+      channel3_state.freq = freq;
+      break;
+    case CHANNEL4:
+      channel4_state.freq = freq;
+      break;
+    default:
+      return;
   }
 }
 
@@ -257,20 +256,20 @@ static inline void channel_update_CCR(channel_t channel, uint32_t ccr)
 {
   switch (channel)
   {
-  case CHANNEL1:
-    CHANNEL1_4_TIMER->CCR4 = ccr;
-    break;
-  case CHANNEL2:
-    CHANNEL1_4_TIMER->CCR1 = ccr;
-    break;
-  case CHANNEL3:
-    CHANNEL1_4_TIMER->CCR2 = ccr;
-    break;
-  case CHANNEL4:
-    CHANNEL1_4_TIMER->CCR3 = ccr;
-    break;
-  default:
-    return;
+    case CHANNEL1:
+      CHANNEL1_4_TIMER->CCR4 = ccr;
+      break;
+    case CHANNEL2:
+      CHANNEL1_4_TIMER->CCR1 = ccr;
+      break;
+    case CHANNEL3:
+      CHANNEL1_4_TIMER->CCR2 = ccr;
+      break;
+    case CHANNEL4:
+      CHANNEL1_4_TIMER->CCR3 = ccr;
+      break;
+    default:
+      return;
   }
 }
 
@@ -331,6 +330,7 @@ static void reset_channel(volatile channel_state_t *channel, channel_t channel_n
 
 static void channel1_4_timer_gpio_init()
 {
+  // Enable the RCC for the timers' GPIO pins
   RCC_GPIOA_CLK_Enable();
   RCC_GPIOB_CLK_Enable();
   RCC_GPIOC_CLK_Enable();

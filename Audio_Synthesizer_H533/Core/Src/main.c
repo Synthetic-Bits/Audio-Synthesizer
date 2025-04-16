@@ -2,7 +2,8 @@
  ******************************************************************************
  * @file           : main.c
  * @brief          : Main program body
- * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson, Hayoung In
+ * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson,
+ *                   and Hayoung Im
  ******************************************************************************
  * @attention
  *
@@ -15,6 +16,7 @@
  *
  ******************************************************************************
  */
+
 /* Includes ------------------------------------------------------------------*/
 
 #include "main.h"
@@ -109,165 +111,165 @@ int main(void)
 
   while (1)
   {
-#ifdef DEMO_100Hz_SWEEP
-    HAL_Delay(100);
+    #ifdef DEMO_100Hz_SWEEP
+        HAL_Delay(100);
 
-    current_f += 100;
-    current_f = current_f % 12000;
+        current_f += 100;
+        current_f = current_f % 12000;
 
-    channel1_state.freq = current_f;
-    channel2_state.freq = current_f;
-    channel3_state.freq = current_f;
-    channel4_state.freq = current_f;
-#endif
+        channel1_state.freq = current_f;
+        channel2_state.freq = current_f;
+        channel3_state.freq = current_f;
+        channel4_state.freq = current_f;
+    #endif
 
-#ifdef DEMO_C_MAJOR
-    HAL_Delay(750);
+    #ifdef DEMO_C_MAJOR
+        HAL_Delay(750);
 
-    current_f = 262; // C4
+        current_f = 262; // C4
 
-    channel1_state.freq = current_f;
-    channel2_state.freq = current_f;
-    channel3_state.freq = current_f;
-    channel4_state.freq = current_f;
+        channel1_state.freq = current_f;
+        channel2_state.freq = current_f;
+        channel3_state.freq = current_f;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 296; // D4
+        current_f = 296; // D4
 
-    channel1_state.freq = current_f;
-    channel2_state.freq = current_f;
-    channel3_state.freq = current_f;
-    channel4_state.freq = current_f;
+        channel1_state.freq = current_f;
+        channel2_state.freq = current_f;
+        channel3_state.freq = current_f;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 330; // E4
+        current_f = 330; // E4
 
-    channel1_state.freq = current_f;
-    channel2_state.freq = current_f;
-    channel3_state.freq = current_f;
-    channel4_state.freq = current_f;
+        channel1_state.freq = current_f;
+        channel2_state.freq = current_f;
+        channel3_state.freq = current_f;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 349; // F4
+        current_f = 349; // F4
 
-    channel1_state.freq = current_f;
-    channel2_state.freq = current_f;
-    channel3_state.freq = current_f;
-    channel4_state.freq = current_f;
+        channel1_state.freq = current_f;
+        channel2_state.freq = current_f;
+        channel3_state.freq = current_f;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 392; // G4
+        current_f = 392; // G4
 
-    channel1_state.freq = current_f;
-    channel2_state.freq = current_f;
-    channel3_state.freq = current_f;
-    channel4_state.freq = current_f;
+        channel1_state.freq = current_f;
+        channel2_state.freq = current_f;
+        channel3_state.freq = current_f;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 440; // A4
+        current_f = 440; // A4
 
-    channel1_state.freq = current_f;
-    channel2_state.freq = current_f;
-    channel3_state.freq = current_f;
-    channel4_state.freq = current_f;
+        channel1_state.freq = current_f;
+        channel2_state.freq = current_f;
+        channel3_state.freq = current_f;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 494; // B4
+        current_f = 494; // B4
 
-    channel1_state.freq = current_f;
-    channel2_state.freq = current_f;
-    channel3_state.freq = current_f;
-    channel4_state.freq = current_f;
+        channel1_state.freq = current_f;
+        channel2_state.freq = current_f;
+        channel3_state.freq = current_f;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 523; // C5
+        current_f = 523; // C5
 
-    channel1_state.freq = current_f;
-    channel2_state.freq = current_f;
-    channel3_state.freq = current_f;
-    channel4_state.freq = current_f;
-#endif
+        channel1_state.freq = current_f;
+        channel2_state.freq = current_f;
+        channel3_state.freq = current_f;
+        channel4_state.freq = current_f;
+    #endif
 
-#ifdef DEMO_C_MAJOR_CHORDS
+    #ifdef DEMO_C_MAJOR_CHORDS
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 262; // C4
+        current_f = 262; // C4
 
-    channel1_state.freq = 262;
-    channel2_state.freq = 330;
-    channel3_state.freq = 392;
-    channel4_state.freq = current_f;
+        channel1_state.freq = 262;
+        channel2_state.freq = 330;
+        channel3_state.freq = 392;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 296; // D4
+        current_f = 296; // D4
 
-    channel1_state.freq = 296;
-    channel2_state.freq = 349;
-    channel3_state.freq = 440;
-    channel4_state.freq = current_f;
+        channel1_state.freq = 296;
+        channel2_state.freq = 349;
+        channel3_state.freq = 440;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 330; // E4
+        current_f = 330; // E4
 
-    channel1_state.freq = 330;
-    channel2_state.freq = 392;
-    channel3_state.freq = 494;
-    channel4_state.freq = current_f;
+        channel1_state.freq = 330;
+        channel2_state.freq = 392;
+        channel3_state.freq = 494;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 349; // F4
+        current_f = 349; // F4
 
-    channel1_state.freq = 349;
-    channel2_state.freq = 440;
-    channel3_state.freq = 523;
-    channel4_state.freq = current_f;
+        channel1_state.freq = 349;
+        channel2_state.freq = 440;
+        channel3_state.freq = 523;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 392; // G4
+        current_f = 392; // G4
 
-    channel1_state.freq = 392;
-    channel2_state.freq = 494;
-    channel3_state.freq = 587;
-    channel4_state.freq = current_f;
+        channel1_state.freq = 392;
+        channel2_state.freq = 494;
+        channel3_state.freq = 587;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 440; // A4
+        current_f = 440; // A4
 
-    channel1_state.freq = 440;
-    channel2_state.freq = 523;
-    channel3_state.freq = 659;
-    channel4_state.freq = current_f;
+        channel1_state.freq = 440;
+        channel2_state.freq = 523;
+        channel3_state.freq = 659;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 494; // B4
+        current_f = 494; // B4
 
-    channel1_state.freq = 494;
-    channel2_state.freq = 587;
-    channel3_state.freq = 698;
-    channel4_state.freq = current_f;
+        channel1_state.freq = 494;
+        channel2_state.freq = 587;
+        channel3_state.freq = 698;
+        channel4_state.freq = current_f;
 
-    HAL_Delay(750);
+        HAL_Delay(750);
 
-    current_f = 523; // C5
+        current_f = 523; // C5
 
-    channel1_state.freq = 523;
-    channel2_state.freq = 659;
-    channel3_state.freq = 784;
-    channel4_state.freq = current_f;
-#endif
+        channel1_state.freq = 523;
+        channel2_state.freq = 659;
+        channel3_state.freq = 784;
+        channel4_state.freq = current_f;
+    #endif
   };
 }

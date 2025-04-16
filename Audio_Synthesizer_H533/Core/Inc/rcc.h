@@ -2,6 +2,8 @@
  ******************************************************************************
  * @file           : rcc.h
  * @brief          : RCC Initialization Defintions
+ * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson,
+ *                   and Hayoung Im
  ******************************************************************************
  */
 
