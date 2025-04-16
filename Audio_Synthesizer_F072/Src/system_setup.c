@@ -95,6 +95,17 @@ void HAL_RCC_USART3_CLK_Enable(void)
 }
 
 /**
+ * @brief Enable the RCC clock for the USART4 peripheral.
+ * @param None
+ * @retval None
+ */
+void HAL_RCC_USART4_CLK_Enable(void)
+{
+  RCC->APB1ENR &= ~(RCC_APB1ENR_USART4EN);
+  RCC->APB1ENR |=   RCC_APB1ENR_USART4EN;
+}
+
+/**
   * @brief  This function is executed in case of error occurrence.
   * @param  None
   * @retval None

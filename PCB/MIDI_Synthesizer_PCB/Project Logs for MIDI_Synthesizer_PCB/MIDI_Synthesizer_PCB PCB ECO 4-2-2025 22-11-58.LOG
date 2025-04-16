@@ -1,0 +1,59 @@
+Removed Pin From Net: NetName=+15 Pin=J6-1
+Removed Pin From Net: NetName=GND Pin=J6-2
+Removed Pin From Net: NetName=-15 Pin=J7-1
+Removed Pin From Net: NetName=GND Pin=J7-2
+Removed Member From Class: ClassName=MIDI_Synthesizer Member=J6
+Removed Member From Class: ClassName=MIDI_Synthesizer Member=J7
+Change Component Footprint: Designator=J4 Old Footprint=SHDR2W70P0X500_1X2_1000X750X1160P New Footprint=Barrier Terminal P=8.25mm
+Change Component Footprint: Designator=J5 Old Footprint=SHDR2W70P0X500_1X2_1000X750X1160P New Footprint=Barrier Terminal P=8.25mm
+Change Component Comment : Designator=J4 Old Comment=691137710002 New Comment=Header
+Change Component Comment : Designator=J5 Old Comment=691137710002 New Comment=Header
+Change Component Designator: OldDesignator=H22 NewDesignator=H24
+Change Component Designator: OldDesignator=H23 NewDesignator=H25
+Change Component Designator: OldDesignator=H24 NewDesignator=H26
+Change Component Designator: OldDesignator=H25 NewDesignator=H27
+Change Component Designator: OldDesignator=H26 NewDesignator=H28
+Change Component Designator: OldDesignator=H27_A NewDesignator=H29_A
+Change Component Designator: OldDesignator=H27_B NewDesignator=H29_B
+Change Component Designator: OldDesignator=H27_C NewDesignator=H29_C
+Change Component Designator: OldDesignator=H27_D NewDesignator=H29_D
+Change Component Designator: OldDesignator=H27_E NewDesignator=H29_E
+Change Component Designator: OldDesignator=H27_F NewDesignator=H29_F
+Change Component Designator: OldDesignator=H27_G NewDesignator=H29_G
+Change Component Designator: OldDesignator=H27_H NewDesignator=H29_H
+Change component parameters: Designator = "J4" ("J4"); Footprint = "SHDR2W70P0X500_1X2_1000X750X1160P"; UniqueID = "\ZCVGFWMV" ("\ZCVGFWMV")
+Change component parameters: Designator = "J5" ("J5"); Footprint = "SHDR2W70P0X500_1X2_1000X750X1160P"; UniqueID = "\KCVEFXIB" ("\KCVEFXIB")
+Added Component: Designator=H22(Header_1X2)
+Added Component: Designator=H23(Header_1X2)
+Added Pin To Net: NetName=+15 Pin=H22-1
+Added Pin To Net: NetName=GND Pin=H22-2
+Added Pin To Net: NetName=-15 Pin=H23-1
+Added Pin To Net: NetName=GND Pin=H23-2
+Change Net Name : Old Net Name=NetH22_2 New Net Name=NetH24_2
+Change Net Name : Old Net Name=NetH22_3 New Net Name=NetH24_3
+Change Net Name : Old Net Name=NetH27_A_1 New Net Name=NetH29_A_1
+Change Net Name : Old Net Name=NetH27_A_2 New Net Name=NetH29_A_2
+Change Net Name : Old Net Name=NetH27_A_3 New Net Name=NetH29_A_3
+Change Net Name : Old Net Name=NetH27_B_1 New Net Name=NetH29_B_1
+Change Net Name : Old Net Name=NetH27_B_2 New Net Name=NetH29_B_2
+Change Net Name : Old Net Name=NetH27_B_3 New Net Name=NetH29_B_3
+Change Net Name : Old Net Name=NetH27_C_1 New Net Name=NetH29_C_1
+Change Net Name : Old Net Name=NetH27_C_2 New Net Name=NetH29_C_2
+Change Net Name : Old Net Name=NetH27_C_3 New Net Name=NetH29_C_3
+Change Net Name : Old Net Name=NetH27_D_1 New Net Name=NetH29_D_1
+Change Net Name : Old Net Name=NetH27_D_2 New Net Name=NetH29_D_2
+Change Net Name : Old Net Name=NetH27_D_3 New Net Name=NetH29_D_3
+Change Net Name : Old Net Name=NetH27_E_1 New Net Name=NetH29_E_1
+Change Net Name : Old Net Name=NetH27_E_2 New Net Name=NetH29_E_2
+Change Net Name : Old Net Name=NetH27_E_3 New Net Name=NetH29_E_3
+Change Net Name : Old Net Name=NetH27_F_1 New Net Name=NetH29_F_1
+Change Net Name : Old Net Name=NetH27_F_2 New Net Name=NetH29_F_2
+Change Net Name : Old Net Name=NetH27_F_3 New Net Name=NetH29_F_3
+Change Net Name : Old Net Name=NetH27_G_1 New Net Name=NetH29_G_1
+Change Net Name : Old Net Name=NetH27_G_2 New Net Name=NetH29_G_2
+Change Net Name : Old Net Name=NetH27_G_3 New Net Name=NetH29_G_3
+Change Net Name : Old Net Name=NetH27_H_1 New Net Name=NetH29_H_1
+Change Net Name : Old Net Name=NetH27_H_2 New Net Name=NetH29_H_2
+Change Net Name : Old Net Name=NetH27_H_3 New Net Name=NetH29_H_3
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H27 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H28 Header

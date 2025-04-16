@@ -29,6 +29,7 @@ void HAL_RCC_TIM3_CLK_Enable(void);
 void HAL_RCC_USART1_CLK_Enable(void);
 void HAL_RCC_USART2_CLK_Enable(void);
 void HAL_RCC_USART3_CLK_Enable(void);
+void HAL_RCC_USART4_CLK_Enable(void);
 
 /* ========================================================================== */
 /*                                                                            */
@@ -42,6 +43,13 @@ void HAL_RCC_USART3_CLK_Enable(void);
  * @retval None
  */
 void checkpoint_1(void);
+
+/**
+ * @brief This function runs the second checkpoint of the synthesizer project.
+ * @param None
+ * @retval None
+ */
+void checkpoint_2(void);
 
 /* ========================================================================== */
 /*                                                                            */

@@ -1,0 +1,26 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: MIDI_Synthesizer_PCB.PcbDoc   4/4/2025  17:36:54
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : MIDI_Synthesizer_PCB.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      14mil (0.35mm)                                            Round             3647      PTH        290.29inch (7373.30mm)
+T2      25mil (0.63mm)                                            Round             40        PTH        14.53inch (368.96mm)
+T3      39mil (1mm)                                               Round             27        PTH        13.00inch (330.27mm)
+T4      40mil (1.01mm)                                            Round             24        PTH        11.06inch (280.80mm)
+T5      40mil (1.02mm)                                            Round             76        PTH        12.40inch (314.96mm)
+T6      45mil (1.15mm)                                            Round             187       PTH        48.83inch (1240.25mm)
+T7      47mil (1.2mm)                                             Round             6         PTH        2.46inch (62.40mm)
+T8      52mil (1.32mm)                                            Round             3         PTH        0.20inch (5.10mm)
+T9      53mil (1.35mm)                                            Round             5         PTH        0.50inch (12.82mm)
+T10     55mil (1.4mm)                                             Round             14        PTH        3.51inch (89.20mm)
+T11     63mil (1.59mm)                                            Round             16        PTH        11.26inch (286.00mm)
+T12     112mil (2.84mm)                                           Round             18        PTH        13.25inch (336.67mm)
+T13     134mil (3.4mm)                                            Round             5         PTH        16.23inch (412.30mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              4068
+
+Total Processing Time (hh:mm:ss) : 00:00:00

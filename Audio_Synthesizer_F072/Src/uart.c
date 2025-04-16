@@ -44,6 +44,12 @@
 volatile int globalReceiveBufferIndex = 0;
 volatile char globalReceiveBuffer[1024];
 
+// Variables that keep track of if the USART peripherals are configured.
+static int USART1_configured = 0;
+static int USART2_configured = 0;
+static int USART3_configured = 0;
+static int USART4_configured = 0;
+
 /* ========================================================================== */
 /*                                                                            */
 /*    IRQ Handlers                                                            */
@@ -76,14 +82,56 @@ void USART2_IRQHandler()
 
 void USART3_4_IRQHandler()
 {
-    // Add the received data to the global buffer.
-    globalReceiveBuffer[globalReceiveBufferIndex] = USART3->RDR;
+    // Check if USART3 or USART4 triggered the interrupt.
+    if ((USART3->ISR & USART_ISR_RXNE_Msk))
+    {
+        // Add the received data to the global buffer.
+        globalReceiveBuffer[globalReceiveBufferIndex] = USART3->RDR;
 
-    // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
-    globalReceiveBufferIndex++;
+        // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
+        globalReceiveBufferIndex++;
+        if (globalReceiveBufferIndex > GLOBAL_RECEIVE_BUFFER_SIZE)
+        {
+            // We overflowed, set up the LED indicators
+            initializeLEDs();
+            HAL_GPIO_WritePin(GPIOC, GREEN_LED_PIN, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOC, ORANGE_LED_PIN, GPIO_PIN_SET);
 
-    // Check that the buffer hasn't overflown
-    // assert(globalReceiveBufferIndex < GLOBAL_RECEIVE_BUFFER_SIZE);
+            // Loop infinitely
+            while (1) { }
+        }
+    }
+    else if ((USART4->ISR & USART_ISR_RXNE_Msk))
+    {
+        // Add the received data to the global buffer.
+        globalReceiveBuffer[globalReceiveBufferIndex] = USART4->RDR;
+
+        // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
+        globalReceiveBufferIndex++;
+        if (globalReceiveBufferIndex > GLOBAL_RECEIVE_BUFFER_SIZE)
+        {
+            // We overflowed, set up the LED indicators
+            initializeLEDs();
+            HAL_GPIO_WritePin(GPIOC, GREEN_LED_PIN, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOC, ORANGE_LED_PIN, GPIO_PIN_SET);
+
+            // Loop infinitely
+            while (1) { }
+        }
+    }
+    else
+    {
+        // Error state, how did you even get here?
+        // Set up the LED indicators for the error
+        initializeLEDs();
+        HAL_GPIO_WritePin(GPIOC, RED_LED_PIN, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOC, GREEN_LED_PIN, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOC, BLUE_LED_PIN, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOC, ORANGE_LED_PIN, GPIO_PIN_SET);
+
+        // Loop infinitely
+        while(1) { }
+    }
 }
 
 /* ========================================================================== */
@@ -126,12 +174,15 @@ void configureUART1(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     USART1->CR1 &= ~(USART_CR1_UE);
     USART1->CR1 |=   USART_CR1_UE;
 
-    // Lastly, enable the USART1 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
+    // Enable the USART1 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
     if (enableInterrupts == UART_ENABLE_INTERRUPTS)
     {
         NVIC_EnableIRQ(USART1_IRQn);
         NVIC_SetPriority(USART1_IRQn, interruptPriority);
     }
+
+    // Lastly, indicate that this peripheral has been configured
+    USART1_configured = 1;
 }
 
 void configureUART2(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority)
@@ -168,12 +219,15 @@ void configureUART2(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     USART2->CR1 &= ~(USART_CR1_UE);
     USART2->CR1 |=   USART_CR1_UE;
 
-    // Lastly, enable the USART2 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
+    // Enable the USART2 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
     if (enableInterrupts == UART_ENABLE_INTERRUPTS)
     {
         NVIC_EnableIRQ(USART2_IRQn);
         NVIC_SetPriority(USART2_IRQn, interruptPriority);
     }
+
+    // Lastly, indicate that this peripheral has been configured
+    USART2_configured = 1;
 }
 
 void configureUART3(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority)
@@ -210,12 +264,60 @@ void configureUART3(unsigned int baudRate, uint8_t enableInterrupts, uint8_t int
     USART3->CR1 &= ~(USART_CR1_UE);
     USART3->CR1 |=   USART_CR1_UE;
 
-    // Lastly, enable the USART3 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
+    // Enable the USART3 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
     if (enableInterrupts == UART_ENABLE_INTERRUPTS)
     {
         NVIC_EnableIRQ(USART3_4_IRQn);
         NVIC_SetPriority(USART3_4_IRQn, interruptPriority);
     }
+
+    // Lastly, indicate that this peripheral has been configured
+    USART3_configured = 1;
+}
+
+void configureUART4(unsigned int baudRate, uint8_t enableInterrupts, uint8_t interruptPriority)
+{
+    // Enable the RCC for GPIOC and USART4.
+    HAL_RCC_GPIOC_CLK_Enable();
+    HAL_RCC_USART4_CLK_Enable();
+
+    // Set the GPIO pins for TX (PC10) and RX (PC11) into AF mode.
+    GPIO_InitTypeDef initStr = {UART4_TX_PIN | UART4_RX_PIN,
+                                GPIO_MODE_AF_PP,
+                                GPIO_NOPULL,
+                                GPIO_SPEED_FREQ_LOW,
+                                GPIO_AF4_USART4};
+    HAL_GPIO_Init(GPIOC, &initStr);
+
+    // Set the baud rate of communication to the one specified by the user.
+    USART4->BRR = (HAL_RCC_GetHCLKFreq() / baudRate) & 0x0000FFFF;
+
+    // Enable the receive register not empty interrupt (if interrupts are enabled).
+    if (enableInterrupts == UART_ENABLE_INTERRUPTS)
+    {
+        USART4->CR1 &= ~(USART_CR1_RXNEIE);
+        USART4->CR1 |=   USART_CR1_RXNEIE;
+    }
+
+    // Enable the transmitter and receiver hardware in USART4.
+    USART4->CR1 &= ~(USART_CR1_TE);
+    USART4->CR1 |=   USART_CR1_TE;
+    USART4->CR1 &= ~(USART_CR1_RE);
+    USART4->CR1 |=   USART_CR1_RE;
+
+    // Enable the USART4 peripheral.
+    USART4->CR1 &= ~(USART_CR1_UE);
+    USART4->CR1 |=   USART_CR1_UE;
+
+    // Enable the USART4 interrupt in the NVIC as well as set its priority (if interrupts are enabled).
+    if (enableInterrupts == UART_ENABLE_INTERRUPTS)
+    {
+        NVIC_EnableIRQ(USART3_4_IRQn);
+        NVIC_SetPriority(USART3_4_IRQn, interruptPriority);
+    }
+
+    // Lastly, indicate that this peripheral has been configured
+    USART4_configured = 1;
 }
 
 /* ========================================================================== */
@@ -281,6 +383,25 @@ void sendUART3(char *sendBuffer)
     }    
 }
 
+void sendUART4(char *sendBuffer)
+{
+    int index = 0;
+    char currentByte = sendBuffer[index];
+    while (currentByte != '\x0')
+    {
+        // Wait for the transmit register to be empty by polling the TXE bit in the ISR.
+        while (!(USART4->ISR & USART_ISR_TXE))
+            __NOP();
+
+        // Write the characterToSend into the TDR.
+        USART4->TDR = currentByte;
+
+        // Prepare the loop for the next byte.
+        index++;
+        currentByte = sendBuffer[index];
+    }    
+}
+
 /* ========================================================================== */
 /*                                                                            */
 /*    Blocking Receiving Functions                                            */
@@ -330,4 +451,40 @@ void receiveUART3Blocking(int nBytes, char *receiveBuffer)
         char receivedByte = USART3->RDR;
         receiveBuffer[i] = receivedByte;
     }    
+}
+
+void receiveUART4Blocking(int nBytes, char *receiveBuffer)
+{
+    // Loop until all of the bytes have been read.
+    for (int i = 0; i < nBytes; i++)
+    {
+        // Wait for the transmit register to be empty by polling the RXNE bit in the ISR.
+        while(!(USART4->ISR & USART_ISR_RXNE))
+            __NOP();
+
+        // Save the receivedByte in the receiveBuffer.
+        char receivedByte = USART4->RDR;
+        receiveBuffer[i] = receivedByte;
+    }    
+}
+
+/* ========================================================================== */
+/*                                                                            */
+/*    Miscellaneous Functions                                                 */
+/*                                                                            */
+/* ========================================================================== */
+
+/**
+ * @brief This function initializes the UART4 peripheral and acts as a drop-in replacement for print().
+ * @param text The text to print using UART4.
+ * @retval None.
+ */
+void printu(char *text)
+{
+    // Configure USART4 if needed.
+    if (USART4_configured == 0)
+        configureUART4(115200, UART_DISABLE_INTERRUPTS, 2);
+    
+    // Send the text using USART4.
+    sendUART4(text);
 }
