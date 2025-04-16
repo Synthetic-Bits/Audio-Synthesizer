@@ -1,0 +1,332 @@
+Change Component Footprint: Designator=H9 Old Footprint=Header_1X12 New Footprint=Header_1X10
+Added Pin To Net: NetName=PC10 Pin=H1-1
+Added Pin To Net: NetName=PC11 Pin=H1-2
+Added Pin To Net: NetName=PC12 Pin=H1-3
+Added Pin To Net: NetName=PD2 Pin=H1-4
+Added Pin To Net: NetName=VDD Pin=H1-5
+Added Pin To Net: NetName=E5V Pin=H1-6
+Added Pin To Net: NetName=BOOT0 Pin=H1-7
+Added Pin To Net: NetName=GND Pin=H1-8
+Added Pin To Net: NetName=IOREF Pin=H1-12
+Added Pin To Net: NetName=PA13 Pin=H1-13
+Added Pin To Net: NetName=T_NRST Pin=H1-14
+Added Pin To Net: NetName=PA14 Pin=H1-15
+Added Pin To Net: NetName=3V3 Pin=H1-16
+Added Pin To Net: NetName=PA15 Pin=H1-17
+Added Pin To Net: NetName=5V Pin=H1-18
+Added Pin To Net: NetName=GND Pin=H1-19
+Added Pin To Net: NetName=GND Pin=H1-20
+Added Pin To Net: NetName=GND Pin=H1-22
+Added Pin To Net: NetName=PC13 Pin=H1-23
+Added Pin To Net: NetName=VIN Pin=H1-24
+Added Pin To Net: NetName=PC14 Pin=H1-25
+Added Pin To Net: NetName=PC15 Pin=H1-27
+Added Pin To Net: NetName=PA0 Pin=H1-28
+Added Pin To Net: NetName=PF0 Pin=H1-29
+Added Pin To Net: NetName=PA1 Pin=H1-30
+Added Pin To Net: NetName=PF1 Pin=H1-31
+Added Pin To Net: NetName=PB1 Pin=H1-32
+Added Pin To Net: NetName=VBAT Pin=H1-33
+Added Pin To Net: NetName=PB0 Pin=H1-34
+Added Pin To Net: NetName=PC2 Pin=H1-35
+Added Pin To Net: NetName=PC1 Pin=H1-36
+Added Pin To Net: NetName=PC3 Pin=H1-37
+Added Pin To Net: NetName=PC0 Pin=H1-38
+Added Pin To Net: NetName=PA9 Pin=H2-2
+Added Pin To Net: NetName=PB6 Pin=H2-3
+Added Pin To Net: NetName=PA10 Pin=H2-4
+Added Pin To Net: NetName=PB7 Pin=H2-5
+Added Pin To Net: NetName=PC5 Pin=H2-6
+Added Pin To Net: NetName=AVDD Pin=H2-7
+Added Pin To Net: NetName=VBUS_STLK Pin=H2-8
+Added Pin To Net: NetName=GND Pin=H2-9
+Added Pin To Net: NetName=PA5 Pin=H2-11
+Added Pin To Net: NetName=PA12 Pin=H2-12
+Added Pin To Net: NetName=PA6 Pin=H2-13
+Added Pin To Net: NetName=PA11 Pin=H2-14
+Added Pin To Net: NetName=PA7 Pin=H2-15
+Added Pin To Net: NetName=PB12 Pin=H2-16
+Added Pin To Net: NetName=PC9 Pin=H2-17
+Added Pin To Net: NetName=PC6 Pin=H2-19
+Added Pin To Net: NetName=GND Pin=H2-20
+Added Pin To Net: NetName=PC7 Pin=H2-21
+Added Pin To Net: NetName=PB2 Pin=H2-22
+Added Pin To Net: NetName=PA8 Pin=H2-23
+Added Pin To Net: NetName=PB10 Pin=H2-25
+Added Pin To Net: NetName=PB15 Pin=H2-26
+Added Pin To Net: NetName=PB4 Pin=H2-27
+Added Pin To Net: NetName=PB14 Pin=H2-28
+Added Pin To Net: NetName=PB5 Pin=H2-29
+Added Pin To Net: NetName=PB13 Pin=H2-30
+Added Pin To Net: NetName=PB3 Pin=H2-31
+Added Pin To Net: NetName=AGND Pin=H2-32
+Added Pin To Net: NetName=PC8 Pin=H2-33
+Added Pin To Net: NetName=PC4 Pin=H2-34
+Added Pin To Net: NetName=PB14 Pin=H2-35
+Added Pin To Net: NetName=PB8 Pin=H2-36
+Added Pin To Net: NetName=PB15 Pin=H2-37
+Added Pin To Net: NetName=IOREF Pin=H8-2
+Added Pin To Net: NetName=T_NRST Pin=H8-3
+Added Pin To Net: NetName=3V3 Pin=H8-4
+Added Pin To Net: NetName=5V Pin=H8-5
+Added Pin To Net: NetName=GND Pin=H8-6
+Added Pin To Net: NetName=GND Pin=H8-7
+Added Pin To Net: NetName=VIN Pin=H8-8
+Added Pin To Net: NetName=PB6 Pin=H9-1
+Added Pin To Net: NetName=PB7 Pin=H9-2
+Added Pin To Net: NetName=AVDD Pin=H9-3
+Added Pin To Net: NetName=GND Pin=H9-4
+Added Pin To Net: NetName=PA5 Pin=H9-5
+Added Pin To Net: NetName=PA6 Pin=H9-6
+Added Pin To Net: NetName=PA7 Pin=H9-7
+Added Pin To Net: NetName=PC9 Pin=H9-8
+Added Pin To Net: NetName=PC6 Pin=H9-9
+Added Pin To Net: NetName=PC7 Pin=H9-10
+Added Pin To Net: NetName=PA0 Pin=H11-1
+Added Pin To Net: NetName=PA1 Pin=H11-2
+Added Pin To Net: NetName=PB1 Pin=H11-3
+Added Pin To Net: NetName=PB0 Pin=H11-4
+Added Pin To Net: NetName=PC1 Pin=H11-5
+Added Pin To Net: NetName=PC0 Pin=H11-6
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C1 1u
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C2 100n
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C3 100n
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C4 100u
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C5 100n
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C6 2.2u
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C7 100n
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C8 100n
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C9 0.22u
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C10 100u
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C11 100n
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C12 22u
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C13 100u
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C14 100u
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C15 100u
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C16 100u
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C17 1u
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component C18 1u
+Added Member To Class: ClassName=A Member=Component C19_A (C19) 22p
+Added Member To Class: ClassName=B Member=Component C19_B (C19) 22p
+Added Member To Class: ClassName=C Member=Component C19_C (C19) 22p
+Added Member To Class: ClassName=D Member=Component C19_D (C19) 22p
+Added Member To Class: ClassName=E Member=Component C19_E (C19) 22p
+Added Member To Class: ClassName=F Member=Component C19_F (C19) 22p
+Added Member To Class: ClassName=G Member=Component C19_G (C19) 22p
+Added Member To Class: ClassName=H Member=Component C19_H (C19) 22p
+Added Member To Class: ClassName=A Member=Component C20_A (C20) 820p
+Added Member To Class: ClassName=B Member=Component C20_B (C20) 820p
+Added Member To Class: ClassName=C Member=Component C20_C (C20) 820p
+Added Member To Class: ClassName=D Member=Component C20_D (C20) 820p
+Added Member To Class: ClassName=E Member=Component C20_E (C20) 820p
+Added Member To Class: ClassName=F Member=Component C20_F (C20) 820p
+Added Member To Class: ClassName=G Member=Component C20_G (C20) 820p
+Added Member To Class: ClassName=H Member=Component C20_H (C20) 820p
+Added Member To Class: ClassName=A Member=Component C21_A (C21) 1u
+Added Member To Class: ClassName=B Member=Component C21_B (C21) 1u
+Added Member To Class: ClassName=C Member=Component C21_C (C21) 1u
+Added Member To Class: ClassName=D Member=Component C21_D (C21) 1u
+Added Member To Class: ClassName=E Member=Component C21_E (C21) 1u
+Added Member To Class: ClassName=F Member=Component C21_F (C21) 1u
+Added Member To Class: ClassName=G Member=Component C21_G (C21) 1u
+Added Member To Class: ClassName=H Member=Component C21_H (C21) 1u
+Added Member To Class: ClassName=A Member=Component C22_A (C22) 100n
+Added Member To Class: ClassName=B Member=Component C22_B (C22) 100n
+Added Member To Class: ClassName=C Member=Component C22_C (C22) 100n
+Added Member To Class: ClassName=D Member=Component C22_D (C22) 100n
+Added Member To Class: ClassName=E Member=Component C22_E (C22) 100n
+Added Member To Class: ClassName=F Member=Component C22_F (C22) 100n
+Added Member To Class: ClassName=G Member=Component C22_G (C22) 100n
+Added Member To Class: ClassName=H Member=Component C22_H (C22) 100n
+Added Member To Class: ClassName=A Member=Component C23_A (C23) 100n
+Added Member To Class: ClassName=B Member=Component C23_B (C23) 100n
+Added Member To Class: ClassName=C Member=Component C23_C (C23) 100n
+Added Member To Class: ClassName=D Member=Component C23_D (C23) 100n
+Added Member To Class: ClassName=E Member=Component C23_E (C23) 100n
+Added Member To Class: ClassName=F Member=Component C23_F (C23) 100n
+Added Member To Class: ClassName=G Member=Component C23_G (C23) 100n
+Added Member To Class: ClassName=H Member=Component C23_H (C23) 100n
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D1 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D2 1N4148
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D3 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D4 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D5 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D6 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D7 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D8 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D9 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D10 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D11 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D12 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D13 LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component D14 LED
+Added Member To Class: ClassName=A Member=Component D15_A (D15) LED
+Added Member To Class: ClassName=B Member=Component D15_B (D15) LED
+Added Member To Class: ClassName=C Member=Component D15_C (D15) LED
+Added Member To Class: ClassName=D Member=Component D15_D (D15) LED
+Added Member To Class: ClassName=E Member=Component D15_E (D15) LED
+Added Member To Class: ClassName=F Member=Component D15_F (D15) LED
+Added Member To Class: ClassName=G Member=Component D15_G (D15) LED
+Added Member To Class: ClassName=H Member=Component D15_H (D15) LED
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H1 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H2 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H3 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H4 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H5 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H6 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H7 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H8 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H9 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H10 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H11 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H12 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H13 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H14 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H15 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H16 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H17 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H18 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H19 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H20 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H21 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H22 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H23 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H24 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H25 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component H26 Header
+Added Member To Class: ClassName=A Member=Component H27_A (H27) Header
+Added Member To Class: ClassName=B Member=Component H27_B (H27) Header
+Added Member To Class: ClassName=C Member=Component H27_C (H27) Header
+Added Member To Class: ClassName=D Member=Component H27_D (H27) Header
+Added Member To Class: ClassName=E Member=Component H27_E (H27) Header
+Added Member To Class: ClassName=F Member=Component H27_F (H27) Header
+Added Member To Class: ClassName=G Member=Component H27_G (H27) Header
+Added Member To Class: ClassName=H Member=Component H27_H (H27) Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component IC1 NE5532N
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component IC2 6N138
+Added Member To Class: ClassName=A Member=Component IC3_A (IC3A) NE5532N
+Added Member To Class: ClassName=B Member=Component IC3_B (IC3A) NE5532N
+Added Member To Class: ClassName=C Member=Component IC3_C (IC3A) NE5532N
+Added Member To Class: ClassName=D Member=Component IC3_D (IC3A) NE5532N
+Added Member To Class: ClassName=E Member=Component IC3_E (IC3A) NE5532N
+Added Member To Class: ClassName=F Member=Component IC3_F (IC3A) NE5532N
+Added Member To Class: ClassName=G Member=Component IC3_G (IC3A) NE5532N
+Added Member To Class: ClassName=H Member=Component IC3_H (IC3A) NE5532N
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component J1 KCDX-5S-S2
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component J2 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component J3 KCDX-5S-S2
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component J4 691137710002
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component J5 691137710002
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component J6 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component J7 Header
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component Q1 SI2302
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R1 10k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R2 100k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R3 100k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R4 10k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R5 10k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R6 10k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R7 1M
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R8 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R9 10k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R10 10k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R11 10k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R12 10k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R13 10k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R14 220
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R15 470
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R16 0
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R17 10k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R18 4.7k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R19 1M
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R20 22k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R21 1
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R22 220
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R23 10k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R24 220
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R25 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R26 22k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R27 0
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R28 100k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R29 100k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R30 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R31 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R32 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R33 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R34 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R35 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R36 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R37 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R38 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R39 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R40 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R41 1k
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R42 0
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component R43 0
+Added Member To Class: ClassName=A Member=Component R44_A (R44) 10k
+Added Member To Class: ClassName=B Member=Component R44_B (R44) 10k
+Added Member To Class: ClassName=C Member=Component R44_C (R44) 10k
+Added Member To Class: ClassName=D Member=Component R44_D (R44) 10k
+Added Member To Class: ClassName=E Member=Component R44_E (R44) 10k
+Added Member To Class: ClassName=F Member=Component R44_F (R44) 10k
+Added Member To Class: ClassName=G Member=Component R44_G (R44) 10k
+Added Member To Class: ClassName=H Member=Component R44_H (R44) 10k
+Added Member To Class: ClassName=A Member=Component R45_A (R45) 10k
+Added Member To Class: ClassName=B Member=Component R45_B (R45) 10k
+Added Member To Class: ClassName=C Member=Component R45_C (R45) 10k
+Added Member To Class: ClassName=D Member=Component R45_D (R45) 10k
+Added Member To Class: ClassName=E Member=Component R45_E (R45) 10k
+Added Member To Class: ClassName=F Member=Component R45_F (R45) 10k
+Added Member To Class: ClassName=G Member=Component R45_G (R45) 10k
+Added Member To Class: ClassName=H Member=Component R45_H (R45) 10k
+Added Member To Class: ClassName=A Member=Component R46_A (R46) 1M
+Added Member To Class: ClassName=B Member=Component R46_B (R46) 1M
+Added Member To Class: ClassName=C Member=Component R46_C (R46) 1M
+Added Member To Class: ClassName=D Member=Component R46_D (R46) 1M
+Added Member To Class: ClassName=E Member=Component R46_E (R46) 1M
+Added Member To Class: ClassName=F Member=Component R46_F (R46) 1M
+Added Member To Class: ClassName=G Member=Component R46_G (R46) 1M
+Added Member To Class: ClassName=H Member=Component R46_H (R46) 1M
+Added Member To Class: ClassName=A Member=Component R47_A (R47) 10k
+Added Member To Class: ClassName=B Member=Component R47_B (R47) 10k
+Added Member To Class: ClassName=C Member=Component R47_C (R47) 10k
+Added Member To Class: ClassName=D Member=Component R47_D (R47) 10k
+Added Member To Class: ClassName=E Member=Component R47_E (R47) 10k
+Added Member To Class: ClassName=F Member=Component R47_F (R47) 10k
+Added Member To Class: ClassName=G Member=Component R47_G (R47) 10k
+Added Member To Class: ClassName=H Member=Component R47_H (R47) 10k
+Added Member To Class: ClassName=A Member=Component R48_A (R48) 3.3k
+Added Member To Class: ClassName=B Member=Component R48_B (R48) 3.3k
+Added Member To Class: ClassName=C Member=Component R48_C (R48) 3.3k
+Added Member To Class: ClassName=D Member=Component R48_D (R48) 3.3k
+Added Member To Class: ClassName=E Member=Component R48_E (R48) 3.3k
+Added Member To Class: ClassName=F Member=Component R48_F (R48) 3.3k
+Added Member To Class: ClassName=G Member=Component R48_G (R48) 3.3k
+Added Member To Class: ClassName=H Member=Component R48_H (R48) 3.3k
+Added Member To Class: ClassName=A Member=Component R49_A (R49) 10k
+Added Member To Class: ClassName=B Member=Component R49_B (R49) 10k
+Added Member To Class: ClassName=C Member=Component R49_C (R49) 10k
+Added Member To Class: ClassName=D Member=Component R49_D (R49) 10k
+Added Member To Class: ClassName=E Member=Component R49_E (R49) 10k
+Added Member To Class: ClassName=F Member=Component R49_F (R49) 10k
+Added Member To Class: ClassName=G Member=Component R49_G (R49) 10k
+Added Member To Class: ClassName=H Member=Component R49_H (R49) 10k
+Added Member To Class: ClassName=A Member=Component R50_A (R50) 3.3k
+Added Member To Class: ClassName=B Member=Component R50_B (R50) 3.3k
+Added Member To Class: ClassName=C Member=Component R50_C (R50) 3.3k
+Added Member To Class: ClassName=D Member=Component R50_D (R50) 3.3k
+Added Member To Class: ClassName=E Member=Component R50_E (R50) 3.3k
+Added Member To Class: ClassName=F Member=Component R50_F (R50) 3.3k
+Added Member To Class: ClassName=G Member=Component R50_G (R50) 3.3k
+Added Member To Class: ClassName=H Member=Component R50_H (R50) 3.3k
+Added Member To Class: ClassName=A Member=Component SW1_A (SW1) Slide Switch 4
+Added Member To Class: ClassName=B Member=Component SW1_B (SW1) Slide Switch 4
+Added Member To Class: ClassName=C Member=Component SW1_C (SW1) Slide Switch 4
+Added Member To Class: ClassName=D Member=Component SW1_D (SW1) Slide Switch 4
+Added Member To Class: ClassName=E Member=Component SW1_E (SW1) Slide Switch 4
+Added Member To Class: ClassName=F Member=Component SW1_F (SW1) Slide Switch 4
+Added Member To Class: ClassName=G Member=Component SW1_G (SW1) Slide Switch 4
+Added Member To Class: ClassName=H Member=Component SW1_H (SW1) Slide Switch 4
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component U1 LM1875T
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component U2 SN74AHC1G14DCKR
+Added Member To Class: ClassName=MIDI_Synthesizer Member=Component U3 LM7805CT
