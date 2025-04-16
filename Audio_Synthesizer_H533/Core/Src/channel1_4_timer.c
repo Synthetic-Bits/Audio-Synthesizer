@@ -62,6 +62,8 @@ void channel1_4_timer_init();
 #define CHANNEL1_4_TIMER_PSC (1 - 1)
 #define CHANNEL1_4_TIMER_ARR ((0x1 << 10) - 1) // ~240 kHz (244 kHz)
 
+#define CHANNEL1_4_SAMPLE_RESOL_BITS_DIFF (6) // 65565 -> 1024 (RSH 7)
+
 volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state;
 
 /* ========================================================================== */
@@ -256,16 +258,16 @@ static inline void channel_update_CCR(channel_t channel, uint32_t ccr)
   switch (channel)
   {
   case CHANNEL1:
-    CHANNEL1_4_TIMER->CCR1 = ccr;
+    CHANNEL1_4_TIMER->CCR4 = ccr;
     break;
   case CHANNEL2:
-    CHANNEL1_4_TIMER->CCR2 = ccr;
+    CHANNEL1_4_TIMER->CCR1 = ccr;
     break;
   case CHANNEL3:
-    CHANNEL1_4_TIMER->CCR3 = ccr;
+    CHANNEL1_4_TIMER->CCR2 = ccr;
     break;
   case CHANNEL4:
-    CHANNEL1_4_TIMER->CCR4 = ccr;
+    CHANNEL1_4_TIMER->CCR3 = ccr;
     break;
   default:
     return;
@@ -298,7 +300,7 @@ static inline void channel_update(volatile channel_state_t *channel)
     return;
   }
 
-  uint16_t ccr = channel->waveform_data[channel->count] >> (((MIDI_MAX_VAL - channel->vol) >> 4));
+  uint16_t ccr = channel->waveform_data[channel->count >> CHANNEL1_4_SAMPLE_RESOL_BITS_DIFF] >> (((MIDI_MAX_VAL - channel->vol) >> 4));
   channel_update_CCR(channel->channel, ccr);
 }
 

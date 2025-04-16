@@ -4,6 +4,12 @@
 //  * @brief   DAC-based Noise Channel Control Interface Header
 //  *******************************************************************************
 //  */
+// /**
+//  *******************************************************************************
+//  * @file    noise_channel.h
+//  * @brief   DAC-based Noise Channel Control Interface Header
+//  *******************************************************************************
+//  */
 
 //  #ifndef _NOISE_CHANNEL_H_
 //  #define _NOISE_CHANNEL_H_
