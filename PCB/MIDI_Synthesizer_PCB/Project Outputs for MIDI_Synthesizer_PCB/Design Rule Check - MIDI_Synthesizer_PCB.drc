@@ -1,0 +1,75 @@
+Protel Design System Design Rule Check
+PCB File : D:\ECE5780-FP\PCB\MIDI_Synthesizer_PCB\MIDI_Synthesizer_PCB.PcbDoc
+Date     : 4/3/2025
+Time     : 20:03:44
+
+Processing Rule : Clearance Constraint (Gap=0.127mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+Rule Violations :0
+
+Processing Rule : Un-Routed Net Constraint ( (All) )
+Rule Violations :0
+
+Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=0.1mm) (Max=2mm) (Preferred=0.254mm) (All)
+Rule Violations :0
+
+Processing Rule : Routing Topology Rule(Topology=Shortest) (All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=0.508mm) (Conductor Width=0.254mm) (Air Gap=0.254mm) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=0.025mm) (Max=15mm) (All)
+Rule Violations :0
+
+Processing Rule : Hole To Hole Clearance (Gap=0.254mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=0mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Silk To Solder Mask (Clearance=0mm) (IsPad),(All)
+Rule Violations :0
+
+Processing Rule : Silk to Silk (Clearance=0mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Net Antennae (Tolerance=0mm) (All)
+Rule Violations :0
+
+Processing Rule : Room LP_FILTER_1 (Bounding Region = (136.2mm, 77.3mm, 178.2mm, 101.4mm) (InComponentClass('G'))
+Rule Violations :0
+
+Processing Rule : Room LP_FILTER (Bounding Region = (136.2mm, 99.9mm, 178.2mm, 124mm) (InComponentClass('H'))
+Rule Violations :0
+
+Processing Rule : Room LP_FILTER_3 (Bounding Region = (136.2mm, 32.1mm, 178.2mm, 56.2mm) (InComponentClass('E'))
+Rule Violations :0
+
+Processing Rule : Room LP_FILTER_2 (Bounding Region = (136.2mm, 54.7mm, 178.2mm, 78.8mm) (InComponentClass('F'))
+Rule Violations :0
+
+Processing Rule : Room LP_FILTER_4 (Bounding Region = (93.8mm, 99.9mm, 135.8mm, 124mm) (InComponentClass('D'))
+Rule Violations :0
+
+Processing Rule : Room LP_FILTER_5 (Bounding Region = (93.8mm, 77.3mm, 135.8mm, 101.4mm) (InComponentClass('C'))
+Rule Violations :0
+
+Processing Rule : Room LP_FILTER_7 (Bounding Region = (93.8mm, 32.1mm, 135.8mm, 56.2mm) (InComponentClass('A'))
+Rule Violations :0
+
+Processing Rule : Room LP_FILTER_6 (Bounding Region = (93.8mm, 54.7mm, 135.8mm, 78.8mm) (InComponentClass('B'))
+Rule Violations :0
+
+Processing Rule : Height Constraint (Min=0mm) (Max=25.4mm) (Prefered=12.7mm) (All)
+Rule Violations :0
+
+
+Violations Detected : 0
+Waived Violations : 0
+Time Elapsed        : 00:00:00

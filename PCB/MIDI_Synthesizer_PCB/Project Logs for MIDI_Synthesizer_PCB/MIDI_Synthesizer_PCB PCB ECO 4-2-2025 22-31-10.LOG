@@ -1,0 +1,33 @@
+Change Component Footprint: Designator=J2 Old Footprint=Barrier Terminal P=8.25mm New Footprint=SHDR2W70P0X500_1X2_1000X750X1160P
+Change Component Footprint: Designator=J4 Old Footprint=Barrier Terminal P=8.25mm New Footprint=SHDR2W70P0X500_1X2_1000X750X1160P
+Change Component Footprint: Designator=J5 Old Footprint=Barrier Terminal P=8.25mm New Footprint=SHDR2W70P0X500_1X2_1000X750X1160P
+Change Component Comment : Designator=J2 Old Comment=Header New Comment=691137710002
+Change Component Comment : Designator=J4 Old Comment=Header New Comment=691137710002
+Change Component Comment : Designator=J5 Old Comment=Header New Comment=691137710002
+Change component parameters: Designator = "J2" ("J2"); Footprint = "Barrier Terminal P=8.25mm"; UniqueID = "\UCXRQWWE" ("\UCXRQWWE")
+Change component parameters (AddParameter): Name = "Arrow Part Number"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Arrow Price/Stock"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Datasheet Link"; Value = "https://katalog.we-online.com/em/datasheet/691137710002.pdf"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Height"; Value = "11.6mm"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer_Name"; Value = "Wurth Elektronik"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer_Part_Number"; Value = "691137710002"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Mouser Part Number"; Value = "710-691137710002"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Mouser Price/Stock"; Value = "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/691137710002?qs=lBTPRtX1sU9LnHBbviNKGA%3D%3D"; VariantName = "[No Variations]"
+Change component parameters: Designator = "J4" ("J4"); Footprint = "Barrier Terminal P=8.25mm"; UniqueID = "\ZJYBEULA" ("\ZJYBEULA")
+Change component parameters (AddParameter): Name = "Arrow Part Number"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Arrow Price/Stock"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Datasheet Link"; Value = "https://katalog.we-online.com/em/datasheet/691137710002.pdf"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Height"; Value = "11.6mm"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer_Name"; Value = "Wurth Elektronik"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer_Part_Number"; Value = "691137710002"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Mouser Part Number"; Value = "710-691137710002"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Mouser Price/Stock"; Value = "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/691137710002?qs=lBTPRtX1sU9LnHBbviNKGA%3D%3D"; VariantName = "[No Variations]"
+Change component parameters: Designator = "J5" ("J5"); Footprint = "Barrier Terminal P=8.25mm"; UniqueID = "\NFGSZMXS" ("\NFGSZMXS")
+Change component parameters (AddParameter): Name = "Arrow Part Number"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Arrow Price/Stock"; Value = ""; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Datasheet Link"; Value = "https://katalog.we-online.com/em/datasheet/691137710002.pdf"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Height"; Value = "11.6mm"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer_Name"; Value = "Wurth Elektronik"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer_Part_Number"; Value = "691137710002"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Mouser Part Number"; Value = "710-691137710002"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Mouser Price/Stock"; Value = "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/691137710002?qs=lBTPRtX1sU9LnHBbviNKGA%3D%3D"; VariantName = "[No Variations]"
