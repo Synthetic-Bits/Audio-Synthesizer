@@ -1,7 +1,7 @@
 /**
  ******************************************************************************
- * @file           : rcc.h
- * @brief          : RCC Initialization Defintions
+ * @file           : notes.h
+ * @brief          : Common Note Definitions
  ******************************************************************************
  */
 
@@ -11,21 +11,13 @@
 
 /* ========================================================================== */
 /*                                                                            */
-/*    RCC Control Definitions                                                 */
+/*    Notes Definitions                                                       */
 /*                                                                            */
 /* ========================================================================== */
 
-#ifndef _RCC_H_
-#define _RCC_H_
+#ifndef _NOTES_H_
+#define _NOTES_H_
 
-// GPIO RCC Enables
-void RCC_GPIOA_CLK_Enable(void);
-void RCC_GPIOB_CLK_Enable(void);
-void RCC_GPIOC_CLK_Enable(void);
+#define TWO_SEMITONE_SCALAR 575 // 2 ^ (2/12) * 512
 
-// Timer RCC Enables
-void RCC_TIM2_CLK_Enable(void);
-void RCC_TIM3_CLK_Enable(void);
-void RCC_TIM4_CLK_Enable(void);
-
-#endif /* _RCC_H_ */
+#endif /* _NOTES_H_ */

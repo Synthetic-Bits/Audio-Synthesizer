@@ -18,7 +18,7 @@
 #ifndef _SAMPLE_TIMER_H_
 #define _SAMPLE_TIMER_H_
 
-typedef void (*sample_timer_cb_t)(uint16_t count);
+typedef void (*sample_timer_cb_t)();
 
 /* ========================================================================== */
 /*                                                                            */

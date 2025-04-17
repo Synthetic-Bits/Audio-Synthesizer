@@ -24,7 +24,7 @@
 
 #include "sample_timer.h"
 #include "channel_common.h"
-#include "channel1_4_timer.h"
+#include "channel_driver.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -32,7 +32,7 @@
 
 // #define DEMO_100Hz_SWEEP
 // #define DEMO_C_MAJOR
-#define DEMO_C_MAJOR_CHORDS
+// #define DEMO_C_MAJOR_CHORDS
 
 /* Private macro -------------------------------------------------------------*/
 
@@ -44,9 +44,9 @@ extern volatile channel_state_t channel1_state, channel2_state, channel3_state, 
 
 /* Private user code ---------------------------------------------------------*/
 
-void sample_timer_handler(uint16_t counter)
+void sample_timer_handler()
 {
-  channel1_4_update();
+  channel_update_all();
 }
 
 /* ========================================================================== */
@@ -72,35 +72,35 @@ int main(void)
 
   // ==== OUTPUT CHANNELS ====
   // Channels 1 - 4
-  channel1_4_timer_init();
+  channel_timer_init();
 
   // Channel 1 Settings
-  channel1_4_enable(CHANNEL1);
-  channel1_4_set_waveform(CHANNEL1, WAVEFORM_SINE);
-  channel1_4_on_off(CHANNEL1, 1);
-  channel1_4_frequency(CHANNEL1, 100);
-  channel1_4_volume(CHANNEL1, 127);
+  channel_enable(CHANNEL1);
+  channel_set_waveform(CHANNEL1, WAVEFORM_SINE);
+  channel_on_off(CHANNEL1, 1);
+  channel_frequency(CHANNEL1, 100);
+  channel_volume(CHANNEL1, 127);
 
   // Channel 2 Settings
-  channel1_4_enable(CHANNEL2);
-  channel1_4_set_waveform(CHANNEL2, WAVEFORM_TRIG);
-  channel1_4_on_off(CHANNEL2, 1);
-  channel1_4_frequency(CHANNEL2, 100);
-  channel1_4_volume(CHANNEL2, 127);
+  channel_enable(CHANNEL2);
+  channel_set_waveform(CHANNEL2, WAVEFORM_TRIG);
+  channel_on_off(CHANNEL2, 1);
+  channel_frequency(CHANNEL2, 100);
+  channel_volume(CHANNEL2, 127);
 
   // Channel 3 Settings
-  channel1_4_enable(CHANNEL3);
-  channel1_4_set_waveform(CHANNEL3, WAVEFORM_RAMP);
-  channel1_4_on_off(CHANNEL3, 1);
-  channel1_4_frequency(CHANNEL3, 100);
-  channel1_4_volume(CHANNEL3, 127);
+  channel_enable(CHANNEL3);
+  channel_set_waveform(CHANNEL3, WAVEFORM_RAMP);
+  channel_on_off(CHANNEL3, 1);
+  channel_frequency(CHANNEL3, 100);
+  channel_volume(CHANNEL3, 127);
 
   // Channel 4 Settings
-  channel1_4_enable(CHANNEL4);
-  channel1_4_set_waveform(CHANNEL4, WAVEFORM_SQUARE);
-  channel1_4_on_off(CHANNEL4, 1);
-  channel1_4_frequency(CHANNEL4, 100);
-  channel1_4_volume(CHANNEL4, 127);
+  channel_enable(CHANNEL4);
+  channel_set_waveform(CHANNEL4, WAVEFORM_SQUARE);
+  channel_on_off(CHANNEL4, 1);
+  channel_frequency(CHANNEL4, 100);
+  channel_volume(CHANNEL4, 127);
 
   // Start the sample timer (advance the sampled waveforms)
   sample_timer_start();

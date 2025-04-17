@@ -9,7 +9,10 @@
 		"cortex-debug.openocdPath": "C:\\INTELFPGA_LITE\\23.1STD\\QUARTUS\\BIN64\\OPENOCD.EXE",
 		"files.associations": {
 			"stm32h5xx_hal.h": "c",
-			"stm32h5xx.h": "c"
+			"stm32h5xx.h": "c",
+			"trig_base.h": "c",
+			"square_base.h": "c",
+			"ramp_base.h": "c"
 		}
 	}
 }
