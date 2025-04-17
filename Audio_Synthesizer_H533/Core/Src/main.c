@@ -32,9 +32,10 @@
 
 /* Private define ------------------------------------------------------------*/
 
+// Checkpoint 3 Defines (only use 1!)
 // #define DEMO_100Hz_SWEEP
-// #define DEMO_C_MAJOR
-#define DEMO_C_MAJOR_CHORDS
+#define DEMO_C_MAJOR
+// #define DEMO_C_MAJOR_CHORDS
 
 /* Private macro -------------------------------------------------------------*/
 
@@ -44,6 +45,8 @@ extern volatile channel_state_t channel1_state, channel2_state, channel3_state, 
 
 /* Private function prototypes -----------------------------------------------*/
 
+void checkpoint_3(void);
+
 /* Private user code ---------------------------------------------------------*/
 
 void sample_timer_handler(uint16_t counter)
@@ -51,29 +54,9 @@ void sample_timer_handler(uint16_t counter)
   channel1_4_update();
 }
 
-/* ========================================================================== */
-/*                                                                            */
-/*        Main Loop                                                           */
-/*                                                                            */
-/* ========================================================================== */
-/**
- * @brief  The application entry point.
- * @retval int
- */
-int main(void)
+void checkpoint_3(void)
 {
-  // Configure the System Clock
-  SystemClock_Config();
-
-  // Enable the Instruction Caching
-  MX_ICACHE_Init();
-
-  // ==== SAMPLE TIMER ====
-  sample_timer_register_cb(sample_timer_handler); // Register the Sample Timer Callback
-  sample_timer_init();
-
-  // ==== OUTPUT CHANNELS ====
-  // Channels 1 - 4
+  // Configure the output channels (1-4)
   channel1_4_timer_init();
 
   // Channel 1 Settings
@@ -104,14 +87,16 @@ int main(void)
   channel1_4_frequency(CHANNEL4, 100);
   channel1_4_volume(CHANNEL4, 127);
 
-  // Start the sample timer (advance the sampled waveforms)
-  sample_timer_start();
+  // Configure and start the sample timer
+  sample_timer_register_cb(sample_timer_handler); // Register the Sample Timer Callback
+  sample_timer_init();
+  sample_timer_start(); // Advance the sampled waveforms
 
+  // Loop through the demo code
   uint16_t current_f = 100;
-
   while (1)
   {
-    #ifdef DEMO_100Hz_SWEEP
+    #if defined(DEMO_100Hz_SWEEP)
         HAL_Delay(100);
 
         current_f += 100;
@@ -121,9 +106,7 @@ int main(void)
         channel2_state.freq = current_f;
         channel3_state.freq = current_f;
         channel4_state.freq = current_f;
-    #endif
-
-    #ifdef DEMO_C_MAJOR
+    #elif defined(DEMO_C_MAJOR)
         HAL_Delay(750);
 
         current_f = 262; // C4
@@ -195,9 +178,7 @@ int main(void)
         channel2_state.freq = current_f;
         channel3_state.freq = current_f;
         channel4_state.freq = current_f;
-    #endif
-
-    #ifdef DEMO_C_MAJOR_CHORDS
+    #elif defined(DEMO_C_MAJOR_CHORDS)
 
         HAL_Delay(750);
 
@@ -271,5 +252,29 @@ int main(void)
         channel3_state.freq = 784;
         channel4_state.freq = current_f;
     #endif
-  };
+  }
+}
+
+/* ========================================================================== */
+/*                                                                            */
+/*        Main Loop                                                           */
+/*                                                                            */
+/* ========================================================================== */
+/**
+ * @brief  The application entry point.
+ * @retval int
+ */
+int main(void)
+{
+  // Configure the System Clock
+  SystemClock_Config();
+
+  // Enable the Instruction Caching
+  MX_ICACHE_Init();
+
+  // Run the third checkpoint
+  checkpoint_3();
+
+  // Loop indefinitely to prevent returning from main
+  while (1) { };
 }
