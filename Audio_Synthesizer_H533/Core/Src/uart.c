@@ -44,7 +44,7 @@ volatile int global_receive_buffer_index = 0;
 volatile char global_receive_buffer[1024];
 
 // Variables that keep track of if the UART peripherals are configured.
-static int user_UART_configured = 0;
+static int USER_UART_configured = 0;
 static int MIDI_UART_configured = 0;
 
 /* ========================================================================== */
@@ -77,7 +77,7 @@ void USART3_IRQHandler()
 /*                                                                            */
 /* ========================================================================== */
 
-void configure_user_UART(unsigned int baud_rate, uint8_t enable_interrupts, uint8_t interrupt_priority)
+void configure_USER_UART(unsigned int baud_rate, uint8_t enable_interrupts, uint8_t interrupt_priority)
 {
     // Enable the RCC for GPIOB and USART1 (user UART's canonical name).
     RCC_GPIOB_CLK_Enable();
@@ -119,7 +119,7 @@ void configure_user_UART(unsigned int baud_rate, uint8_t enable_interrupts, uint
     }
 
     // Lastly, indicate that this peripheral has been configured
-    user_UART_configured = 1;
+    USER_UART_configured = 1;
 }
 
 void configure_MIDI_UART(unsigned int baud_rate, uint8_t enable_interrupts, uint8_t interrupt_priority)
@@ -217,7 +217,7 @@ void send_MIDI_UART(char *send_buffer)
 /*                                                                            */
 /* ========================================================================== */
 
-void receive_user_UART_blocking(int n_bytes, char *receive_buffer)
+void receive_USER_UART_blocking(int n_bytes, char *receive_buffer)
 {
     // Loop until all of the bytes have been read.
     for (int i = 0; i < n_bytes; i++)
@@ -261,8 +261,8 @@ void receive_MIDI_UART_blocking(int n_bytes, char *receive_buffer)
 void printu(char *text)
 {
     // Configure USART4 if needed.
-    if (user_UART_configured == 0)
-        configure_user_UART(115200, UART_DISABLE_INTERRUPTS, 2);
+    if (USER_UART_configured == 0)
+        configure_USER_UART(115200, UART_DISABLE_INTERRUPTS, 2);
     
     // Send the text using USART4.
     send_USER_UART(text);

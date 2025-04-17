@@ -18,6 +18,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "main.h"
+#include "uart.h"
 #include <stm32h5xx_hal.h>
 
 /* Private includes ----------------------------------------------------------*/
@@ -30,19 +31,106 @@
 
 /* Private define ------------------------------------------------------------*/
 
+// #define UART_INTERRUPT_TEST
+
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
 
+extern volatile int global_receive_buffer_index;
+extern volatile char global_receive_buffer[1024];
 extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state;
 
 /* Private function prototypes -----------------------------------------------*/
 
+/**
+ * @brief This function tests the USER_UART peripheral to see if it is working as intended.
+ * @param None
+ * @retval None.
+ */
+void test_USER_UART();
+
+/**
+ * @brief This function tests the MIDI_UART peripheral to see if it is working as intended.
+ * @param None
+ * @retval None.
+ */
+void test_MIDI_UART();
+
 /* Private user code ---------------------------------------------------------*/
 
-void sample_timer_handler(uint16_t counter)
+void test_USER_UART()
 {
-  channel1_4_update();
+  #ifdef UART_INTERRUPT_TEST
+    // Initialize the USER_UART peripheral (interrupt-mode)
+    configure_USER_UART(115200, UART_ENABLE_INTERRUPTS, 2);
+
+    // Send info using USER_UART
+    send_USER_UART("Hello from the USER_UART peripheral!\n");
+
+    // Loop until there are five bytes in the global_receive_buffer
+    char buffer[6];
+    while(global_receive_buffer_index >= 5)
+    {
+      for (int i = 0; i < 5; i++)
+        buffer[i] = global_receive_buffer[i];
+      buffer[5] = '\n';
+    }
+
+    // Test the printu() function to see if UART console output works
+    printu(buffer);
+  #else
+    // Initialize the USER_UART peripheral (blocking-mode)
+    configure_USER_UART(115200, UART_DISABLE_INTERRUPTS, 2);
+
+    // Send info using USER_UART
+    send_USER_UART("Hello from the USER_UART peripheral!\n");
+  
+    // Receive info using USER_UART
+    char buffer[6];
+    receive_USER_UART_blocking(5, buffer);
+    buffer[5] = '\n';
+  
+    // Test the printu() function to see if UART console output works
+    printu(buffer);
+  #endif
+}
+
+void test_MIDI_UART()
+{
+  #ifdef UART_INTERRUPT_TEST
+    // Initialize the MIDI_UART peripheral (interrupt-mode)
+    configure_MIDI_UART(115200, UART_ENABLE_INTERRUPTS, 2);
+
+    // Send info using MIDI_UART
+    send_MIDI_UART("Hello from the MIDI_UART peripheral!\n");
+
+    // Loop until there are five bytes in the global_receive_buffer
+    char buffer[6];
+    while(global_receive_buffer_index >= 5)
+    {
+      for (int i = 0; i < 5; i++)
+        buffer[i] = global_receive_buffer[i];
+      buffer[5] = '\n';
+    }
+
+    // Test the printu() function to see if UART console output works
+    printu(buffer);
+  #else
+    // Initialize the MIDI_UART peripheral (blocking-mode)
+    configure_MIDI_UART(115200, UART_DISABLE_INTERRUPTS, 2);
+
+    // Send info using MIDI_UART
+    send_MIDI_UART("Hello from the MIDI_UART peripheral!\n");
+
+    // Receive info using MIDI_UART
+    char buffer[6];
+    receive_MIDI_UART_blocking(5, buffer);
+    buffer[5] = '\n';
+
+    // Test the printu() function to see if UART console output works
+    printu(buffer);
+  #endif
 }
 
 /* ========================================================================== */
@@ -63,57 +151,12 @@ int main(void)
   // Enable the Instruction Caching
   MX_ICACHE_Init();
 
-  // ==== SAMPLE TIMER ====
-  sample_timer_register_cb(sample_timer_handler); // Register the Sample Timer Callback
-  sample_timer_init();
+  // Test the USER_UART peripheral
+  test_USER_UART();
 
-  // ==== OUTPUT CHANNELS ====
-  // Channels 1 - 4
-  channel1_4_timer_init();
+  // Test the MIDI_UART peripheral
+  // test_MIDI_UART();
 
-  // Channel 1 Settings
-  channel1_4_enable(CHANNEL1);
-  channel1_4_set_waveform(CHANNEL1, WAVEFORM_SINE);
-  channel1_4_on_off(CHANNEL1, 1);
-  channel1_4_frequency(CHANNEL1, 100);
-  channel1_4_volume(CHANNEL1, 127);
-
-  // Channel 2 Settings
-  channel1_4_enable(CHANNEL2);
-  channel1_4_set_waveform(CHANNEL2, WAVEFORM_TRIG);
-  channel1_4_on_off(CHANNEL2, 1);
-  channel1_4_frequency(CHANNEL2, 100);
-  channel1_4_volume(CHANNEL2, 127);
-
-  // Channel 3 Settings
-  channel1_4_enable(CHANNEL3);
-  channel1_4_set_waveform(CHANNEL3, WAVEFORM_RAMP);
-  channel1_4_on_off(CHANNEL3, 1);
-  channel1_4_frequency(CHANNEL3, 100);
-  channel1_4_volume(CHANNEL3, 127);
-
-  // Channel 4 Settings
-  channel1_4_enable(CHANNEL4);
-  channel1_4_set_waveform(CHANNEL4, WAVEFORM_SQUARE);
-  channel1_4_on_off(CHANNEL4, 1);
-  channel1_4_frequency(CHANNEL4, 100);
-  channel1_4_volume(CHANNEL4, 127);
-
-  // Start the sample timer (advance the sampled waveforms)
-  sample_timer_start();
-
-  uint16_t current_f = 100;
-
-  while (1)
-  {
-    HAL_Delay(100);
-
-    current_f += 100;
-    current_f = current_f % 12000;
-
-    channel1_state.freq = current_f;
-    channel2_state.freq = current_f;
-    channel3_state.freq = current_f;
-    channel4_state.freq = current_f;
-  };
+  // Loop indefinitely
+  while (1) { };
 }

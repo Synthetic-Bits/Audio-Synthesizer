@@ -31,7 +31,7 @@
  * @param enable_interrupts Whether or not interrupts should be enabled for the peripheral.
  * @param interrupt_priority The interrupt priority of the peripheral.  Should be set even if interrupts are disabled for this peripheral.
  */
-void configure_user_UART(unsigned int baud_rate, uint8_t enable_interrupts, uint8_t interrupt_priority);
+void configure_USER_UART(unsigned int baud_rate, uint8_t enable_interrupts, uint8_t interrupt_priority);
 
 /**
  * @brief This function configures the MIDI_UART peripheral for use in the synthesizer.
@@ -39,7 +39,7 @@ void configure_user_UART(unsigned int baud_rate, uint8_t enable_interrupts, uint
  * @param enable_interrupts Whether or not interrupts should be enabled for the peripheral.
  * @param interrupt_priority The interrupt priority of the peripheral.  Should be set even if interrupts are disabled for this peripheral.
  */
-void configure_midi_uart(unsigned int baud_rate, uint8_t enable_interrupts, uint8_t interrupt_priority);
+void configure_MIDI_UART(unsigned int baud_rate, uint8_t enable_interrupts, uint8_t interrupt_priority);
 
 /* ========================================================================== */
 /*                                                                            */
@@ -73,7 +73,7 @@ void send_MIDI_UART(char *send_buffer);
  * @param receive_buffer The buffer to store received information in.
  * @retval None.
  */
-void receive_user_UART_blocking(int n_bytes, char *receive_buffer);
+void receive_USER_UART_blocking(int n_bytes, char *receive_buffer);
 
 /**
  * @brief This function receives a set number of bytes on the MIDI_UART peripheral while blocking program execution.
