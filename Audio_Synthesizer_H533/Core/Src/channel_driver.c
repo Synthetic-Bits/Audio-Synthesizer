@@ -51,9 +51,11 @@ void channel_disable(channel_t channel);
 void channel_set_waveform(channel_t channel, waveforms_t wave);
 void channel_volume(channel_t channel, uint8_t volume);
 
-void channel_voice_on_off(channel_t channel, uint8_t voice, uint8_t state);
+void channel_voice_on(channel_t channel, uint8_t voice);
+void channel_voice_off(channel_t channel, uint8_t voice);
 void channel_voice_frequency(channel_t channel, uint8_t voice, uint16_t freq);
 void channel_voice_modulation(channel_t channel, uint8_t voice, uint16_t modulation);
+void channel_voice_velocity(channel_t channel, uint8_t voice, uint8_t velocity);
 
 static inline void channel_update_CCR(channel_t channel, uint32_t ccr);
 static inline void channel_update(volatile channel_state_t *channel);
@@ -88,31 +90,31 @@ void channel_enable(channel_t channel)
   switch (channel)
   {
   case CHANNEL1:
-    channel1_state.enable = 0;
+    channel1_state.enable = 1;
     CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC1E;
     break;
   case CHANNEL2:
-    channel2_state.enable = 0;
+    channel2_state.enable = 1;
     CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC2E;
     break;
   case CHANNEL3:
-    channel3_state.enable = 0;
+    channel3_state.enable = 1;
     CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC3E;
     break;
   case CHANNEL4:
-    channel4_state.enable = 0;
+    channel4_state.enable = 1;
     CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC4E;
     break;
   case CHANNEL5:
-    channel1_state.enable = 0;
+    channel1_state.enable = 1;
     CHANNEL5_7_TIMER->CCER |= TIM_CCER_CC1E;
     break;
   case CHANNEL6:
-    channel2_state.enable = 0;
+    channel2_state.enable = 1;
     CHANNEL5_7_TIMER->CCER |= TIM_CCER_CC2E;
     break;
   case CHANNEL7:
-    channel3_state.enable = 0;
+    channel3_state.enable = 1;
     CHANNEL5_7_TIMER->CCER |= TIM_CCER_CC3E;
     break;
   default:
@@ -125,31 +127,31 @@ void channel_disable(channel_t channel)
   switch (channel)
   {
   case CHANNEL1:
-    channel1_state.enable = 1;
+    channel1_state.enable = 0;
     CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC1E;
     break;
   case CHANNEL2:
-    channel2_state.enable = 1;
+    channel2_state.enable = 0;
     CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC2E;
     break;
   case CHANNEL3:
-    channel3_state.enable = 1;
+    channel3_state.enable = 0;
     CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC3E;
     break;
   case CHANNEL4:
-    channel4_state.enable = 1;
+    channel4_state.enable = 0;
     CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC4E;
     break;
   case CHANNEL5:
-    channel1_state.enable = 1;
+    channel1_state.enable = 0;
     CHANNEL5_7_TIMER->CCER &= ~TIM_CCER_CC1E;
     break;
   case CHANNEL6:
-    channel2_state.enable = 1;
+    channel2_state.enable = 0;
     CHANNEL5_7_TIMER->CCER &= ~TIM_CCER_CC2E;
     break;
   case CHANNEL7:
-    channel3_state.enable = 1;
+    channel3_state.enable = 0;
     CHANNEL5_7_TIMER->CCER &= ~TIM_CCER_CC3E;
     break;
   default:
@@ -244,7 +246,7 @@ void channel_volume(channel_t channel, uint8_t volume)
   }
 }
 
-void channel_voice_on_off(channel_t channel, uint8_t voice, uint8_t state)
+void channel_voice_on(channel_t channel, uint8_t voice)
 {
   if (voice >= MAX_CHANNEL_VOICES)
     return;
@@ -252,110 +254,80 @@ void channel_voice_on_off(channel_t channel, uint8_t voice, uint8_t state)
   switch (channel)
   {
   case CHANNEL1:
-    if (state)
-    {
-      channel1_state.voices[voice].on_off = 1;
-      channel1_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-      channel1_state.voices[voice].mod_count = 0;
-      channel1_state.voices[voice].env_count = 0;
-      channel1_state.voices[voice].env_start = 0;
-      channel1_state.active_voices++;
-    }
-    else
-    {
-      channel1_state.voices[voice].on_off = 0;
-      channel1_state.active_voices--;
-    }
+    channel1_state.voices[voice].on_off = 1;
+    channel1_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+    channel1_state.voices[voice].mod_count = 0;
+    channel1_state.voices[voice].env_count = 0;
+    channel1_state.voices[voice].env_start = 0;
     break;
   case CHANNEL2:
-    if (state)
-    {
-      channel2_state.voices[voice].on_off = 1;
-      channel2_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-      channel2_state.voices[voice].mod_count = 0;
-      channel2_state.voices[voice].env_count = 0;
-      channel2_state.active_voices++;
-    }
-    else
-    {
-      channel2_state.voices[voice].on_off = 0;
-      channel2_state.active_voices--;
-    }
+    channel2_state.voices[voice].on_off = 1;
+    channel2_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+    channel2_state.voices[voice].mod_count = 0;
+    channel2_state.voices[voice].env_count = 0;
     break;
   case CHANNEL3:
-    if (state)
-    {
-      channel3_state.voices[voice].on_off = 1;
-      channel3_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-      channel3_state.voices[voice].mod_count = 0;
-      channel3_state.voices[voice].env_count = 0;
-      channel3_state.active_voices++;
-    }
-    else
-    {
-      channel3_state.voices[voice].on_off = 0;
-      channel3_state.active_voices--;
-    }
+    channel3_state.voices[voice].on_off = 1;
+    channel3_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+    channel3_state.voices[voice].mod_count = 0;
+    channel3_state.voices[voice].env_count = 0;
     break;
   case CHANNEL4:
-    if (state)
-    {
-      channel4_state.voices[voice].on_off = 1;
-      channel4_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-      channel4_state.voices[voice].mod_count = 0;
-      channel4_state.voices[voice].env_count = 0;
-      channel4_state.active_voices++;
-    }
-    else
-    {
-      channel4_state.voices[voice].on_off = 0;
-      channel4_state.active_voices--;
-    }
+    channel4_state.voices[voice].on_off = 1;
+    channel4_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+    channel4_state.voices[voice].mod_count = 0;
+    channel4_state.voices[voice].env_count = 0;
     break;
   case CHANNEL5:
-    if (state)
-    {
-      channel5_state.voices[voice].on_off = 1;
-      channel5_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-      channel5_state.voices[voice].mod_count = 0;
-      channel5_state.voices[voice].env_count = 0;
-      channel5_state.active_voices++;
-    }
-    else
-    {
-      channel5_state.voices[voice].on_off = 0;
-      channel5_state.active_voices--;
-    }
+    channel5_state.voices[voice].on_off = 1;
+    channel5_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+    channel5_state.voices[voice].mod_count = 0;
+    channel5_state.voices[voice].env_count = 0;
     break;
   case CHANNEL6:
-    if (state)
-    {
-      channel6_state.voices[voice].on_off = 1;
-      channel6_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-      channel6_state.voices[voice].mod_count = 0;
-      channel6_state.voices[voice].env_count = 0;
-      channel6_state.active_voices++;
-    }
-    else
-    {
-      channel6_state.voices[voice].on_off = 0;
-      channel6_state.active_voices--;
-    }
+    channel6_state.voices[voice].on_off = 1;
+    channel6_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+    channel6_state.voices[voice].mod_count = 0;
+    channel6_state.voices[voice].env_count = 0;
     break;
   case CHANNEL7:
-    if (state)
-    {
-      channel7_state.voices[voice].on_off = 1;
-      channel7_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-      channel7_state.voices[voice].mod_count = 0;
-      channel7_state.voices[voice].env_count = 0;
-      channel7_state.active_voices++;
-    }
-    else
-    {
-      channel7_state.voices[voice].on_off = 0;
-      channel7_state.active_voices--;
-    }
+    channel7_state.voices[voice].on_off = 1;
+    channel7_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+    channel7_state.voices[voice].mod_count = 0;
+    channel7_state.voices[voice].env_count = 0;
+    break;
+  default:
+    return;
+  }
+}
+
+void channel_voice_off(channel_t channel, uint8_t voice)
+{
+  if (voice >= MAX_CHANNEL_VOICES)
+    return;
+
+  switch (channel)
+  {
+  case CHANNEL1:
+    channel1_state.voices[voice].on_off = 0;
+    break;
+  case CHANNEL2:
+    channel2_state.voices[voice].on_off = 0;
+    break;
+  case CHANNEL3:
+    channel3_state.voices[voice].on_off = 0;
+    break;
+  case CHANNEL4:
+    channel4_state.voices[voice].on_off = 0;
+    break;
+  case CHANNEL5:
+    channel5_state.voices[voice].on_off = 0;
+    break;
+  case CHANNEL6:
+    channel6_state.voices[voice].on_off = 0;
+    break;
+  case CHANNEL7:
+    channel7_state.voices[voice].on_off = 0;
     break;
   default:
     return;
@@ -389,6 +361,72 @@ void channel_voice_frequency(channel_t channel, uint8_t voice, uint16_t freq)
     break;
   case CHANNEL7:
     channel7_state.voices[voice].frequency = freq;
+    break;
+  default:
+    return;
+  }
+}
+
+void channel_voice_modulation(channel_t channel, uint8_t voice, uint16_t modulation)
+{
+  if (voice >= MAX_CHANNEL_VOICES)
+    return;
+
+  switch (channel)
+  {
+  case CHANNEL1:
+    channel1_state.voices[voice].mod = modulation;
+    break;
+  case CHANNEL2:
+    channel2_state.voices[voice].mod = modulation;
+    break;
+  case CHANNEL3:
+    channel3_state.voices[voice].mod = modulation;
+    break;
+  case CHANNEL4:
+    channel4_state.voices[voice].mod = modulation;
+    break;
+  case CHANNEL5:
+    channel5_state.voices[voice].mod = modulation;
+    break;
+  case CHANNEL6:
+    channel6_state.voices[voice].mod = modulation;
+    break;
+  case CHANNEL7:
+    channel7_state.voices[voice].mod = modulation;
+    break;
+  default:
+    return;
+  }
+}
+
+void channel_voice_velocity(channel_t channel, uint8_t voice, uint8_t velocity)
+{
+  if (voice >= MAX_CHANNEL_VOICES)
+    return;
+
+  switch (channel)
+  {
+  case CHANNEL1:
+    channel1_state.voices[voice].mod = velocity;
+    break;
+  case CHANNEL2:
+    channel2_state.voices[voice].mod = velocity;
+    break;
+  case CHANNEL3:
+    channel3_state.voices[voice].mod = velocity;
+    break;
+  case CHANNEL4:
+    channel4_state.voices[voice].mod = velocity;
+    break;
+  case CHANNEL5:
+    channel5_state.voices[voice].mod = velocity;
+    break;
+  case CHANNEL6:
+    channel6_state.voices[voice].mod = velocity;
+    break;
+  case CHANNEL7:
+    channel7_state.voices[voice].mod = velocity;
     break;
   default:
     return;
@@ -436,7 +474,7 @@ static inline uint32_t calculate_voice_output(volatile channel_state_t *channel,
 {
   voice_t cur_voice = channel->voices[voice];
 
-  if ((!cur_voice.on_off) && cur_voice.adsr_state == ADSR_ATTACK)
+  if ((!cur_voice.on_off) && cur_voice.adsr_state != ADSR_ATTACK)
     return 0;
 
   uint32_t output, envelope = 0;
@@ -576,6 +614,8 @@ static void reset_channel(volatile channel_state_t *channel, channel_t channel_n
 
   if (num_voices > MAX_CHANNEL_VOICES)
     channel->num_voices = MAX_CHANNEL_VOICES;
+  else
+    channel->num_voices = num_voices;
 
   // Reset all voice parameters
   for (uint8_t i = 0; i < num_voices; i++)

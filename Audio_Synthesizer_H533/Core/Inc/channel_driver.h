@@ -59,10 +59,17 @@ void channel_volume(channel_t channel, uint8_t volume);
  * @brief Turn the channel note on or off (no more PWM)
  * @param channel The channel to modify
  * @param voice The voice to modify
- * @param state Turn the channel on or off (1 is on, 0 is off)
  * @note Updates when channel_update() is invoked
  */
-void channel_voice_on_off(channel_t channel, uint8_t voice, uint8_t state);
+void channel_voice_on(channel_t channel, uint8_t voice);
+
+/**
+ * @brief Turn the channel note on or off (no more PWM)
+ * @param channel The channel to modify
+ * @param voice The voice to modify
+ * @note Updates when channel_update() is invoked
+ */
+void channel_voice_off(channel_t channel, uint8_t voice);
 
 /**
  * @brief Set the channel frequency
@@ -81,6 +88,15 @@ void channel_voice_frequency(channel_t channel, uint8_t voice, uint16_t freq);
  * @note Updates when channel_update() is invoked
  */
 void channel_voice_modulation(channel_t channel, uint8_t voice, uint16_t modulation);
+
+/**
+ * @brief Set the channel frequency
+ * @param channel The channel to modify
+ * @param voice Voice to modify
+ * @param velocity Frequency of the signal to synthesize
+ * @note Updates when channel_update() is invoked
+ */
+void channel_voice_velocity(channel_t channel, uint8_t voice, uint8_t velocity);
 
 /**
  * @brief Update the current channel output according to its state

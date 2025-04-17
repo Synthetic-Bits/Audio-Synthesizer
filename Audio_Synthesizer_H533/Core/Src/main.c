@@ -38,7 +38,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state;
+extern volatile channel_state_t CHANNEL4_state, channel2_state, channel3_state, channel4_state;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -77,30 +77,34 @@ int main(void)
   // Channel 1 Settings
   channel_enable(CHANNEL1);
   channel_set_waveform(CHANNEL1, WAVEFORM_SINE);
-  channel_on_off(CHANNEL1, 1);
-  channel_frequency(CHANNEL1, 100);
   channel_volume(CHANNEL1, 127);
+  channel_voice_on(CHANNEL1, 0);
+  channel_voice_frequency(CHANNEL1, 0, 100);
+  channel_voice_modulation(CHANNEL1, 0, 0);
 
   // Channel 2 Settings
   channel_enable(CHANNEL2);
   channel_set_waveform(CHANNEL2, WAVEFORM_TRIG);
-  channel_on_off(CHANNEL2, 1);
-  channel_frequency(CHANNEL2, 100);
   channel_volume(CHANNEL2, 127);
+  channel_voice_on(CHANNEL2, 0);
+  channel_voice_frequency(CHANNEL2, 0, 100);
+  channel_voice_modulation(CHANNEL2, 0, 0);
 
   // Channel 3 Settings
   channel_enable(CHANNEL3);
   channel_set_waveform(CHANNEL3, WAVEFORM_RAMP);
-  channel_on_off(CHANNEL3, 1);
-  channel_frequency(CHANNEL3, 100);
   channel_volume(CHANNEL3, 127);
+  channel_voice_on(CHANNEL3, 0);
+  channel_voice_frequency(CHANNEL3, 0, 100);
+  channel_voice_modulation(CHANNEL3, 0, 0);
 
   // Channel 4 Settings
   channel_enable(CHANNEL4);
   channel_set_waveform(CHANNEL4, WAVEFORM_SQUARE);
-  channel_on_off(CHANNEL4, 1);
-  channel_frequency(CHANNEL4, 100);
   channel_volume(CHANNEL4, 127);
+  channel_voice_on(CHANNEL4, 0);
+  channel_voice_frequency(CHANNEL4, 0, 100);
+  channel_voice_modulation(CHANNEL4, 0, 0);
 
   // Start the sample timer (advance the sampled waveforms)
   sample_timer_start();
@@ -115,7 +119,7 @@ int main(void)
     current_f += 100;
     current_f = current_f % 12000;
 
-    channel1_state.freq = current_f;
+    CHANNEL4_state.freq = current_f;
     channel2_state.freq = current_f;
     channel3_state.freq = current_f;
     channel4_state.freq = current_f;
@@ -126,7 +130,7 @@ int main(void)
 
     current_f = 262; // C4
 
-    channel1_state.freq = current_f;
+    CHANNEL4_state.freq = current_f;
     channel2_state.freq = current_f;
     channel3_state.freq = current_f;
     channel4_state.freq = current_f;
@@ -135,7 +139,7 @@ int main(void)
 
     current_f = 296; // D4
 
-    channel1_state.freq = current_f;
+    CHANNEL4_state.freq = current_f;
     channel2_state.freq = current_f;
     channel3_state.freq = current_f;
     channel4_state.freq = current_f;
@@ -144,7 +148,7 @@ int main(void)
 
     current_f = 330; // E4
 
-    channel1_state.freq = current_f;
+    CHANNEL4_state.freq = current_f;
     channel2_state.freq = current_f;
     channel3_state.freq = current_f;
     channel4_state.freq = current_f;
@@ -153,7 +157,7 @@ int main(void)
 
     current_f = 349; // F4
 
-    channel1_state.freq = current_f;
+    CHANNEL4_state.freq = current_f;
     channel2_state.freq = current_f;
     channel3_state.freq = current_f;
     channel4_state.freq = current_f;
@@ -162,7 +166,7 @@ int main(void)
 
     current_f = 392; // G4
 
-    channel1_state.freq = current_f;
+    CHANNEL4_state.freq = current_f;
     channel2_state.freq = current_f;
     channel3_state.freq = current_f;
     channel4_state.freq = current_f;
@@ -171,7 +175,7 @@ int main(void)
 
     current_f = 440; // A4
 
-    channel1_state.freq = current_f;
+    CHANNEL4_state.freq = current_f;
     channel2_state.freq = current_f;
     channel3_state.freq = current_f;
     channel4_state.freq = current_f;
@@ -180,7 +184,7 @@ int main(void)
 
     current_f = 494; // B4
 
-    channel1_state.freq = current_f;
+    CHANNEL4_state.freq = current_f;
     channel2_state.freq = current_f;
     channel3_state.freq = current_f;
     channel4_state.freq = current_f;
@@ -189,7 +193,7 @@ int main(void)
 
     current_f = 523; // C5
 
-    channel1_state.freq = current_f;
+    CHANNEL4_state.freq = current_f;
     channel2_state.freq = current_f;
     channel3_state.freq = current_f;
     channel4_state.freq = current_f;
@@ -201,7 +205,7 @@ int main(void)
 
     current_f = 262; // C4
 
-    channel1_state.freq = 262;
+    CHANNEL4_state.freq = 262;
     channel2_state.freq = 330;
     channel3_state.freq = 392;
     channel4_state.freq = current_f;
@@ -210,7 +214,7 @@ int main(void)
 
     current_f = 296; // D4
 
-    channel1_state.freq = 296;
+    CHANNEL4_state.freq = 296;
     channel2_state.freq = 349;
     channel3_state.freq = 440;
     channel4_state.freq = current_f;
@@ -219,7 +223,7 @@ int main(void)
 
     current_f = 330; // E4
 
-    channel1_state.freq = 330;
+    CHANNEL4_state.freq = 330;
     channel2_state.freq = 392;
     channel3_state.freq = 494;
     channel4_state.freq = current_f;
@@ -228,7 +232,7 @@ int main(void)
 
     current_f = 349; // F4
 
-    channel1_state.freq = 349;
+    CHANNEL4_state.freq = 349;
     channel2_state.freq = 440;
     channel3_state.freq = 523;
     channel4_state.freq = current_f;
@@ -237,7 +241,7 @@ int main(void)
 
     current_f = 392; // G4
 
-    channel1_state.freq = 392;
+    CHANNEL4_state.freq = 392;
     channel2_state.freq = 494;
     channel3_state.freq = 587;
     channel4_state.freq = current_f;
@@ -246,7 +250,7 @@ int main(void)
 
     current_f = 440; // A4
 
-    channel1_state.freq = 440;
+    CHANNEL4_state.freq = 440;
     channel2_state.freq = 523;
     channel3_state.freq = 659;
     channel4_state.freq = current_f;
@@ -255,7 +259,7 @@ int main(void)
 
     current_f = 494; // B4
 
-    channel1_state.freq = 494;
+    CHANNEL4_state.freq = 494;
     channel2_state.freq = 587;
     channel3_state.freq = 698;
     channel4_state.freq = current_f;
@@ -264,7 +268,7 @@ int main(void)
 
     current_f = 523; // C5
 
-    channel1_state.freq = 523;
+    CHANNEL4_state.freq = 523;
     channel2_state.freq = 659;
     channel3_state.freq = 784;
     channel4_state.freq = current_f;

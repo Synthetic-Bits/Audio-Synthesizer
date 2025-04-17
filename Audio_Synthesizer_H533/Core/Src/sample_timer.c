@@ -36,7 +36,7 @@
 void sample_timer_stop();
 void sample_timer_start();
 
-static void __sample_timer_handler(uint16_t counter);
+static void __sample_timer_handler();
 
 void sample_timer_register_cb(sample_timer_cb_t cb);
 void sample_timer_init();
@@ -97,7 +97,7 @@ void sample_timer_start()
 /**
  * @brief Placeholder Function for the timer callback
  */
-static void __sample_timer_handler(uint16_t counter)
+static void __sample_timer_handler()
 {
   return;
 }
