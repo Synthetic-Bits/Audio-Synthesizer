@@ -15,6 +15,7 @@
  *
  ******************************************************************************
  */
+
 /* Includes ------------------------------------------------------------------*/
 
 #include "main.h"
@@ -22,9 +23,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 
-#include "sample_timer.h"
 #include "channel_common.h"
 #include "channel1_4_timer.h"
+#include "midi.h"
+#include "sample_timer.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -50,6 +52,7 @@ void sample_timer_handler(uint16_t counter)
 /*        Main Loop                                                           */
 /*                                                                            */
 /* ========================================================================== */
+
 /**
  * @brief  The application entry point.
  * @retval int
@@ -61,6 +64,9 @@ int main(void)
 
   // Enable the Instruction Caching
   MX_ICACHE_Init();
+
+  // Setup the MIDI system
+  setup_midi();
 
   // ==== SAMPLE TIMER ====
   sample_timer_register_cb(sample_timer_handler); // Register the Sample Timer Callback
@@ -102,7 +108,6 @@ int main(void)
   sample_timer_start();
 
   uint16_t current_f = 100;
-
   while (1)
   {
     HAL_Delay(100);

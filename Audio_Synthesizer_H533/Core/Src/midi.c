@@ -1,19 +1,35 @@
-#include <stdint.h>
-#include <stdio.h>
+/**
+ ******************************************************************************
+ * @file    midi.c
+ * @brief   MIDI Control Interface
+ * @author  Adrian Sucahyo, Kenneth Gordon, Bryant Watson,
+ *          and Hayoung Im
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 Synthetic Bits.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 
-#include "sample_timer.h"
+/* Includes ------------------------------------------------------------------*/
+
 #include "channel_common.h"
 #include "channel1_4_timer.h"
-#include "main.h"
-#include <stm32h5xx_hal.h>
 #include "midi.h"
+#include "sample_timer.h"
 
-//#include <stm32f0xx_hal.h> ??
-// #include "uart.h" ??
-// #include "midi.h" ?? 
-// #include "gpio.h" ??
+#include <stdint.h>
+// #include <stdio.h>
+#include <stm32h5xx_hal.h>
 
-
+// #include "uart.h" ?? - Needs to be implemented
+// #include "gpio.h" ?? - Might need to be moved?
 
 //status codes------------------------------------------------------------------
 #define NOTE_ON_EVENT           (0b1001)
@@ -60,6 +76,7 @@
 //PORT AND PIN DEFINES----------------------------------------------------------------
 //Port Definitions
 #define PORT_LED         GPIOC
+
 //Pin Definitions
 #define PIN_LED_RED      GPIO_PIN_6
 #define PIN_LED_BLUE     GPIO_PIN_7
@@ -68,21 +85,21 @@
 
 //FREQUENCY DEFINES--------------------------------------------------------------------
 #define FREQ_DEFAULT 60
-#define FREQ_C2     65  //0  C
-#define FREQ_Db2    69  //1  Db
-#define FREQ_D2     73  //2  D
-#define FREQ_Eb2    78  //3  Eb
-#define FREQ_E2     82  //4  E
-#define FREQ_F2     87  //5  F
-#define FREQ_Gb2    93  //6  Gb
-#define FREQ_G2     98  //7  G
-#define FREQ_Ab2    104 //8  Ab
-#define FREQ_A2     110 //9  A
-#define FREQ_Bb2    117 //10 Bb
-#define FREQ_B2     123 //11 B
+#define FREQ_C2      65  // 0  C
+#define FREQ_Db2     69  // 1  Db
+#define FREQ_D2      73  // 2  D
+#define FREQ_Eb2     78  // 3  Eb
+#define FREQ_E2      82  // 4  E
+#define FREQ_F2      87  // 5  F
+#define FREQ_Gb2     93  // 6  Gb
+#define FREQ_G2      98  // 7  G
+#define FREQ_Ab2     104 // 8  Ab
+#define FREQ_A2      110 // 9  A
+#define FREQ_Bb2     117 // 10 Bb
+#define FREQ_B2      123 // 11 B
 //OTHER DEFINES
-#define ON          1 //ON
-#define OFF         0 //OFF
+#define ON           1 // ON
+#define OFF          0 // OFF
 
 //global variables and structs------------------------------------------------------------------
 static uint16_t index;
@@ -141,7 +158,9 @@ static void channel_mode_messages_handler(char data[], MIDI midi){ //inline????
     //     //Mono mode On
     // }
 }
-static void system_message_handler(char data[], MIDI midi){
+
+static void system_message_handler(char data[], MIDI midi)
+{
     uint16_t message_type = data[index] & 0x0f;
     switch(message_type)
     {
@@ -202,54 +221,63 @@ MIDI set_channel(char data[], MIDI midi)
 
     return midi;
 }
+
 MIDI set_keynumber(char data[], MIDI midi)
 {
     midi.keynumber = (data[index] & KEYNUMBER_msk);
     index++;
     return midi;
 }
+
 MIDI set_velocity(char data[], MIDI midi)
 {
     midi.velocity = (data[index] & VELOCITY_msk);
     index++;
     return midi;
 }
+
 MIDI set_forceonkey(char data[], MIDI midi)
 {
     midi.forceonkey = (data[index] & FORCEONKEY_msk);
     index++;
     return midi;
 }
+
 MIDI set_addressofcontrol(char data[], MIDI midi)
 {
     midi.addressofcontrol = (data[index] & ADDRESS_OF_CONTROL_msk);
     index++;
     return midi;
 }
+
 MIDI set_valueofcontroloutput(char data[], MIDI midi)
 {
     midi.valueofcontroloutput = (data[index] & VALUE_OF_CONTROL_OUTPUT_msk);
     index++;
     return midi;
 }
+
 MIDI set_programmeselect(char data[], MIDI midi)
 {
     midi.programmeselect = (data[index] & PROGRAMME_SELECT_msk);
     index++;
     return midi;
 }
+
 MIDI set_pressurevalue(char data[], MIDI midi)
 {
     midi.pressurevalue = (data[index] & PRESSURE_VALUE_msk);
     index++;
     return midi;
 }
+
 MIDI set_pitchbendlsb(char data[], MIDI midi)
 {
     midi.pitchbendlsb = (data[index] & PITCH_BEND_LSB_msk);
     index++;
     return midi;
 }
+
 MIDI set_pitchbendmsb(char data[], MIDI midi)
 {
     midi.pitchbendmsb = (data[index] & PITCH_BEND_MSB_msk);
