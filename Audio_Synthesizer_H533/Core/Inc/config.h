@@ -64,17 +64,17 @@
 /*                                                                            */
 /* ========================================================================== */
 
-#define USER_UART UART1
-
+#define USER_UART USART1
 #define USER_UART_PORT GPIOB
 #define USER_UART_TX_PIN GPIO_PIN_14
 #define USER_UART_RX_PIN GPIO_PIN_15
+#define USER_UART_IRQn USART1_IRQn
 
-#define MIDI_UART UART3
-
+#define MIDI_UART USART3
 #define MIDI_UART_PORT GPIOB
 #define MIDI_UART_TX_PIN GPIO_PIN_10
 #define MIDI_UART_RX_PIN GPIO_PIN_1
+#define MIDI_UART_IRQn USART3_IRQn
 
 /* ========================================================================== */
 /*                                                                            */

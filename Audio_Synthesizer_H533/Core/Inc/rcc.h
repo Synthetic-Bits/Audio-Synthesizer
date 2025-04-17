@@ -27,4 +27,8 @@ void RCC_GPIOC_CLK_Enable(void);
 void RCC_TIM2_CLK_Enable(void);
 void RCC_TIM3_CLK_Enable(void);
 
+// USART RCC Enables
+void RCC_USART1_CLK_Enable(void);
+void RCC_USART3_CLK_Enable(void);
+
 #endif /* _RCC_H_ */

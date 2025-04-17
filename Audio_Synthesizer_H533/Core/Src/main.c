@@ -50,6 +50,7 @@ void sample_timer_handler(uint16_t counter)
 /*        Main Loop                                                           */
 /*                                                                            */
 /* ========================================================================== */
+
 /**
  * @brief  The application entry point.
  * @retval int
