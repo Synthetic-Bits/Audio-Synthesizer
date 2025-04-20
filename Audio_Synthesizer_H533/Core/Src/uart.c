@@ -26,22 +26,13 @@
 
 /* ========================================================================== */
 /*                                                                            */
-/*    Local Definitions                                                       */
-/*                                                                            */
-/* ========================================================================== */
-
-// Define the size of the global_receive_buffer
-#define GLOBAL_RECEIVE_BUFFER_SIZE 1024
-
-/* ========================================================================== */
-/*                                                                            */
 /*    Global Variables                                                        */
 /*                                                                            */
 /* ========================================================================== */
 
 // Global definitions for the global_receive_buffer (used in interrupts).
 volatile int global_receive_buffer_index = 0;
-volatile char global_receive_buffer[1024];
+volatile char global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
 
 // Variables that keep track of if the UART peripherals are configured.
 static int USER_UART_configured = 0;
@@ -60,6 +51,11 @@ void USART1_IRQHandler()
 
     // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
     global_receive_buffer_index++;
+    if (global_receive_buffer_index > GLOBAL_RECEIVE_BUFFER_SIZE)
+    {
+        // Loop indefinitely.  Later, change an LED once that is implemented.
+        while (1) { }
+    }
 }
 
 void USART3_IRQHandler()
@@ -69,6 +65,11 @@ void USART3_IRQHandler()
 
     // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
     global_receive_buffer_index++;
+    if (global_receive_buffer_index > GLOBAL_RECEIVE_BUFFER_SIZE)
+    {
+        // Loop indefinitely.  Later, change an LED once that is implemented.
+        while (1) { }
+    }
 }
 
 /* ========================================================================== */

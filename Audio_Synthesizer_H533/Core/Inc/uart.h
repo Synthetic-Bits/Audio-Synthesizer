@@ -16,8 +16,12 @@
 #ifndef _UART_H_
 #define _UART_H_
 
+// Define aliases for enabling and disabling interrupts
 #define UART_DISABLE_INTERRUPTS 0
 #define UART_ENABLE_INTERRUPTS 1
+
+// Define the size of the global_receive_buffer
+#define GLOBAL_RECEIVE_BUFFER_SIZE 1024
 
 /* ========================================================================== */
 /*                                                                            */

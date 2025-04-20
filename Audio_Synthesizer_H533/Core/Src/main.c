@@ -17,6 +17,7 @@
  */
 /* Includes ------------------------------------------------------------------*/
 
+#include "config.h"
 #include "main.h"
 #include "uart.h"
 #include <stm32h5xx_hal.h>
@@ -38,7 +39,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 extern volatile int global_receive_buffer_index;
-extern volatile char global_receive_buffer[1024];
+extern volatile char global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
 extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -74,11 +75,21 @@ void test_USER_UART()
     {
       if (global_receive_buffer_index >= 5)
       {
+        // Disable interrupts while we extract data from the buffer
+        NVIC_DisableIRQ(USER_UART_IRQn);
+
+        // Extract the data from the buffer
         for (int i = 0; i < 5; i++)
           buffer[i] = global_receive_buffer[i];
         buffer[5] = '\n';
         buffer[6] = '\x0';
         break;
+
+        // Reset the buffer index, we got the data we need
+        global_receive_buffer_index = 0;
+
+        // Re-enable interrupts as we're done extracting data from the buffer
+        NVIC_EnableIRQ(USER_UART_IRQn);
       }
     }
 
@@ -117,11 +128,21 @@ void test_MIDI_UART()
     {
       if (global_receive_buffer_index >= 5)
       {
+        // Disable interrupts while we extract data from the buffer
+        NVIC_DisableIRQ(MIDI_UART_IRQn);
+
+        // Extract the data from the buffer
         for (int i = 0; i < 5; i++)
           buffer[i] = global_receive_buffer[i];
         buffer[5] = '\n';
         buffer[6] = '\x0';
         break;
+
+        // Reset the buffer index, we got the data we need
+        global_receive_buffer_index = 0;
+
+        // Re-enable interrupts as we're done extracting data from the buffer
+        NVIC_EnableIRQ(MIDI_UART_IRQn);
       }
     }
 
