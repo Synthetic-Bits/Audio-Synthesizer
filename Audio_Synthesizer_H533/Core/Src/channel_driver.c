@@ -1,7 +1,7 @@
 /**
  ******************************************************************************
- * @file    CHANNEL_TIMER.c
- * @brief   Channel1 Timer Control Interface
+ * @file    channel_driver.c
+ * @brief   Channel Timer Control Interface
  * @author  Adrian Sucahyo
  ******************************************************************************
  * @attention

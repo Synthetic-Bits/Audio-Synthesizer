@@ -84,6 +84,14 @@ void RCC_TIM3_CLK_Enable()
 }
 
 /**
+ * @brief Enable the RCC Clock for TIM4
+ */
+void RCC_TIM4_CLK_Enable()
+{
+    RCC->APB1LENR |= RCC_APB1LENR_TIM4EN;
+}
+
+/**
  * @brief Enable the RCC Clock for USART1
  */
 void RCC_USART1_CLK_Enable()

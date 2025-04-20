@@ -28,7 +28,7 @@
 
 #include "sample_timer.h"
 #include "channel_common.h"
-#include "channel1_4_timer.h"
+#include "channel_driver.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -48,336 +48,255 @@
 
 extern volatile int global_receive_buffer_index;
 extern volatile char global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
-extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state;
+extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state;
 
 /* Private function prototypes -----------------------------------------------*/
 
-/**
- * @brief This is the timer handler for the sample timer (we need a better description of this tbh...)
- * @param None
- * @retval None.
- */
-void sample_timer_handler(uint16_t counter)
-{
-  // Operate on the counter variable to remove a compiler warning
-  // This doesn't do anything...
-  counter++;
-  counter--;
+void checkpoint_3(void);
+void test_USER_UART();
+void test_MIDI_UART();
 
-  // Updated channels 1-4
-  channel1_4_update();
-}
+void sample_timer_handler();
+
+void init_sample_timer();
+void init_channel_driver();
+void start_audio_synthesis();
+void stop_audio_synthesis();
+
+/* Private user code ---------------------------------------------------------*/
+
+/* ========================================================================== */
+/*                                                                            */
+/*        Demonstration Functions                                             */
+/*                                                                            */
+/* ========================================================================== */
 
 /**
  * @brief This function demonstrates the synthesizer's third checkpoint.
  * @param None
  * @retval None.
  */
-void checkpoint_3(void);
+void checkpoint_3(void)
+{
+
+  // Test the MIDI_UART peripheral
+  // test_MIDI_UART();
+
+  // Channel 1 Settings
+  channel_enable(CHANNEL1);
+  channel_set_waveform(CHANNEL1, WAVEFORM_SINE);
+  channel_volume(CHANNEL1, 127);
+
+  // Channel 2 Settings
+  channel_enable(CHANNEL2);
+  channel_set_waveform(CHANNEL2, WAVEFORM_TRIG);
+  channel_volume(CHANNEL2, 127);
+
+  // Channel 3 Settings
+  channel_enable(CHANNEL3);
+  channel_set_waveform(CHANNEL3, WAVEFORM_RAMP);
+  channel_volume(CHANNEL3, 127);
+
+  // Channel 4 Settings
+  channel_enable(CHANNEL4);
+  channel_set_waveform(CHANNEL4, WAVEFORM_SQUARE);
+  channel_volume(CHANNEL4, 127);
+
+  while (1)
+  {
+  }
+}
 
 /**
  * @brief This function tests the USER_UART peripheral to see if it is working as intended.
  * @param None
  * @retval None.
  */
-void test_USER_UART();
+void test_USER_UART()
+{
+#ifdef UART_INTERRUPT_TEST
+  // Initialize the USER_UART peripheral (interrupt-mode)
+  configure_USER_UART(115200, UART_ENABLE_INTERRUPTS, 2);
+
+  // Send info using USER_UART
+  send_USER_UART("Hello from the USER_UART peripheral!\n");
+
+  // Loop until there are five bytes in the global_receive_buffer
+  char buffer[7];
+  while (1)
+  {
+    if (global_receive_buffer_index >= 5)
+    {
+      // Disable interrupts while we extract data from the buffer
+      NVIC_DisableIRQ(USER_UART_IRQn);
+
+      // Extract the data from the buffer
+      for (int i = 0; i < 5; i++)
+        buffer[i] = global_receive_buffer[i];
+      buffer[5] = '\n';
+      buffer[6] = '\x0';
+
+      // Reset the buffer index, we got the data we need
+      global_receive_buffer_index = 0;
+
+      // Re-enable interrupts as we're done extracting data from the buffer
+      NVIC_EnableIRQ(USER_UART_IRQn);
+      break;
+    }
+  }
+
+  // Test the printu() function to see if UART console output works
+  printu(buffer);
+#else
+  // Initialize the USER_UART peripheral (blocking-mode)
+  configure_USER_UART(115200, UART_DISABLE_INTERRUPTS, 2);
+
+  // Send info using USER_UART
+  send_USER_UART("Hello from the USER_UART peripheral!\n");
+
+  // Receive info using USER_UART
+  char buffer[7];
+  receive_USER_UART_blocking(5, buffer);
+  buffer[5] = '\n';
+  buffer[6] = '\x0';
+
+  // Test the printu() function to see if UART console output works
+  printu(buffer);
+#endif
+}
 
 /**
  * @brief This function tests the MIDI_UART peripheral to see if it is working as intended.
  * @param None
  * @retval None.
  */
-void test_MIDI_UART();
-
-/* Private user code ---------------------------------------------------------*/
-
-void checkpoint_3(void)
+void test_MIDI_UART()
 {
-  // Configure the output channels (1-4)
-  channel1_4_timer_init();
+#ifdef UART_INTERRUPT_TEST
+  // Initialize the MIDI_UART peripheral (interrupt-mode)
+  configure_MIDI_UART(115200, UART_ENABLE_INTERRUPTS, 2);
 
-  // Channel 1 Settings
-  channel1_4_enable(CHANNEL1);
-  channel1_4_set_waveform(CHANNEL1, WAVEFORM_SINE);
-  channel1_4_on_off(CHANNEL1, 1);
-  channel1_4_frequency(CHANNEL1, 100);
-  channel1_4_volume(CHANNEL1, 127);
+  // Send info using MIDI_UART
+  send_MIDI_UART("Hello from the MIDI_UART peripheral!\n");
 
-  // Test the MIDI_UART peripheral
-  // test_MIDI_UART();
+  // Loop until there are five bytes in the global_receive_buffer
+  char buffer[7];
+  while (1)
+  {
+    if (global_receive_buffer_index >= 5)
+    {
+      // Disable interrupts while we extract data from the buffer
+      NVIC_DisableIRQ(MIDI_UART_IRQn);
 
+      // Extract the data from the buffer
+      for (int i = 0; i < 5; i++)
+        buffer[i] = global_receive_buffer[i];
+      buffer[5] = '\n';
+      buffer[6] = '\x0';
+
+      // Reset the buffer index, we got the data we need
+      global_receive_buffer_index = 0;
+
+      // Re-enable interrupts as we're done extracting data from the buffer
+      NVIC_EnableIRQ(MIDI_UART_IRQn);
+      break;
+    }
+  }
+
+  // Echo the received data back using MIDI_UART
+  send_MIDI_UART(buffer);
+#else
+  // Initialize the MIDI_UART peripheral (blocking-mode)
+  configure_MIDI_UART(115200, UART_DISABLE_INTERRUPTS, 2);
+
+  // Send info using MIDI_UART
+  send_MIDI_UART("Hello from the MIDI_UART peripheral!\n");
+
+  // Receive info using MIDI_UART
+  char buffer[7];
+  receive_MIDI_UART_blocking(5, buffer);
+  buffer[5] = '\n';
+  buffer[6] = '\x0';
+
+  // Echo the received data back using MIDI_UART
+  send_MIDI_UART(buffer);
+#endif
+}
+
+/* ========================================================================== */
+/*                                                                            */
+/*        Callback Handlers                                                   */
+/*                                                                            */
+/* ========================================================================== */
+
+/**
+ * @brief Sample timer callback handler - invoked when sample timer asserts
+ * @param None
+ * @retval None.
+ */
+void sample_timer_handler()
+{
+  channel_update_all();
+}
+
+/* ========================================================================== */
+/*                                                                            */
+/*        Initialization and Control Functions                                */
+/*                                                                            */
+/* ========================================================================== */
+
+/**
+ * @brief Initialize all the necessary components for the channel driver
+ */
+void init_sample_timer()
+{
   // Configure and start the sample timer
   sample_timer_register_cb(sample_timer_handler); // Register the Sample Timer Callback
   sample_timer_init();
-  sample_timer_start(); // Advance the sampled waveforms
-
-  // Loop through the demo code
-  uint16_t current_f = 100;
-  while (1)
-  {
-    #if defined(DEMO_100Hz_SWEEP)
-        HAL_Delay(100);
-
-        current_f += 100;
-        current_f = current_f % 12000;
-
-        channel1_state.freq = current_f;
-        channel2_state.freq = current_f;
-        channel3_state.freq = current_f;
-        channel4_state.freq = current_f;
-    #elif defined(DEMO_C_MAJOR)
-        HAL_Delay(750);
-
-        current_f = 262; // C4
-
-        channel1_state.freq = current_f;
-        channel2_state.freq = current_f;
-        channel3_state.freq = current_f;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 296; // D4
-
-        channel1_state.freq = current_f;
-        channel2_state.freq = current_f;
-        channel3_state.freq = current_f;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 330; // E4
-
-        channel1_state.freq = current_f;
-        channel2_state.freq = current_f;
-        channel3_state.freq = current_f;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 349; // F4
-
-        channel1_state.freq = current_f;
-        channel2_state.freq = current_f;
-        channel3_state.freq = current_f;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 392; // G4
-
-        channel1_state.freq = current_f;
-        channel2_state.freq = current_f;
-        channel3_state.freq = current_f;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 440; // A4
-
-        channel1_state.freq = current_f;
-        channel2_state.freq = current_f;
-        channel3_state.freq = current_f;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 494; // B4
-
-        channel1_state.freq = current_f;
-        channel2_state.freq = current_f;
-        channel3_state.freq = current_f;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 523; // C5
-
-        channel1_state.freq = current_f;
-        channel2_state.freq = current_f;
-        channel3_state.freq = current_f;
-        channel4_state.freq = current_f;
-    #elif defined(DEMO_C_MAJOR_CHORDS)
-
-        HAL_Delay(750);
-
-        current_f = 262; // C4
-
-        channel1_state.freq = 262;
-        channel2_state.freq = 330;
-        channel3_state.freq = 392;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 296; // D4
-
-        channel1_state.freq = 296;
-        channel2_state.freq = 349;
-        channel3_state.freq = 440;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 330; // E4
-
-        channel1_state.freq = 330;
-        channel2_state.freq = 392;
-        channel3_state.freq = 494;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 349; // F4
-
-        channel1_state.freq = 349;
-        channel2_state.freq = 440;
-        channel3_state.freq = 523;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 392; // G4
-
-        channel1_state.freq = 392;
-        channel2_state.freq = 494;
-        channel3_state.freq = 587;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 440; // A4
-
-        channel1_state.freq = 440;
-        channel2_state.freq = 523;
-        channel3_state.freq = 659;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 494; // B4
-
-        channel1_state.freq = 494;
-        channel2_state.freq = 587;
-        channel3_state.freq = 698;
-        channel4_state.freq = current_f;
-
-        HAL_Delay(750);
-
-        current_f = 523; // C5
-
-        channel1_state.freq = 523;
-        channel2_state.freq = 659;
-        channel3_state.freq = 784;
-        channel4_state.freq = current_f;
-    #endif
-  }
 }
 
-void test_USER_UART()
+/**
+ * @brief Initialize all the necessary components for the channel driver
+ * @param None
+ */
+void init_channel_driver()
 {
-  #ifdef UART_INTERRUPT_TEST
-    // Initialize the USER_UART peripheral (interrupt-mode)
-    configure_USER_UART(115200, UART_ENABLE_INTERRUPTS, 2);
+  // Channels 1 - 7
+  channel_timer_init();
 
-    // Send info using USER_UART
-    send_USER_UART("Hello from the USER_UART peripheral!\n");
+  channel_voice_on(CHANNEL1, 0);
+  channel_voice_frequency(CHANNEL1, 0, 440);
+  channel_voice_modulation(CHANNEL1, 0, 8196);
 
-    // Loop until there are five bytes in the global_receive_buffer
-    char buffer[7];
-    while (1)
-    {
-      if (global_receive_buffer_index >= 5)
-      {
-        // Disable interrupts while we extract data from the buffer
-        NVIC_DisableIRQ(USER_UART_IRQn);
+  channel_voice_on(CHANNEL2, 0);
+  channel_voice_frequency(CHANNEL2, 0, 100);
+  channel_voice_modulation(CHANNEL2, 0, 8196);
 
-        // Extract the data from the buffer
-        for (int i = 0; i < 5; i++)
-          buffer[i] = global_receive_buffer[i];
-        buffer[5] = '\n';
-        buffer[6] = '\x0';
+  channel_voice_on(CHANNEL3, 0);
+  channel_voice_frequency(CHANNEL3, 0, 100);
+  channel_voice_modulation(CHANNEL3, 0, 8196);
 
-        // Reset the buffer index, we got the data we need
-        global_receive_buffer_index = 0;
-
-        // Re-enable interrupts as we're done extracting data from the buffer
-        NVIC_EnableIRQ(USER_UART_IRQn);
-        break;
-      }
-    }
-
-    // Test the printu() function to see if UART console output works
-    printu(buffer);
-  #else
-    // Initialize the USER_UART peripheral (blocking-mode)
-    configure_USER_UART(115200, UART_DISABLE_INTERRUPTS, 2);
-
-    // Send info using USER_UART
-    send_USER_UART("Hello from the USER_UART peripheral!\n");
-  
-    // Receive info using USER_UART
-    char buffer[7];
-    receive_USER_UART_blocking(5, buffer);
-    buffer[5] = '\n';
-    buffer[6] = '\x0';
-  
-    // Test the printu() function to see if UART console output works
-    printu(buffer);
-  #endif
+  channel_voice_on(CHANNEL4, 0);
+  channel_voice_frequency(CHANNEL4, 0, 100);
+  channel_voice_modulation(CHANNEL4, 0, 8196);
 }
 
-void test_MIDI_UART()
+/**
+ * @brief Start the overall audio synthesis
+ */
+void start_audio_synthesis()
 {
-  #ifdef UART_INTERRUPT_TEST
-    // Initialize the MIDI_UART peripheral (interrupt-mode)
-    configure_MIDI_UART(115200, UART_ENABLE_INTERRUPTS, 2);
+  // Start the sample timer (advance the sampled waveforms)
+  sample_timer_start();
+}
 
-    // Send info using MIDI_UART
-    send_MIDI_UART("Hello from the MIDI_UART peripheral!\n");
-
-    // Loop until there are five bytes in the global_receive_buffer
-    char buffer[7];
-    while (1)
-    {
-      if (global_receive_buffer_index >= 5)
-      {
-        // Disable interrupts while we extract data from the buffer
-        NVIC_DisableIRQ(MIDI_UART_IRQn);
-
-        // Extract the data from the buffer
-        for (int i = 0; i < 5; i++)
-          buffer[i] = global_receive_buffer[i];
-        buffer[5] = '\n';
-        buffer[6] = '\x0';
-
-        // Reset the buffer index, we got the data we need
-        global_receive_buffer_index = 0;
-
-        // Re-enable interrupts as we're done extracting data from the buffer
-        NVIC_EnableIRQ(MIDI_UART_IRQn);
-        break;
-      }
-    }
-
-    // Echo the received data back using MIDI_UART
-    send_MIDI_UART(buffer);
-  #else
-    // Initialize the MIDI_UART peripheral (blocking-mode)
-    configure_MIDI_UART(115200, UART_DISABLE_INTERRUPTS, 2);
-
-    // Send info using MIDI_UART
-    send_MIDI_UART("Hello from the MIDI_UART peripheral!\n");
-
-    // Receive info using MIDI_UART
-    char buffer[7];
-    receive_MIDI_UART_blocking(5, buffer);
-    buffer[5] = '\n';
-    buffer[6] = '\x0';
-
-    // Echo the received data back using MIDI_UART
-    send_MIDI_UART(buffer);
-  #endif
+/**
+ * @brief Stop the overall audio synthesis
+ */
+void stop_audio_synthesis()
+{
+  // Stop the sample timer (advance the sampled waveforms)
+  sample_timer_stop();
 }
 
 /* ========================================================================== */
@@ -400,6 +319,14 @@ int main(void)
   // Run the third checkpoint
   checkpoint_3();
 
+  // == AUDIO SETUP ==
+  init_sample_timer();
+  init_channel_driver();
+
+  start_audio_synthesis();
+
   // Loop indefinitely to prevent returning from main
-  while (1) { };
+  while (1)
+  {
+  };
 }
