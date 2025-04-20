@@ -1,7 +1,9 @@
 /**
  ******************************************************************************
- * @file           : channel_driver.h
- * @brief          : Channel Timer Control Interface Header
+ * @file           : channel_timer.h
+ * @brief          : Channel1 Timer Control Interface Header
+ * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson,
+ *                   and Hayoung Im
  ******************************************************************************
  */
 
@@ -17,8 +19,8 @@
 /*                                                                            */
 /* ========================================================================== */
 
-#ifndef _CHANNEL_DRIVER_H_
-#define _CHANNEL_DRIVER_H_
+#ifndef _CHANNEL1_4_TIMER_H_
+#define _CHANNEL1_4_TIMER_H_
 
 /* ========================================================================== */
 /*                                                                            */
@@ -31,78 +33,51 @@
  * @param channel The channel to enable
  * @note Starts the timer
  */
-void channel_enable(channel_t channel);
+void channel1_4_enable(channel_t channel);
 
 /**
  * @brief Disable the Channel Output
  * @param channel The channel to disable
  * @note Halts the timer
  */
-void channel_disable(channel_t channel);
+void channel1_4_disable(channel_t channel);
 
 /**
  * @brief Set the current output waveform
  * @param channel The channel to modify
  * @param wave The waveform to synthesize
  */
-void channel_set_waveform(channel_t channel, waveforms_t wave);
+void channel1_4_set_waveform(channel_t channel, waveforms_t wave);
+
+/**
+ * @brief Turn the channel note on or off (no more PWM)
+ * @param channel The channel to modify
+ * @param state Turn the channel on or off (1 is on, 0 is off)
+ * @note Updates when channeln_update() is invoked
+ */
+void channel1_4_on_off(channel_t channel, uint8_t state);
 
 /**
  * @brief Set the channel volume
  * @param channel The channel to modify
  * @param volume Volume of the signal (up to 127)
- * @note Updates when channel_update() is invoked
+ * @note Updates when channeln_update() is invoked
  */
-void channel_volume(channel_t channel, uint8_t volume);
-
-/**
- * @brief Turn the channel note on or off (no more PWM)
- * @param channel The channel to modify
- * @param voice The voice to modify
- * @note Updates when channel_update() is invoked
- */
-void channel_voice_on(channel_t channel, uint8_t voice);
-
-/**
- * @brief Turn the channel note on or off (no more PWM)
- * @param channel The channel to modify
- * @param voice The voice to modify
- * @note Updates when channel_update() is invoked
- */
-void channel_voice_off(channel_t channel, uint8_t voice);
+void channel1_4_volume(channel_t channel, uint8_t volume);
 
 /**
  * @brief Set the channel frequency
  * @param channel The channel to modify
- * @param voice Voice to modify
  * @param freq Frequency of the signal to synthesize
- * @note Updates when channel_update() is invoked
+ * @note Updates when channeln_update() is invoked
  */
-void channel_voice_frequency(channel_t channel, uint8_t voice, uint16_t freq);
-
-/**
- * @brief Set the channel frequency
- * @param channel The channel to modify
- * @param voice Voice to modify
- * @param freq Frequency of the signal to synthesize
- * @note Updates when channel_update() is invoked
- */
-void channel_voice_modulation(channel_t channel, uint8_t voice, uint16_t modulation);
-
-/**
- * @brief Set the channel frequency
- * @param channel The channel to modify
- * @param voice Voice to modify
- * @param velocity Frequency of the signal to synthesize
- * @note Updates when channel_update() is invoked
- */
-void channel_voice_velocity(channel_t channel, uint8_t voice, uint8_t velocity);
+void channel1_4_frequency(channel_t channel, uint16_t freq);
 
 /**
  * @brief Update the current channel output according to its state
- * @note Updates when channel_update() is invoked
+ * @note Updates when channeln_update() is invoked
  */
-void channel_update_all();
+void channel1_4_update();
 
 /* ========================================================================== */
 /*                                                                            */
@@ -113,6 +88,6 @@ void channel_update_all();
 /**
  * @brief Intialize the channel1 timer component
  */
-void channel_timer_init();
+void channel1_4_timer_init();
 
-#endif /* _CHANNEL_DRIVER_H_ */
+#endif /* _CHANNEL1_4_TIMER_H_ */

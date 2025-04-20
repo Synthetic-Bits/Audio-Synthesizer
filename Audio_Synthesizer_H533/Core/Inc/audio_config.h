@@ -2,6 +2,8 @@
  ******************************************************************************
  * @file           : audio_config.h
  * @brief          : Audio Control Config Header
+ * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson,
+ *                   and Hayoung Im
  ******************************************************************************
  */
 

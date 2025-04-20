@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    rcc.c
  * @brief   RCC Timer Control Interface
- * @author  Adrian Sucahyo, Kenneth Gordon, Bryant Watson, Hayoung In
+ * @authors Adrian Sucahyo, Kenneth Gordon, Bryant Watson, and Hayoung Im
  ******************************************************************************
  * @attention
  *
@@ -15,8 +15,8 @@
  *
  ******************************************************************************
  */
-/* Includes ------------------------------------------------------------------*/
 
+/* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "rcc.h"
 
@@ -27,13 +27,15 @@
 #include "stm32h5xx.h"
 
 /* Function Prototypes -------------------------------------------------------*/
-void RCC_GPIOA_CLK_Enable();
-void RCC_GPIOB_CLK_Enable();
-void RCC_GPIOC_CLK_Enable();
+void RCC_GPIOA_CLK_Enable(void);
+void RCC_GPIOB_CLK_Enable(void);
+void RCC_GPIOC_CLK_Enable(void);
 
-void RCC_TIM2_CLK_Enable();
-void RCC_TIM3_CLK_Enable();
-void RCC_TIM4_CLK_Enable();
+void RCC_TIM2_CLK_Enable(void);
+void RCC_TIM3_CLK_Enable(void);
+
+void RCC_USART1_CLK_Enable(void);
+void RCC_USART3_CLK_Enable(void);
 
 /* ========================================================================== */
 /*                                                                            */
@@ -82,9 +84,17 @@ void RCC_TIM3_CLK_Enable()
 }
 
 /**
- * @brief Enable the RCC Clock for TIM4
+ * @brief Enable the RCC Clock for USART1
  */
-void RCC_TIM4_CLK_Enable()
+void RCC_USART1_CLK_Enable()
 {
-    RCC->APB1LENR |= RCC_APB1LENR_TIM4EN;
+    RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
+}
+
+/**
+ * @brief Enable the RCC Clock for USART3
+ */
+void RCC_USART3_CLK_Enable()
+{
+    RCC->APB1LENR |= RCC_APB1LENR_USART3EN;
 }

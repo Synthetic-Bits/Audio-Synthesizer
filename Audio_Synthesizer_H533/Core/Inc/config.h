@@ -2,6 +2,8 @@
  ******************************************************************************
  * @file           : config.h
  * @brief          : Pin and Component Config Header
+ * @authors        : Adrian Sucahyo, Kenneth Gordon, Bryant Watson,
+ *                   and Hayoung Im
  ******************************************************************************
  */
 
@@ -28,10 +30,10 @@
 #define CHANNEL1_4_TIMER TIM3 // Ensure to update the RCC if necessary
 
 #define CHANNEL1_4_GPIO_PORT GPIOC
-#define CHANNEL1_GPIO_PIN GPIO_PIN_9
-#define CHANNEL2_GPIO_PIN GPIO_PIN_6
-#define CHANNEL3_GPIO_PIN GPIO_PIN_7
-#define CHANNEL4_GPIO_PIN GPIO_PIN_8
+#define CHANNEL1_GPIO_PIN GPIO_PIN_9 // PC9
+#define CHANNEL2_GPIO_PIN GPIO_PIN_6 // PC6
+#define CHANNEL3_GPIO_PIN GPIO_PIN_7 // PC7
+#define CHANNEL4_GPIO_PIN GPIO_PIN_8 // PC8
 
 /* ========================================================================== */
 /*                                                                            */
@@ -42,9 +44,9 @@
 #define CHANNEL5_7_TIMER TIM4 // Ensure to update the RCC if necessary
 
 #define CHANNEL5_7_GPIO_PORT GPIOB
-#define CHANNEL5_GPIO_PIN GPIO_PIN_6
-#define CHANNEL6_GPIO_PIN GPIO_PIN_7
-#define CHANNEL7_GPIO_PIN GPIO_PIN_8
+#define CHANNEL5_GPIO_PIN GPIO_PIN_6 // PB6
+#define CHANNEL6_GPIO_PIN GPIO_PIN_7 // PB7
+#define CHANNEL7_GPIO_PIN GPIO_PIN_8 // PB8
 
 /* ========================================================================== */
 /*                                                                            */
@@ -56,7 +58,7 @@
 #define CHANNEL8_DAC_CH DAC1_CHANNEL_2
 
 #define CHANNEL8_GPIO_PORT GPIOA
-#define CHANNEL8_GPIO_PIN GPIO_PIN_5
+#define CHANNEL8_GPIO_PIN GPIO_PIN_5 // PA5
 
 /* ========================================================================== */
 /*                                                                            */
@@ -64,17 +66,17 @@
 /*                                                                            */
 /* ========================================================================== */
 
-#define USER_UART UART1
-
+#define USER_UART USART1
 #define USER_UART_PORT GPIOB
-#define USER_UART_TX_PIN GPIO_PIN_14
-#define USER_UART_RX_PIN GPIO_PIN_15
+#define USER_UART_TX_PIN GPIO_PIN_14 // PB14
+#define USER_UART_RX_PIN GPIO_PIN_15 // PB15
+#define USER_UART_IRQn USART1_IRQn
 
-#define MIDI_UART UART3
-
+#define MIDI_UART USART3
 #define MIDI_UART_PORT GPIOB
-#define MIDI_UART_TX_PIN GPIO_PIN_10
-#define MIDI_UART_RX_PIN GPIO_PIN_1
+#define MIDI_UART_TX_PIN GPIO_PIN_10 // PB10
+#define MIDI_UART_RX_PIN GPIO_PIN_1  // PB1
+#define MIDI_UART_IRQn USART3_IRQn
 
 /* ========================================================================== */
 /*                                                                            */
