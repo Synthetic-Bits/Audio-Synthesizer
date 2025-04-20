@@ -2,9 +2,9 @@
 Version=1.0
 
 [PublishSettings]
-OutputFilePath2=D:\ECE5780-FP\PCB\MIDI_Synthesizer_PCB\.PDF
+OutputFilePath2=C:\Users\adria\Documents\ECE5870-F\Audio-Synthesizer\PCB\MIDI_Synthesizer_PCB\.PDF
 ReleaseManaged2=0
-OutputBasePath2=D:\ECE5780-FP\PCB\MIDI_Synthesizer_PCB\
+OutputBasePath2=C:\Users\adria\Documents\ECE5870-F\Audio-Synthesizer\PCB\MIDI_Synthesizer_PCB\
 OutputPathMedia2=
 OutputPathMediaValue2=
 OutputPathOutputer2=[Output Type]
@@ -81,7 +81,7 @@ WmvVideoCodecName4=Windows Media Video V7
 WmvQuality4=80
 
 [GeneratedFilesSettings]
-RelativeOutputPath2=D:\ECE5780-FP\PCB\MIDI_Synthesizer_PCB\.PDF
+RelativeOutputPath2=C:\Users\adria\Documents\ECE5870-F\Audio-Synthesizer\PCB\MIDI_Synthesizer_PCB\.PDF
 OpenOutputs2=1
 RelativeOutputPath3=
 OpenOutputs3=1

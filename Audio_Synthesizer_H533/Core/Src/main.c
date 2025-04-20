@@ -79,8 +79,8 @@ int main(void)
   channel_set_waveform(CHANNEL1, WAVEFORM_SINE);
   channel_volume(CHANNEL1, 127);
   channel_voice_on(CHANNEL1, 0);
-  channel_voice_frequency(CHANNEL1, 0, 100);
-  channel_voice_modulation(CHANNEL1, 0, 0);
+  channel_voice_frequency(CHANNEL1, 0, 440);
+  channel_voice_modulation(CHANNEL1, 0, 8196);
 
   // Channel 2 Settings
   channel_enable(CHANNEL2);
@@ -88,7 +88,7 @@ int main(void)
   channel_volume(CHANNEL2, 127);
   channel_voice_on(CHANNEL2, 0);
   channel_voice_frequency(CHANNEL2, 0, 100);
-  channel_voice_modulation(CHANNEL2, 0, 0);
+  channel_voice_modulation(CHANNEL2, 0, 8196);
 
   // Channel 3 Settings
   channel_enable(CHANNEL3);
@@ -96,7 +96,7 @@ int main(void)
   channel_volume(CHANNEL3, 127);
   channel_voice_on(CHANNEL3, 0);
   channel_voice_frequency(CHANNEL3, 0, 100);
-  channel_voice_modulation(CHANNEL3, 0, 0);
+  channel_voice_modulation(CHANNEL3, 0, 8196);
 
   // Channel 4 Settings
   channel_enable(CHANNEL4);
@@ -104,7 +104,7 @@ int main(void)
   channel_volume(CHANNEL4, 127);
   channel_voice_on(CHANNEL4, 0);
   channel_voice_frequency(CHANNEL4, 0, 100);
-  channel_voice_modulation(CHANNEL4, 0, 0);
+  channel_voice_modulation(CHANNEL4, 0, 8196);
 
   // Start the sample timer (advance the sampled waveforms)
   sample_timer_start();
