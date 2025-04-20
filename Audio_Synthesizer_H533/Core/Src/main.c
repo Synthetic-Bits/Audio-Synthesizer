@@ -32,6 +32,7 @@
 
 /* Private define ------------------------------------------------------------*/
 
+// Define for configuring the UART tests
 #define UART_INTERRUPT_TEST
 
 /* Private macro -------------------------------------------------------------*/
@@ -188,7 +189,7 @@ int main(void)
   // test_USER_UART();
 
   // Test the MIDI_UART peripheral
-  test_MIDI_UART();
+  // test_MIDI_UART();
 
   // Loop indefinitely
   while (1) { };
