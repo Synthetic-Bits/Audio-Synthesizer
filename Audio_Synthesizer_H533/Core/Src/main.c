@@ -31,7 +31,7 @@
 
 /* Private define ------------------------------------------------------------*/
 
-// #define UART_INTERRUPT_TEST
+#define UART_INTERRUPT_TEST
 
 /* Private macro -------------------------------------------------------------*/
 
@@ -69,12 +69,17 @@ void test_USER_UART()
     send_USER_UART("Hello from the USER_UART peripheral!\n");
 
     // Loop until there are five bytes in the global_receive_buffer
-    char buffer[6];
-    while(global_receive_buffer_index >= 5)
+    char buffer[7];
+    while (1)
     {
-      for (int i = 0; i < 5; i++)
-        buffer[i] = global_receive_buffer[i];
-      buffer[5] = '\n';
+      if (global_receive_buffer_index >= 5)
+      {
+        for (int i = 0; i < 5; i++)
+          buffer[i] = global_receive_buffer[i];
+        buffer[5] = '\n';
+        buffer[6] = '\x0';
+        break;
+      }
     }
 
     // Test the printu() function to see if UART console output works
@@ -87,9 +92,10 @@ void test_USER_UART()
     send_USER_UART("Hello from the USER_UART peripheral!\n");
   
     // Receive info using USER_UART
-    char buffer[6];
+    char buffer[7];
     receive_USER_UART_blocking(5, buffer);
     buffer[5] = '\n';
+    buffer[6] = '\x0';
   
     // Test the printu() function to see if UART console output works
     printu(buffer);
@@ -106,12 +112,17 @@ void test_MIDI_UART()
     send_MIDI_UART("Hello from the MIDI_UART peripheral!\n");
 
     // Loop until there are five bytes in the global_receive_buffer
-    char buffer[6];
-    while(global_receive_buffer_index >= 5)
+    char buffer[7];
+    while (1)
     {
-      for (int i = 0; i < 5; i++)
-        buffer[i] = global_receive_buffer[i];
-      buffer[5] = '\n';
+      if (global_receive_buffer_index >= 5)
+      {
+        for (int i = 0; i < 5; i++)
+          buffer[i] = global_receive_buffer[i];
+        buffer[5] = '\n';
+        buffer[6] = '\x0';
+        break;
+      }
     }
 
     // Test the printu() function to see if UART console output works
