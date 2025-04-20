@@ -7,6 +7,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 
+#include "pins.h"
+
 /* ========================================================================== */
 /*                                                                            */
 /*    Definitions                                                             */
@@ -15,11 +17,6 @@
 
 #ifndef _GPIO_H_
 #define _GPIO_H_
-
-#define RED_LED_PIN GPIO_PIN_6
-#define BLUE_LED_PIN GPIO_PIN_7
-#define ORANGE_LED_PIN GPIO_PIN_8
-#define GREEN_LED_PIN GPIO_PIN_9
 
 /* ========================================================================== */
 /*                                                                            */
