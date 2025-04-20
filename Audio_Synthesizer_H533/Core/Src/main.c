@@ -32,7 +32,7 @@
 
 /* Private define ------------------------------------------------------------*/
 
-// #define UART_INTERRUPT_TEST
+#define UART_INTERRUPT_TEST
 
 /* Private macro -------------------------------------------------------------*/
 
@@ -83,13 +83,13 @@ void test_USER_UART()
           buffer[i] = global_receive_buffer[i];
         buffer[5] = '\n';
         buffer[6] = '\x0';
-        break;
 
         // Reset the buffer index, we got the data we need
         global_receive_buffer_index = 0;
 
         // Re-enable interrupts as we're done extracting data from the buffer
         NVIC_EnableIRQ(USER_UART_IRQn);
+        break;
       }
     }
 
@@ -136,18 +136,18 @@ void test_MIDI_UART()
           buffer[i] = global_receive_buffer[i];
         buffer[5] = '\n';
         buffer[6] = '\x0';
-        break;
 
         // Reset the buffer index, we got the data we need
         global_receive_buffer_index = 0;
 
         // Re-enable interrupts as we're done extracting data from the buffer
         NVIC_EnableIRQ(MIDI_UART_IRQn);
+        break;
       }
     }
 
-    // Test the printu() function to see if UART console output works
-    printu(buffer);
+    // Echo the received data back using MIDI_UART
+    send_MIDI_UART(buffer);
   #else
     // Initialize the MIDI_UART peripheral (blocking-mode)
     configure_MIDI_UART(115200, UART_DISABLE_INTERRUPTS, 2);
