@@ -32,7 +32,7 @@
 
 /* Private define ------------------------------------------------------------*/
 
-#define UART_INTERRUPT_TEST
+// #define UART_INTERRUPT_TEST
 
 /* Private macro -------------------------------------------------------------*/
 
@@ -156,12 +156,13 @@ void test_MIDI_UART()
     send_MIDI_UART("Hello from the MIDI_UART peripheral!\n");
 
     // Receive info using MIDI_UART
-    char buffer[6];
+    char buffer[7];
     receive_MIDI_UART_blocking(5, buffer);
     buffer[5] = '\n';
+    buffer[6] = '\x0';
 
-    // Test the printu() function to see if UART console output works
-    printu(buffer);
+    // Echo the received data back using MIDI_UART
+    send_MIDI_UART(buffer);
   #endif
 }
 
@@ -184,10 +185,10 @@ int main(void)
   MX_ICACHE_Init();
 
   // Test the USER_UART peripheral
-  test_USER_UART();
+  // test_USER_UART();
 
   // Test the MIDI_UART peripheral
-  // test_MIDI_UART();
+  test_MIDI_UART();
 
   // Loop indefinitely
   while (1) { };
