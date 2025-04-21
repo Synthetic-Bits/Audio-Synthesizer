@@ -82,28 +82,82 @@ void checkpoint_3(void)
   // Test the MIDI_UART peripheral
   // test_MIDI_UART();
 
-  // Channel 1 Settings
-  channel_enable(CHANNEL1);
-  channel_set_waveform(CHANNEL1, WAVEFORM_SINE);
-  channel_volume(CHANNEL1, 127);
+  channel_voice_frequency(CHANNEL1, 0, 262);
+  channel_voice_frequency(CHANNEL1, 1, 330);
+  channel_voice_frequency(CHANNEL1, 2, 392);
+  channel_voice_on(CHANNEL1, 0);
+  channel_voice_on(CHANNEL1, 1);
+  channel_voice_on(CHANNEL1, 2);
+  // channel_voice_modulation(CHANNEL1, 0, 8196);
 
-  // Channel 2 Settings
-  channel_enable(CHANNEL2);
-  channel_set_waveform(CHANNEL2, WAVEFORM_TRIG);
-  channel_volume(CHANNEL2, 127);
+  channel_voice_frequency(CHANNEL2, 0, 262);
+  channel_voice_frequency(CHANNEL2, 1, 330);
+  channel_voice_frequency(CHANNEL2, 2, 392);
+  channel_voice_on(CHANNEL2, 0);
+  channel_voice_on(CHANNEL2, 1);
+  channel_voice_on(CHANNEL2, 2);
+  // channel_voice_modulation(CHANNEL2, 0, 8196);
 
-  // Channel 3 Settings
-  channel_enable(CHANNEL3);
-  channel_set_waveform(CHANNEL3, WAVEFORM_RAMP);
-  channel_volume(CHANNEL3, 127);
+  channel_voice_frequency(CHANNEL3, 0, 262);
+  channel_voice_frequency(CHANNEL3, 1, 330);
+  channel_voice_frequency(CHANNEL3, 2, 392);
+  channel_voice_on(CHANNEL3, 0);
+  channel_voice_on(CHANNEL3, 1);
+  channel_voice_on(CHANNEL3, 2);
+  // channel_voice_modulation(CHANNEL3, 0, 8196);
 
-  // Channel 4 Settings
-  channel_enable(CHANNEL4);
-  channel_set_waveform(CHANNEL4, WAVEFORM_SQUARE);
-  channel_volume(CHANNEL4, 127);
+  channel_voice_frequency(CHANNEL4, 0, 192);
+  channel_voice_frequency(CHANNEL4, 1, 124);
+  channel_voice_frequency(CHANNEL4, 2, 62);
+  channel_voice_on(CHANNEL4, 0);
+  channel_voice_on(CHANNEL4, 1);
+  channel_voice_on(CHANNEL4, 2);
+  // channel_voice_modulation(CHANNEL4, 0, 8196);
 
+  channel_voice_frequency(CHANNEL5, 0, 262);
+  channel_voice_on(CHANNEL5, 0);
+
+  channel_voice_frequency(CHANNEL6, 0, 330);
+  channel_voice_on(CHANNEL6, 0);
+
+  channel_voice_frequency(CHANNEL7, 0, 392);
+  channel_voice_on(CHANNEL7, 0);
+
+  channel_voice_velocity(CHANNEL4, 0, 127);
+  channel_voice_velocity(CHANNEL4, 1, 127);
+  channel_voice_velocity(CHANNEL4, 2, 127);
+  uint16_t mod = 0;
   while (1)
   {
+    mod += 1000;
+    mod &= (0b0011111111111111);
+
+    channel_voice_modulation(CHANNEL5, 0, mod);
+    channel_voice_modulation(CHANNEL6, 0, mod);
+    channel_voice_modulation(CHANNEL7, 0, mod);
+    // channel_voice_modulation(CHANNEL4, 0, mod);
+
+    channel_voice_on(CHANNEL4, 0);
+    channel_voice_on(CHANNEL4, 1);
+    channel_voice_on(CHANNEL4, 2);
+
+    // Using the struct accesses
+    channel5_state.voices[0].frequency = 880;
+    channel6_state.voices[0].frequency = 880;
+    channel7_state.voices[0].frequency = 880;
+
+    HAL_Delay(1200);
+
+    channel_voice_off(CHANNEL4, 0);
+    channel_voice_off(CHANNEL4, 1);
+    channel_voice_off(CHANNEL4, 2);
+
+    // Using the struct accesses
+    channel5_state.voices[0].frequency = 440;
+    channel6_state.voices[0].frequency = 440;
+    channel7_state.voices[0].frequency = 440;
+
+    HAL_Delay(1200);
   }
 }
 
@@ -264,21 +318,40 @@ void init_channel_driver()
   // Channels 1 - 7
   channel_timer_init();
 
-  channel_voice_on(CHANNEL1, 0);
-  channel_voice_frequency(CHANNEL1, 0, 440);
-  channel_voice_modulation(CHANNEL1, 0, 8196);
+  // Channel 1 Settings
+  channel_enable(CHANNEL1);
+  channel_set_waveform(CHANNEL1, WAVEFORM_SINE);
+  channel_volume(CHANNEL1, 127);
 
-  channel_voice_on(CHANNEL2, 0);
-  channel_voice_frequency(CHANNEL2, 0, 100);
-  channel_voice_modulation(CHANNEL2, 0, 8196);
+  // Channel 2 Settings
+  channel_enable(CHANNEL2);
+  channel_set_waveform(CHANNEL2, WAVEFORM_TRIG);
+  channel_volume(CHANNEL2, 127);
 
-  channel_voice_on(CHANNEL3, 0);
-  channel_voice_frequency(CHANNEL3, 0, 100);
-  channel_voice_modulation(CHANNEL3, 0, 8196);
+  // Channel 3 Settings
+  channel_enable(CHANNEL3);
+  channel_set_waveform(CHANNEL3, WAVEFORM_RAMP);
+  channel_volume(CHANNEL3, 127);
 
-  channel_voice_on(CHANNEL4, 0);
-  channel_voice_frequency(CHANNEL4, 0, 100);
-  channel_voice_modulation(CHANNEL4, 0, 8196);
+  // Channel 4 Settings
+  channel_enable(CHANNEL4);
+  channel_set_waveform(CHANNEL4, WAVEFORM_SQUARE);
+  channel_volume(CHANNEL4, 127);
+
+  // Channel 5 Settings
+  channel_enable(CHANNEL5);
+  channel_set_waveform(CHANNEL5, WAVEFORM_TRIG);
+  channel_volume(CHANNEL5, 127);
+
+  // Channel 6 Settings
+  channel_enable(CHANNEL6);
+  channel_set_waveform(CHANNEL6, WAVEFORM_RAMP);
+  channel_volume(CHANNEL6, 127);
+
+  // Channel 7 Settings
+  channel_enable(CHANNEL7);
+  channel_set_waveform(CHANNEL7, WAVEFORM_SQUARE);
+  channel_volume(CHANNEL7, 127);
 }
 
 /**
@@ -316,14 +389,14 @@ int main(void)
   // Enable the Instruction Caching
   MX_ICACHE_Init();
 
-  // Run the third checkpoint
-  checkpoint_3();
-
   // == AUDIO SETUP ==
   init_sample_timer();
   init_channel_driver();
 
   start_audio_synthesis();
+
+  // Run the third checkpoint
+  checkpoint_3();
 
   // Loop indefinitely to prevent returning from main
   while (1)

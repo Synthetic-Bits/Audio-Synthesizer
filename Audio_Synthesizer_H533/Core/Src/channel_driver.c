@@ -106,15 +106,15 @@ void channel_enable(channel_t channel)
     CHANNEL1_4_TIMER->CCER |= TIM_CCER_CC4E;
     break;
   case CHANNEL5:
-    channel1_state.enable = 1;
+    channel5_state.enable = 1;
     CHANNEL5_7_TIMER->CCER |= TIM_CCER_CC1E;
     break;
   case CHANNEL6:
-    channel2_state.enable = 1;
+    channel6_state.enable = 1;
     CHANNEL5_7_TIMER->CCER |= TIM_CCER_CC2E;
     break;
   case CHANNEL7:
-    channel3_state.enable = 1;
+    channel7_state.enable = 1;
     CHANNEL5_7_TIMER->CCER |= TIM_CCER_CC3E;
     break;
   default:
@@ -143,15 +143,15 @@ void channel_disable(channel_t channel)
     CHANNEL1_4_TIMER->CCER &= ~TIM_CCER_CC4E;
     break;
   case CHANNEL5:
-    channel1_state.enable = 0;
+    channel5_state.enable = 0;
     CHANNEL5_7_TIMER->CCER &= ~TIM_CCER_CC1E;
     break;
   case CHANNEL6:
-    channel2_state.enable = 0;
+    channel6_state.enable = 0;
     CHANNEL5_7_TIMER->CCER &= ~TIM_CCER_CC2E;
     break;
   case CHANNEL7:
-    channel3_state.enable = 0;
+    channel7_state.enable = 0;
     CHANNEL5_7_TIMER->CCER &= ~TIM_CCER_CC3E;
     break;
   default:
@@ -259,6 +259,7 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel1_state.voices[voice].mod_count = 0;
     channel1_state.voices[voice].env_count = 0;
     channel1_state.voices[voice].env_start = 0;
+    channel1_state.voices[voice].adsr_state = ADSR_ATTACK;
     channel1_state.active_voices++;
     break;
   case CHANNEL2:
@@ -266,6 +267,8 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel2_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel2_state.voices[voice].mod_count = 0;
     channel2_state.voices[voice].env_count = 0;
+    channel2_state.voices[voice].env_start = 0;
+    channel2_state.voices[voice].adsr_state = ADSR_ATTACK;
     channel2_state.active_voices++;
     break;
   case CHANNEL3:
@@ -273,6 +276,8 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel3_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel3_state.voices[voice].mod_count = 0;
     channel3_state.voices[voice].env_count = 0;
+    channel3_state.voices[voice].env_start = 0;
+    channel3_state.voices[voice].adsr_state = ADSR_ATTACK;
     channel3_state.active_voices++;
     break;
   case CHANNEL4:
@@ -280,6 +285,8 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel4_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel4_state.voices[voice].mod_count = 0;
     channel4_state.voices[voice].env_count = 0;
+    channel4_state.voices[voice].env_start = 0;
+    channel4_state.voices[voice].adsr_state = ADSR_ATTACK;
     channel4_state.active_voices++;
     break;
   case CHANNEL5:
@@ -287,6 +294,8 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel5_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel5_state.voices[voice].mod_count = 0;
     channel5_state.voices[voice].env_count = 0;
+    channel5_state.voices[voice].env_start = 0;
+    channel5_state.voices[voice].adsr_state = ADSR_ATTACK;
     channel5_state.active_voices++;
     break;
   case CHANNEL6:
@@ -294,6 +303,8 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel6_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel6_state.voices[voice].mod_count = 0;
     channel6_state.voices[voice].env_count = 0;
+    channel6_state.voices[voice].env_start = 0;
+    channel6_state.voices[voice].adsr_state = ADSR_ATTACK;
     channel6_state.active_voices++;
     break;
   case CHANNEL7:
@@ -301,6 +312,8 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel7_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel7_state.voices[voice].mod_count = 0;
     channel7_state.voices[voice].env_count = 0;
+    channel7_state.voices[voice].env_start = 0;
+    channel7_state.voices[voice].adsr_state = ADSR_ATTACK;
     channel7_state.active_voices++;
     break;
   default:
@@ -317,30 +330,37 @@ void channel_voice_off(channel_t channel, uint8_t voice)
   {
   case CHANNEL1:
     channel1_state.voices[voice].on_off = 0;
+    channel1_state.voices[voice].adsr_state = ADSR_RELEASE;
     channel1_state.active_voices--;
     break;
   case CHANNEL2:
     channel2_state.voices[voice].on_off = 0;
+    channel2_state.voices[voice].adsr_state = ADSR_RELEASE;
     channel2_state.active_voices--;
     break;
   case CHANNEL3:
     channel3_state.voices[voice].on_off = 0;
+    channel3_state.voices[voice].adsr_state = ADSR_RELEASE;
     channel3_state.active_voices--;
     break;
   case CHANNEL4:
     channel4_state.voices[voice].on_off = 0;
+    channel4_state.voices[voice].adsr_state = ADSR_RELEASE;
     channel4_state.active_voices--;
     break;
   case CHANNEL5:
     channel5_state.voices[voice].on_off = 0;
+    channel5_state.voices[voice].adsr_state = ADSR_RELEASE;
     channel5_state.active_voices--;
     break;
   case CHANNEL6:
     channel6_state.voices[voice].on_off = 0;
+    channel6_state.voices[voice].adsr_state = ADSR_RELEASE;
     channel6_state.active_voices--;
     break;
   case CHANNEL7:
     channel7_state.voices[voice].on_off = 0;
+    channel7_state.voices[voice].adsr_state = ADSR_RELEASE;
     channel7_state.active_voices--;
     break;
   default:
@@ -422,25 +442,25 @@ void channel_voice_velocity(channel_t channel, uint8_t voice, uint8_t velocity)
   switch (channel)
   {
   case CHANNEL1:
-    channel1_state.voices[voice].mod = velocity;
+    channel1_state.voices[voice].velocity = velocity;
     break;
   case CHANNEL2:
-    channel2_state.voices[voice].mod = velocity;
+    channel2_state.voices[voice].velocity = velocity;
     break;
   case CHANNEL3:
-    channel3_state.voices[voice].mod = velocity;
+    channel3_state.voices[voice].velocity = velocity;
     break;
   case CHANNEL4:
-    channel4_state.voices[voice].mod = velocity;
+    channel4_state.voices[voice].velocity = velocity;
     break;
   case CHANNEL5:
-    channel5_state.voices[voice].mod = velocity;
+    channel5_state.voices[voice].velocity = velocity;
     break;
   case CHANNEL6:
-    channel6_state.voices[voice].mod = velocity;
+    channel6_state.voices[voice].velocity = velocity;
     break;
   case CHANNEL7:
-    channel7_state.voices[voice].mod = velocity;
+    channel7_state.voices[voice].velocity = velocity;
     break;
   default:
     return;
@@ -488,27 +508,27 @@ static inline uint32_t calculate_voice_output(volatile channel_state_t *channel,
 {
   voice_t *cur_voice = &channel->voices[voice];
 
-  if ((!cur_voice->on_off) && cur_voice->adsr_state != ADSR_ATTACK)
+  if (cur_voice->on_off == 0 && cur_voice->adsr_state == ADSR_ATTACK)
     return 0;
 
   uint32_t output, envelope = 0;
-  int32_t frequency_delta = 0;
+  int32_t mod_delta, frequency_delta = 0;
 
   // === Find the current state of the envelope ===
   // Check the ADSR
   switch (cur_voice->adsr_state)
   {
   case ADSR_ATTACK:
-    channel1_state.voices[voice].env_target = (ADSR_RANGE * 1016 * (cur_voice->velocity)) + ADSR_MIN; // Calculate the target endpoint
+    cur_voice->env_target = ((ADSR_RANGE * 1016 * (cur_voice->velocity)) >> 17) + ADSR_MIN; // Calculate the target endpoint
 
     cur_voice->env_count++; // Increment the current envelope counter
 
     // Advance to next stage if complete
-    if (cur_voice->env_count > SAMPLE_RESOLUTION_MASK)
+    if (cur_voice->env_count >= SAMPLE_VELOCITY_MASK)
     {
       cur_voice->adsr_state = ADSR_DECAY;
       cur_voice->env_count = 0;
-      cur_voice->env_start = channel1_state.voices[voice].env_target;
+      cur_voice->env_start = cur_voice->env_target;
       break;
     }
 
@@ -517,21 +537,21 @@ static inline uint32_t calculate_voice_output(volatile channel_state_t *channel,
 
     break;
   case ADSR_DECAY:
-    channel1_state.voices[voice].env_target = ADSR_MID;
+    cur_voice->env_target = ADSR_MID;
 
     cur_voice->env_count++; // Increment the current envelope counter
 
     // Advance to next stage if complete
-    if (cur_voice->env_count > SAMPLE_RESOLUTION_MASK)
+    if (cur_voice->env_count > SAMPLE_VELOCITY_MASK)
     {
       cur_voice->adsr_state = ADSR_SUSTAIN;
       cur_voice->env_count = 0;
-      cur_voice->env_start = channel1_state.voices[voice].env_target;
+      cur_voice->env_start = cur_voice->env_target;
       break;
     }
 
     // Calculate the envelope (and scale: 10 bits + 10 bits - 10 bits)
-    envelope = ((((int32_t)(cur_voice->env_start - channel1_state.voices[voice].env_target))) * decay_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF] >> 10) + ADSR_MID;
+    envelope = (((int32_t)(cur_voice->env_start - cur_voice->env_target)) * decay_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF] >> 10) + ADSR_MID;
 
     break;
   case ADSR_SUSTAIN:
@@ -541,16 +561,16 @@ static inline uint32_t calculate_voice_output(volatile channel_state_t *channel,
     cur_voice->env_count++; // Increment the current envelope counter
 
     // Advance to next stage if complete
-    if (cur_voice->env_count > SAMPLE_RESOLUTION_MASK)
+    if (cur_voice->env_count > SAMPLE_VELOCITY_MASK)
     {
       cur_voice->adsr_state = ADSR_ATTACK;
       cur_voice->env_count = 0;
-      cur_voice->env_start = channel1_state.voices[voice].env_target;
+      cur_voice->env_start = cur_voice->env_target;
       break;
     }
 
     // Calculate the envelope (and scale: 10 bits + 10 bits - 10 bits)
-    envelope = (cur_voice->env_start * decay_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF] >> 10);
+    envelope = ((cur_voice->env_start - ADSR_MIN) * decay_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF] >> 10);
     break;
   }
 
@@ -566,15 +586,17 @@ static inline uint32_t calculate_voice_output(volatile channel_state_t *channel,
   if (cur_voice->mod)
   {
     // Advance the modulation coutner
-    cur_voice->mod_count++;
-    cur_voice->mod_count &= SAMPLE_FREQUENCY_MASK;
+    cur_voice->mod_count += (cur_voice->mod >> 9);
+    cur_voice->mod_count &= SAMPLE_MODULATION_MASK;
 
-    // Add the modulation (calculate the +2 semitone and scale - scaled by: 9 bits + 9 bits + 8 bits - 16 bits - 10 bits)
-    frequency_delta += ((cur_voice->frequency) * (((modulation_base[cur_voice->mod_count >> CHANNEL_SAMPLING_VS_RESOLUTION_DIFF]) * TWO_SEMITONE_SCALAR * (cur_voice->mod >> 7)) >> (16))) >> 10;
+    // Add the modulation (calculate the +2 semitone and scale - scaled by: 9 bits + 10 bits + 10 bits - 9 bits - 10 bits)
+    frequency_delta += ((cur_voice->frequency) * (((modulation_base[cur_voice->mod_count >> 4] - 256) * (TWO_SEMITONE_SCALAR >> 5)) >> (9))) >> 10;
   }
 
   // Advance the lookup counter (and mask (faster modulo))
-  cur_voice->count += (cur_voice->frequency + frequency_delta);
+  int freq = (cur_voice->frequency + frequency_delta);
+
+  cur_voice->count += freq;
   cur_voice->count &= SAMPLE_FREQUENCY_MASK;
 
   output = channel->waveform_data[cur_voice->count >> CHANNEL_SAMPLING_VS_RESOLUTION_DIFF] * envelope;
@@ -609,9 +631,9 @@ void channel_update_all()
   channel_update(&channel2_state);
   channel_update(&channel3_state);
   channel_update(&channel4_state);
-  // channel_update(&channel5_state);
-  // channel_update(&channel6_state);
-  // channel_update(&channel7_state);
+  channel_update(&channel5_state);
+  channel_update(&channel6_state);
+  channel_update(&channel7_state);
 }
 
 /* ========================================================================== */
