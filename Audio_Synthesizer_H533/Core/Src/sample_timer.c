@@ -33,7 +33,7 @@
 
 /* Function Prototypes -------------------------------------------------------*/
 
-static void __sample_timer_handler(uint16_t counter);
+static void __sample_timer_handler();
 
 void sample_timer_reset();
 void sample_timer_stop();
@@ -128,7 +128,7 @@ void sample_timer_init()
 /**
  * @brief Placeholder Function for the timer callback
  */
-static void __sample_timer_handler(uint16_t counter)
+static void __sample_timer_handler()
 {
   return;
 }

@@ -5,8 +5,8 @@
 		}
 	],
 	"settings": {
-		"cortex-debug.armToolchainPath": "C:\\PROGRAM FILES (X86)\\ARM GNU TOOLCHAIN ARM-NONE-EABI\\13.3 REL1\\BIN",
-		"cortex-debug.openocdPath": "C:\\INTELFPGA_LITE\\23.1STD\\QUARTUS\\BIN64\\OPENOCD.EXE",
+		"cortex-debug.armToolchainPath": "/Users/cloudjumper/Documents/gcc-embeded/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi/bin",
+		"cortex-debug.openocdPath": "/opt/homebrew/bin/openocd",
 		"files.associations": {
 			"stm32h5xx_hal.h": "c",
 			"stm32h5xx.h": "c",
@@ -14,8 +14,8 @@
 			"square_base.h": "c",
 			"ramp_base.h": "c"
 		},
-		"stm32-for-vscode.makePath": false,
-		"stm32-for-vscode.armToolchainPath": "C:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi\\14.2 rel1\\bin",
+		"stm32-for-vscode.makePath": "/usr/bin/make",
+		"stm32-for-vscode.armToolchainPath": "/Users/cloudjumper/Documents/gcc-embeded/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi/bin",
 		"cortex-debug.variableUseNaturalFormat": true
 	}
 }
