@@ -111,7 +111,7 @@ void checkpoint_3(void)
 
   channel_voice_frequency(CHANNEL4, 0, 192);
   channel_voice_frequency(CHANNEL4, 1, 124);
-  channel_voice_frequency(CHANNEL4, 2, 62);
+  channel_voice_frequency(CHANNEL4, 2, 246);
   // channel_voice_on(CHANNEL4, 0);
   // channel_voice_on(CHANNEL4, 1);
   // channel_voice_on(CHANNEL4, 2);
