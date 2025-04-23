@@ -385,12 +385,9 @@ void set_midi(char data[])
                 freq = midi_note_get_frequency(midi.keynumber);
                 channel_num = midi.channel;
                 voice_add_freq(freq, voice_channles[channel_num], voice_channle_map[channel_num], channel_num); //TODO fix num of voices
-
-
                 // channel1_4_on_off(midi.channel,ON);
                 // channel1_4_frequency(midi.channel, midi_note_get_frequency(midi.keynumber));
                 // channel1_4_volume(CHANNEL1,midi.velocity);
-
                 //printf("NOTE_ON_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity); 
                 break;
             case NOTE_OFF_EVENT: 
@@ -400,11 +397,9 @@ void set_midi(char data[])
                 freq = midi_note_get_frequency(midi.keynumber);
                 channel_num = midi.channel;
                 voice_remove_freq(freq, voice_channles[channel_num], voice_channle_map[channel_num], channel_num);
-
                 // channel1_4_on_off(midi.channel, OFF);
                 // channel1_4_frequency(midi.channel, midi_note_get_frequency(midi.keynumber));
                 // channel1_4_volume(CHANNEL1, midi.velocity);
-
                 //printf("NOTE_OFF_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity); 
                 break;   
             case POLYPHONIC_KEY_PRESSURE:
@@ -415,14 +410,11 @@ void set_midi(char data[])
                 channel_num = midi.channel;
                 uint8_t voice_num = get_voice_num_from_freq(freq, voice_channles[channel_num], voice_channle_map[channel_num], channel_num); //untested function
                 channel_voice_velocity(channel_num, voice_num, midi.forceonkey);
-
                 //printf("POLYPHONIC_KEY_PRESSURE: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tforceonkey:0x%02X\n\n", channel, keynumber,forceonkey); 
                 break;
             case CONTROL_CHANGE:
                 set_channel(data, midi);
-
                 channel_mode_messages_handler(data, midi); //
-
                 set_addressofcontrol(data, midi);
                 set_valueofcontroloutput(data, midi);
                 //printf("CONTROL_CHANGE: \n\tchannel:0x%02X\n\taddress of control:0x%02X\n\tvalue of controloutput:0x%02X\n\n", channel, addressofcontrol, forceonkey); 
