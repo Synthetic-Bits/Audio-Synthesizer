@@ -540,6 +540,7 @@ static inline void channel_update_DAC(channel_t channel, uint8_t update)
     if (update)
     {
       CHANNEL8_DAC->SWTRIGR |= DAC_SWTRIGR_SWTRIG2; // Trigger an update
+      CHANNEL8_DAC->DOR2;
     }
     break;
   default:
