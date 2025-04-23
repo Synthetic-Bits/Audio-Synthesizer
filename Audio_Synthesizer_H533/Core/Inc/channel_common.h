@@ -37,7 +37,7 @@ typedef enum
   CHANNEL5,
   CHANNEL6,
   CHANNEL7,
-  // CHANNEL8 - TODO NOISE CHANNEL
+  CHANNEL8,
 } channel_t;
 
 // Define the types of waveforms available
@@ -67,7 +67,6 @@ typedef struct
   uint32_t frequency;  // Current frequency being played
   uint16_t pitch_bend; // Pitch bend from the baseline frequency (only use MSBs if from 14 bit command)
   uint32_t mod_count;  // Internal counter for the modulator
-  uint16_t mod;        // Intensity of the modulation
   uint8_t on_off;      // Turn this voice on or off
 
   // Envelope Calculations
@@ -86,6 +85,7 @@ typedef struct
   channel_t channel;    // Self Identify this struct
   waveforms_t waveform; // Waveform for this channel
   uint16_t volume;      // Volume of the channel
+  uint16_t mod;         // Intensity of the modulation for the whole channel
 
   uint8_t num_voices;                 // Number of voices on the channel
   uint8_t active_voices;              // Number of active voices

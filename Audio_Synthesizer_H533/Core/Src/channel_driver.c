@@ -54,7 +54,7 @@ void channel_volume(channel_t channel, uint8_t volume);
 void channel_voice_on(channel_t channel, uint8_t voice);
 void channel_voice_off(channel_t channel, uint8_t voice);
 void channel_voice_frequency(channel_t channel, uint8_t voice, uint16_t freq);
-void channel_voice_modulation(channel_t channel, uint8_t voice, uint16_t modulation);
+void channel_voice_modulation(channel_t channel, uint16_t modulation);
 void channel_voice_velocity(channel_t channel, uint8_t voice, uint8_t velocity);
 
 static inline void channel_update_CCR(channel_t channel, uint32_t ccr);
@@ -77,7 +77,7 @@ void channel_timer_init();
 #define CHANNEL_SAMPLING_VS_RESOLUTION_DIFF (6) // 65536 -> 1024 (RSH 6)
 #define CHANNEL_SAMPLING_VS_ENVELOPE_DIFF (4)   // 65536 -> 4096 (RSH 4)
 
-volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state;
+volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state, channel8_state;
 
 /* ========================================================================== */
 /*                                                                            */
@@ -117,6 +117,10 @@ void channel_enable(channel_t channel)
     channel7_state.enable = 1;
     CHANNEL5_7_TIMER->CCER |= TIM_CCER_CC3E;
     break;
+  case CHANNEL8:
+    channel8_state.enable = 1;
+    CHANNEL8_DAC->CR |= DAC_CR_CEN2;
+    break;
   default:
     return;
   }
@@ -154,6 +158,10 @@ void channel_disable(channel_t channel)
     channel7_state.enable = 0;
     CHANNEL5_7_TIMER->CCER &= ~TIM_CCER_CC3E;
     break;
+  case CHANNEL8:
+    channel8_state.enable = 0;
+    CHANNEL8_DAC->CR &= ~DAC_CR_CEN2;
+    break;
   default:
     return;
   }
@@ -176,6 +184,9 @@ void channel_set_waveform(channel_t channel, waveforms_t wave)
     break;
   case WAVEFORM_SQUARE:
     curr_wave = square_base;
+    break;
+  case WAVEFORM_NOISE:
+    curr_wave = NULL;
     break;
   default:
     return;
@@ -211,6 +222,9 @@ void channel_set_waveform(channel_t channel, waveforms_t wave)
     channel7_state.waveform = wave;
     channel7_state.waveform_data = curr_wave;
     break;
+  case CHANNEL8: // Channel 8 is the noise channel - no waveform data
+    channel8_state.waveform = WAVEFORM_NOISE;
+    channel8_state.waveform_data = curr_wave;
   default:
     return;
   }
@@ -241,6 +255,8 @@ void channel_volume(channel_t channel, uint8_t volume)
   case CHANNEL7:
     channel7_state.volume = volume;
     break;
+  case CHANNEL8:
+    channel8_state.volume = volume;
   default:
     return;
   }
@@ -316,6 +332,15 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel7_state.voices[voice].adsr_state = ADSR_ATTACK;
     channel7_state.active_voices++;
     break;
+  case CHANNEL8:
+    channel8_state.voices[voice].on_off = 1;
+    channel8_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+    channel8_state.voices[voice].mod_count = 0;
+    channel8_state.voices[voice].env_count = 0;
+    channel8_state.voices[voice].env_start = 0;
+    channel8_state.voices[voice].adsr_state = ADSR_ATTACK;
+    channel8_state.active_voices++;
+    break;
   default:
     return;
   }
@@ -356,6 +381,10 @@ void channel_voice_off(channel_t channel, uint8_t voice)
     channel7_state.voices[voice].on_off = 0;
     channel7_state.voices[voice].adsr_state = ADSR_RELEASE;
     break;
+  case CHANNEL8:
+    channel8_state.voices[voice].on_off = 0;
+    channel8_state.voices[voice].adsr_state = ADSR_RELEASE;
+    break;
   default:
     return;
   }
@@ -389,38 +418,41 @@ void channel_voice_frequency(channel_t channel, uint8_t voice, uint16_t freq)
   case CHANNEL7:
     channel7_state.voices[voice].frequency = freq;
     break;
+  case CHANNEL8:
+    channel8_state.voices[voice].frequency = freq; // Noise so this does nothing
+    break;
   default:
     return;
   }
 }
 
-void channel_voice_modulation(channel_t channel, uint8_t voice, uint16_t modulation)
+void channel_modulation(channel_t channel, uint16_t modulation)
 {
-  if (voice >= MAX_CHANNEL_VOICES)
-    return;
-
   switch (channel)
   {
   case CHANNEL1:
-    channel1_state.voices[voice].mod = modulation;
+    channel1_state.mod = modulation;
     break;
   case CHANNEL2:
-    channel2_state.voices[voice].mod = modulation;
+    channel2_state.mod = modulation;
     break;
   case CHANNEL3:
-    channel3_state.voices[voice].mod = modulation;
+    channel3_state.mod = modulation;
     break;
   case CHANNEL4:
-    channel4_state.voices[voice].mod = modulation;
+    channel4_state.mod = modulation;
     break;
   case CHANNEL5:
-    channel5_state.voices[voice].mod = modulation;
+    channel5_state.mod = modulation;
     break;
   case CHANNEL6:
-    channel6_state.voices[voice].mod = modulation;
+    channel6_state.mod = modulation;
     break;
   case CHANNEL7:
-    channel7_state.voices[voice].mod = modulation;
+    channel7_state.mod = modulation;
+    break;
+  case CHANNEL8:
+    channel8_state.mod = modulation;
     break;
   default:
     return;
@@ -454,6 +486,9 @@ void channel_voice_velocity(channel_t channel, uint8_t voice, uint8_t velocity)
     break;
   case CHANNEL7:
     channel7_state.voices[voice].velocity = velocity;
+    break;
+  case CHANNEL8:
+    channel8_state.voices[voice].velocity = velocity;
     break;
   default:
     return;
@@ -497,7 +532,22 @@ static inline void channel_update_CCR(channel_t channel, uint32_t ccr)
   }
 }
 
-static inline uint32_t calculate_voice_output(volatile channel_state_t *channel, uint8_t voice)
+static inline void channel_update_DAC(channel_t channel, uint8_t update)
+{
+  switch (channel)
+  {
+  case CHANNEL8:
+    if (update)
+    {
+      CHANNEL8_DAC->SWTRIGR |= DAC_SWTRIGR_SWTRIG2; // Trigger an update
+    }
+    break;
+  default:
+    break;
+  }
+}
+
+static inline uint32_t calculate_voice_timer_output(volatile channel_state_t *channel, uint8_t voice)
 {
   volatile voice_t *cur_voice = &channel->voices[voice];
 
@@ -573,10 +623,10 @@ static inline uint32_t calculate_voice_output(volatile channel_state_t *channel,
   }
 
   // Check if modulation needs calculation
-  if (cur_voice->mod)
+  if (channel->mod)
   {
     // Advance the modulation coutner
-    cur_voice->mod_count += (cur_voice->mod >> 9);
+    cur_voice->mod_count += (channel->mod >> 9);
     cur_voice->mod_count &= SAMPLE_MODULATION_MASK;
 
     // Add the modulation (calculate the +2 semitone and scale - scaled by: 9 bits + 10 bits + 10 bits - 9 bits - 10 bits)
@@ -600,19 +650,29 @@ static inline void channel_update(volatile channel_state_t *channel)
   if (!channel->enable) // Don't calculate if the channel is disabled
     return;
 
-  uint32_t output = 0;
-
-  for (uint8_t i = 0; i < channel->num_voices; i++)
+  if (channel->waveform == WAVEFORM_NOISE)
   {
-    output += calculate_voice_output(channel, i);
+    for (uint8_t i = 0; i < channel->num_voices; i++)
+    {
+      channel_update_DAC(channel->channel, channel->voices[i].on_off);
+    }
   }
+  else
+  {
+    uint32_t output = 0;
 
-  // Scale all the channels down
-  uint16_t ccr = output / channel->active_voices;
-  // uint16_t ccr = channel->waveform_data[channel->voices[0].count >> 6];
+    for (uint8_t i = 0; i < channel->num_voices; i++)
+    {
+      output += calculate_voice_timer_output(channel, i);
+    }
 
-  // Update the resultant value in the CCR (modulate timer PWM)
-  channel_update_CCR(channel->channel, ccr);
+    // Scale all the channels down
+    uint16_t ccr = output / channel->active_voices;
+    // uint16_t ccr = channel->waveform_data[channel->voices[0].count >> 6];
+
+    // Update the resultant value in the CCR (modulate timer PWM)
+    channel_update_CCR(channel->channel, ccr);
+  }
 }
 
 void channel_update_all()
@@ -624,6 +684,7 @@ void channel_update_all()
   channel_update(&channel5_state);
   channel_update(&channel6_state);
   channel_update(&channel7_state);
+  channel_update(&channel8_state);
 }
 
 /* ========================================================================== */
@@ -681,6 +742,14 @@ static void channel_timer_gpio_init()
       GPIO_AF2_TIM4};
 
   HAL_GPIO_Init(CHANNEL5_7_GPIO_PORT, &initChannel5_7);
+
+  GPIO_InitTypeDef initChannel8 = {
+      CHANNEL8_GPIO_PIN,
+      GPIO_MODE_ANALOG,
+      GPIO_NOPULL,
+      GPIO_SPEED_FREQ_HIGH};
+
+  HAL_GPIO_Init(CHANNEL8_GPIO_PORT, &initChannel8);
 }
 
 void channel_timer_init()
@@ -699,6 +768,7 @@ void channel_timer_init()
   reset_channel(&channel5_state, CHANNEL5, 1);
   reset_channel(&channel6_state, CHANNEL6, 1);
   reset_channel(&channel7_state, CHANNEL7, 1);
+  reset_channel(&channel8_state, CHANNEL8, 1);
 
   // Configure Channels 1-4
   CHANNEL1_4_TIMER->PSC = CHANNEL_TIMER_PSC;
@@ -745,4 +815,13 @@ void channel_timer_init()
   // Start the Timers for all Channels
   CHANNEL1_4_TIMER->CR1 |= TIM_CR1_CEN; // Start the Timer
   CHANNEL5_7_TIMER->CR1 |= TIM_CR1_CEN; // Start the Timer
+
+  // Configure Channel 8 (Noise / DAC)
+  CHANNEL8_DAC->CR = (~DAC_CR_MAMP2 & CHANNEL8_DAC->CR) | (DAC_CR_MAMP2_3 | DAC_CR_MAMP2_1 | DAC_CR_MAMP2_0); // Set the DAC Channel Amplitude to 4095
+  CHANNEL8_DAC->CR = (~DAC_CR_WAVE2 & CHANNEL8_DAC->CR) | (DAC_CR_WAVE2_0);                                   // Enable the Noise Generation
+  CHANNEL8_DAC->CR = (~DAC_CR_TSEL2 & CHANNEL8_DAC->CR);                                                      // Set the trigger of the DAC to software
+  CHANNEL8_DAC->CR |= (DAC_CR_TEN2);                                                                          // Enable the Channel Trigger
+
+  // Start the DAC for the Noise Channel
+  CHANNEL8_DAC->CR |= DAC_CR_CEN2;
 }
