@@ -331,37 +331,30 @@ void channel_voice_off(channel_t channel, uint8_t voice)
   case CHANNEL1:
     channel1_state.voices[voice].on_off = 0;
     channel1_state.voices[voice].adsr_state = ADSR_RELEASE;
-    channel1_state.active_voices--;
     break;
   case CHANNEL2:
     channel2_state.voices[voice].on_off = 0;
     channel2_state.voices[voice].adsr_state = ADSR_RELEASE;
-    channel2_state.active_voices--;
     break;
   case CHANNEL3:
     channel3_state.voices[voice].on_off = 0;
     channel3_state.voices[voice].adsr_state = ADSR_RELEASE;
-    channel3_state.active_voices--;
     break;
   case CHANNEL4:
     channel4_state.voices[voice].on_off = 0;
     channel4_state.voices[voice].adsr_state = ADSR_RELEASE;
-    channel4_state.active_voices--;
     break;
   case CHANNEL5:
     channel5_state.voices[voice].on_off = 0;
     channel5_state.voices[voice].adsr_state = ADSR_RELEASE;
-    channel5_state.active_voices--;
     break;
   case CHANNEL6:
     channel6_state.voices[voice].on_off = 0;
     channel6_state.voices[voice].adsr_state = ADSR_RELEASE;
-    channel6_state.active_voices--;
     break;
   case CHANNEL7:
     channel7_state.voices[voice].on_off = 0;
     channel7_state.voices[voice].adsr_state = ADSR_RELEASE;
-    channel7_state.active_voices--;
     break;
   default:
     return;
@@ -506,13 +499,13 @@ static inline void channel_update_CCR(channel_t channel, uint32_t ccr)
 
 static inline uint32_t calculate_voice_output(volatile channel_state_t *channel, uint8_t voice)
 {
-  voice_t *cur_voice = &channel->voices[voice];
+  volatile voice_t *cur_voice = &channel->voices[voice];
 
   if (cur_voice->on_off == 0 && cur_voice->adsr_state == ADSR_ATTACK)
     return 0;
 
   uint32_t output, envelope = 0;
-  int32_t mod_delta, frequency_delta = 0;
+  int32_t frequency_delta = 0;
 
   // === Find the current state of the envelope ===
   // Check the ADSR
@@ -520,26 +513,10 @@ static inline uint32_t calculate_voice_output(volatile channel_state_t *channel,
   {
   case ADSR_ATTACK:
     cur_voice->env_target = ((ADSR_RANGE * 1016 * (cur_voice->velocity)) >> 17) + ADSR_MIN; // Calculate the target endpoint
+    cur_voice->env_count++;                                                                 // Increment the current envelope counter
 
-    cur_voice->env_count++; // Increment the current envelope counter
-
-    // Advance to next stage if complete
-    if (cur_voice->env_count >= SAMPLE_VELOCITY_MASK)
-    {
-      cur_voice->adsr_state = ADSR_DECAY;
-      cur_voice->env_count = 0;
-      cur_voice->env_start = cur_voice->env_target;
-      break;
-    }
-
-    // Calculate the envelope (and scale: 10 bits + 10 bits + 7 bits - 17 bits)
-    envelope = ((ADSR_RANGE * attack_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF] * (cur_voice->velocity)) >> 17) + ADSR_MIN;
-
-    break;
-  case ADSR_DECAY:
-    cur_voice->env_target = ADSR_MID;
-
-    cur_voice->env_count++; // Increment the current envelope counter
+    // Calculate the envelope (and scale: 10 bits + 10 bits - 17 bits)
+    envelope = ((cur_voice->env_target * attack_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF]) >> 10);
 
     // Advance to next stage if complete
     if (cur_voice->env_count > SAMPLE_VELOCITY_MASK)
@@ -547,11 +524,24 @@ static inline uint32_t calculate_voice_output(volatile channel_state_t *channel,
       cur_voice->adsr_state = ADSR_SUSTAIN;
       cur_voice->env_count = 0;
       cur_voice->env_start = cur_voice->env_target;
-      break;
     }
+
+    break;
+  case ADSR_DECAY:
+    cur_voice->env_target = ADSR_MID;
+
+    cur_voice->env_count++; // Increment the current envelope counter
 
     // Calculate the envelope (and scale: 10 bits + 10 bits - 10 bits)
     envelope = (((int32_t)(cur_voice->env_start - cur_voice->env_target)) * decay_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF] >> 10) + ADSR_MID;
+
+    // Advance to next stage if complete
+    if (cur_voice->env_count > SAMPLE_VELOCITY_MASK)
+    {
+      cur_voice->adsr_state = ADSR_SUSTAIN;
+      cur_voice->env_count = 0;
+      cur_voice->env_start = cur_voice->env_target;
+    }
 
     break;
   case ADSR_SUSTAIN:
@@ -560,17 +550,17 @@ static inline uint32_t calculate_voice_output(volatile channel_state_t *channel,
   case ADSR_RELEASE:
     cur_voice->env_count++; // Increment the current envelope counter
 
+    // Calculate the envelope (and scale: 10 bits + 10 bits - 10 bits)
+    envelope = ((cur_voice->env_start) * decay_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF] >> 10);
+
     // Advance to next stage if complete
     if (cur_voice->env_count > SAMPLE_VELOCITY_MASK)
     {
       cur_voice->adsr_state = ADSR_ATTACK;
       cur_voice->env_count = 0;
       cur_voice->env_start = cur_voice->env_target;
-      break;
+      channel->active_voices--;
     }
-
-    // Calculate the envelope (and scale: 10 bits + 10 bits - 10 bits)
-    envelope = ((cur_voice->env_start - ADSR_MIN) * decay_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF] >> 10);
     break;
   }
 

@@ -93,9 +93,12 @@ void checkpoint_3(void)
   channel_voice_frequency(CHANNEL2, 0, 262);
   channel_voice_frequency(CHANNEL2, 1, 330);
   channel_voice_frequency(CHANNEL2, 2, 392);
-  channel_voice_on(CHANNEL2, 0);
-  channel_voice_on(CHANNEL2, 1);
-  channel_voice_on(CHANNEL2, 2);
+  // channel_voice_frequency(CHANNEL2, 0, 120);
+  // channel_voice_frequency(CHANNEL2, 1, 240);
+  // channel_voice_frequency(CHANNEL2, 2, 360);
+  // channel_voice_on(CHANNEL2, 0);
+  // channel_voice_on(CHANNEL2, 1);
+  // channel_voice_on(CHANNEL2, 2);
   // channel_voice_modulation(CHANNEL2, 0, 8196);
 
   channel_voice_frequency(CHANNEL3, 0, 262);
@@ -108,10 +111,10 @@ void checkpoint_3(void)
 
   channel_voice_frequency(CHANNEL4, 0, 192);
   channel_voice_frequency(CHANNEL4, 1, 124);
-  channel_voice_frequency(CHANNEL4, 2, 62);
-  channel_voice_on(CHANNEL4, 0);
-  channel_voice_on(CHANNEL4, 1);
-  channel_voice_on(CHANNEL4, 2);
+  channel_voice_frequency(CHANNEL4, 2, 246);
+  // channel_voice_on(CHANNEL4, 0);
+  // channel_voice_on(CHANNEL4, 1);
+  // channel_voice_on(CHANNEL4, 2);
   // channel_voice_modulation(CHANNEL4, 0, 8196);
 
   channel_voice_frequency(CHANNEL5, 0, 262);
@@ -140,6 +143,9 @@ void checkpoint_3(void)
     channel_voice_on(CHANNEL4, 0);
     channel_voice_on(CHANNEL4, 1);
     channel_voice_on(CHANNEL4, 2);
+    channel_voice_on(CHANNEL2, 0);
+    // channel_voice_on(CHANNEL2, 1);
+    // channel_voice_on(CHANNEL2, 2);
 
     // Using the struct accesses
     channel5_state.voices[0].frequency = 880;
@@ -151,6 +157,9 @@ void checkpoint_3(void)
     channel_voice_off(CHANNEL4, 0);
     channel_voice_off(CHANNEL4, 1);
     channel_voice_off(CHANNEL4, 2);
+    channel_voice_off(CHANNEL2, 0);
+    // channel_voice_off(CHANNEL2, 1);
+    // channel_voice_off(CHANNEL2, 2);
 
     // Using the struct accesses
     channel5_state.voices[0].frequency = 440;
