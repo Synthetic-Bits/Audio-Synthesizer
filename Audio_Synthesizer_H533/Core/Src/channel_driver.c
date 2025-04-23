@@ -539,8 +539,7 @@ static inline void channel_update_DAC(channel_t channel, uint8_t update)
   case CHANNEL8:
     if (update)
     {
-      CHANNEL8_DAC->SWTRIGR |= DAC_SWTRIGR_SWTRIG2; // Trigger an update
-      CHANNEL8_DAC->DOR2;
+      CHANNEL8_DAC->SWTRIGR = DAC_SWTRIGR_SWTRIG2; // Trigger an update
     }
     break;
   default:
@@ -758,6 +757,7 @@ void channel_timer_init()
   // Enable the RCC for the Timer
   RCC_TIM3_CLK_Enable();
   RCC_TIM4_CLK_Enable();
+  RCC_DAC1_CLK_Enable();
 
   channel_timer_gpio_init();
 
@@ -818,11 +818,13 @@ void channel_timer_init()
   CHANNEL5_7_TIMER->CR1 |= TIM_CR1_CEN; // Start the Timer
 
   // Configure Channel 8 (Noise / DAC)
-  CHANNEL8_DAC->CR = (~DAC_CR_MAMP2 & CHANNEL8_DAC->CR) | (DAC_CR_MAMP2_3 | DAC_CR_MAMP2_1 | DAC_CR_MAMP2_0); // Set the DAC Channel Amplitude to 4095
+  CHANNEL8_DAC->CR |= (DAC_CR_TEN2);
+  CHANNEL8_DAC->CR &= (~DAC_CR_TSEL2);
   CHANNEL8_DAC->CR = (~DAC_CR_WAVE2 & CHANNEL8_DAC->CR) | (DAC_CR_WAVE2_0);                                   // Enable the Noise Generation
-  CHANNEL8_DAC->CR = (~DAC_CR_TSEL2 & CHANNEL8_DAC->CR);                                                      // Set the trigger of the DAC to software
-  CHANNEL8_DAC->CR |= (DAC_CR_TEN2);                                                                          // Enable the Channel Trigger
+  CHANNEL8_DAC->CR = (~DAC_CR_MAMP2 & CHANNEL8_DAC->CR) | (DAC_CR_MAMP2_3 | DAC_CR_MAMP2_1 | DAC_CR_MAMP2_0); // Set the DAC Channel Amplitude to 4095\
 
   // Start the DAC for the Noise Channel
-  CHANNEL8_DAC->CR |= DAC_CR_CEN2;
+  CHANNEL8_DAC->CR |= DAC_CR_EN2;
+
+  CHANNEL8_DAC->DHR12R2 |= 0xAAA; // Write an initial value
 }
