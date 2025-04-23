@@ -437,6 +437,9 @@ void set_midi(char data[])
                 //channel_voice_modulation(channel_num, pitchbend);
                 //printf("PITCH_BEND: \n\tchannel:0x%02X\n\tpitch bend lsb_msk:0x%02X\n\tpitch bend msb_msk:0x%02X\n\n", channel, pitchbendlsb, pitchbendmsb); 
                 break;
+            default:
+                index++;
+                break;
         }
     }
 }

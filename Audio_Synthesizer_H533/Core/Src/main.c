@@ -22,6 +22,7 @@
 #include "config.h"
 #include "main.h"
 #include "uart.h"
+#include "midi.h"
 #include <stm32h5xx_hal.h>
 
 /* Private includes ----------------------------------------------------------*/
@@ -70,6 +71,39 @@ void stop_audio_synthesis();
 /*        Demonstration Functions                                             */
 /*                                                                            */
 /* ========================================================================== */
+
+void test_MIDI_UART(void)
+{
+  #define UART_SIZE 512
+  
+  char buffer[UART_SIZE];
+  unsigned int baud_rate = 31250;
+  uint8_t interrupt_priority = 2;
+
+  configure_MIDI_UART(baud_rate, UART_ENABLE_INTERRUPTS, interrupt_priority);
+  receive_MIDI_UART_blocking(buffer, UART_SIZE);
+  midi_channle_voice_init();
+
+  while (1)
+  {
+    if (global_receive_buffer_index >= UART_SIZE)
+    {
+      // Disable interrupts while we extract data from the buffer
+      NVIC_DisableIRQ(MIDI_UART_IRQn);
+
+      // Extract the data from the buffer
+      for (int i = 0; i < UART_SIZE; i++)
+        buffer[i] = global_receive_buffer[i];
+
+      // Reset the buffer index, we got the data we need
+      global_receive_buffer_index = 0;
+
+      // Re-enable interrupts as we're done extracting data from the buffer
+      NVIC_EnableIRQ(MIDI_UART_IRQn);
+    }
+    set_midi(buffer);
+  }
+}
 
 /**
  * @brief This function demonstrates the synthesizer's third checkpoint.
