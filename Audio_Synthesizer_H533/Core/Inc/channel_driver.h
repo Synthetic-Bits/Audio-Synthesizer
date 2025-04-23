@@ -87,7 +87,7 @@ void channel_voice_frequency(channel_t channel, uint8_t voice, uint16_t freq);
  * @param freq Frequency of the signal to synthesize
  * @note Updates when channel_update() is invoked
  */
-void channel_voice_modulation(channel_t channel, uint8_t voice, uint16_t modulation);
+void channel_modulation(channel_t channel, uint16_t modulation);
 
 /**
  * @brief Set the channel frequency

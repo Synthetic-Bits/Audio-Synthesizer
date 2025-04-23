@@ -82,13 +82,15 @@ void checkpoint_3(void)
   // Test the MIDI_UART peripheral
   // test_MIDI_UART();
 
+  channel_voice_on(CHANNEL8, 0); // Turn on the noise channel
+
   channel_voice_frequency(CHANNEL1, 0, 262);
   channel_voice_frequency(CHANNEL1, 1, 330);
   channel_voice_frequency(CHANNEL1, 2, 392);
   channel_voice_on(CHANNEL1, 0);
   channel_voice_on(CHANNEL1, 1);
   channel_voice_on(CHANNEL1, 2);
-  // channel_voice_modulation(CHANNEL1, 0, 8196);
+  // channel_modulation(CHANNEL1, 0, 8196);
 
   channel_voice_frequency(CHANNEL2, 0, 262);
   channel_voice_frequency(CHANNEL2, 1, 330);
@@ -99,7 +101,7 @@ void checkpoint_3(void)
   // channel_voice_on(CHANNEL2, 0);
   // channel_voice_on(CHANNEL2, 1);
   // channel_voice_on(CHANNEL2, 2);
-  // channel_voice_modulation(CHANNEL2, 0, 8196);
+  // channel_modulation(CHANNEL2, 0, 8196);
 
   channel_voice_frequency(CHANNEL3, 0, 262);
   channel_voice_frequency(CHANNEL3, 1, 330);
@@ -107,7 +109,7 @@ void checkpoint_3(void)
   channel_voice_on(CHANNEL3, 0);
   channel_voice_on(CHANNEL3, 1);
   channel_voice_on(CHANNEL3, 2);
-  // channel_voice_modulation(CHANNEL3, 0, 8196);
+  // channel_modulation(CHANNEL3, 0, 8196);
 
   channel_voice_frequency(CHANNEL4, 0, 192);
   channel_voice_frequency(CHANNEL4, 1, 124);
@@ -115,7 +117,7 @@ void checkpoint_3(void)
   // channel_voice_on(CHANNEL4, 0);
   // channel_voice_on(CHANNEL4, 1);
   // channel_voice_on(CHANNEL4, 2);
-  // channel_voice_modulation(CHANNEL4, 0, 8196);
+  // channel_modulation(CHANNEL4, 0, 8196);
 
   channel_voice_frequency(CHANNEL5, 0, 262);
   channel_voice_on(CHANNEL5, 0);
@@ -135,10 +137,10 @@ void checkpoint_3(void)
     mod += 1000;
     mod &= (0b0011111111111111);
 
-    channel_voice_modulation(CHANNEL5, 0, mod);
-    channel_voice_modulation(CHANNEL6, 0, mod);
-    channel_voice_modulation(CHANNEL7, 0, mod);
-    // channel_voice_modulation(CHANNEL4, 0, mod);
+    channel_modulation(CHANNEL5, mod);
+    channel_modulation(CHANNEL6, mod);
+    channel_modulation(CHANNEL7, mod);
+    // channel_modulation(CHANNEL4, 0, mod);
 
     channel_voice_on(CHANNEL4, 0);
     channel_voice_on(CHANNEL4, 1);
@@ -361,6 +363,11 @@ void init_channel_driver()
   channel_enable(CHANNEL7);
   channel_set_waveform(CHANNEL7, WAVEFORM_SQUARE);
   channel_volume(CHANNEL7, 127);
+
+  // Channel 8 Settings
+  channel_enable(CHANNEL8);
+  channel_set_waveform(CHANNEL8, WAVEFORM_NOISE);
+  channel_volume(CHANNEL8, 127);
 }
 
 /**
