@@ -1,6 +1,8 @@
 # MIDI Digital Synthesizer
 
-The MIDI Digital Synthesizer is an embedded system capable of synthesizing audio.  The synthesizer is able to interpret MIDI input signals and generate the desired waveforms from the MIDI input.
+The MIDI Digital Synthesizer is an embedded system capable of interpreting MIDI input signals and synthesizing the audio for the MIDI input.  The project was developed as a final project for the University of Utah's ECE 5780: Embedded Systems class.  While originally planned to be developed on an STM32F072 Discover board, the system now only works with a STM32H533RE NUCLEO board due to limitation's with the Discovery's flash memory as well as clock speed.
+
+Code for the STM32F072 is present within this repository however, it should be noted that this code hasn't been integrated together and thus, doesn't really work in a cohesive system.  That said, the code did represent effort that the Synthetic Bits put in to creating this project and thus, was included in this repository.
 
 ## Group Members
 
@@ -73,9 +75,8 @@ Showcase what needs to be connected on a picture of the PCB?
 
 This section is notes for us so we don't forget to include things in this document/the rest of the documentation.
 
-Basic instructions as well as setup guide
+Basic instructions on how to set it up
 Wiring diagrams
 Schematics
 Flow charts
-
-Give the project name, its purpose, functionality, basic instructions on how to set it up, wiring diagrams, schematics, flow charts. Make sure it's organized and written such that it could be of use to an internet stranger interested in the project.
+Make sure it's organized and written such that it could be of use to an internet stranger interested in the project.
