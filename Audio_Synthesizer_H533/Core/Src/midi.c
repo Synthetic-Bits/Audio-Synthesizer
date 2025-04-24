@@ -64,7 +64,7 @@ extern volatile channel_state_t channel1_state, channel2_state, channel3_state, 
 #define PIN_LED_GREEN GPIO_PIN_9
 
 // FREQUENCY DEFINES--------------------------------------------------------------------
-#define FREQ_DEFAULT 60
+#define FREQ_DEFAULT 480
 #define FREQ_C2 65   // 0  C
 #define FREQ_Db2 69  // 1  Db
 #define FREQ_D2 73   // 2  D
@@ -252,10 +252,8 @@ void set_pitchbendmsb(uint8_t data[], MIDI *midi)
 uint16_t midi_note_get_frequency(uint16_t key_num)
 {
   key_num -= 36; // shift to C2 from C0 (12 notes * 3 octives = 36)
-  if (key_num > 0)
-  {
+  if (key_num < 0)
     return FREQ_DEFAULT;
-  }
 
   // funciton globals
   uint16_t octave_num = 0;
@@ -381,6 +379,7 @@ void set_midi(uint8_t data[])
   MIDI midi;
   uint16_t freq = 0;
   uint8_t channel_num;
+  index = 0;
 
   while (data[index] != 0x00)
   {

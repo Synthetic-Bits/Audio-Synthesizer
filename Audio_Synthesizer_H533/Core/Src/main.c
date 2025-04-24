@@ -106,11 +106,14 @@ void midi_processer(void)
       // Reset the buffer index, we got the data we need
       global_receive_buffer_index = 0;
 
-      // Re-enable interrupts as we're done extracting data from the buffer
-      NVIC_EnableIRQ(MIDI_UART_IRQn);
+      // Clear the IDLE flag
+      midi_idle_flag = 0;
 
       /* Counter reset*/
       set_midi(buffer);
+
+      // Re-enable interrupts as we're done extracting data from the buffer
+      NVIC_EnableIRQ(MIDI_UART_IRQn);
     }
   }
 }
@@ -128,54 +131,54 @@ void audo_demo(void)
 
   channel_voice_on(CHANNEL8, 0); // Turn on the noise channel
 
-  channel_voice_frequency(CHANNEL1, 0, 262);
-  channel_voice_frequency(CHANNEL1, 1, 330);
-  channel_voice_frequency(CHANNEL1, 2, 392);
+  channel_voice_frequency(CHANNEL1, 0, 30);
+  // channel_voice_frequency(CHANNEL1, 1, 330);
+  // channel_voice_frequency(CHANNEL1, 2, 392);
   channel_voice_on(CHANNEL1, 0);
-  channel_voice_on(CHANNEL1, 1);
-  channel_voice_on(CHANNEL1, 2);
-  // channel_modulation(CHANNEL1, 0, 8196);
+  // channel_voice_on(CHANNEL1, 1);
+  // channel_voice_on(CHANNEL1, 2);
+  // // channel_modulation(CHANNEL1, 0, 8196);
 
-  channel_voice_frequency(CHANNEL2, 0, 262);
-  channel_voice_frequency(CHANNEL2, 1, 330);
-  channel_voice_frequency(CHANNEL2, 2, 392);
-  // channel_voice_frequency(CHANNEL2, 0, 120);
-  // channel_voice_frequency(CHANNEL2, 1, 240);
-  // channel_voice_frequency(CHANNEL2, 2, 360);
-  // channel_voice_on(CHANNEL2, 0);
-  // channel_voice_on(CHANNEL2, 1);
-  // channel_voice_on(CHANNEL2, 2);
-  // channel_modulation(CHANNEL2, 0, 8196);
+  // channel_voice_frequency(CHANNEL2, 0, 262);
+  // channel_voice_frequency(CHANNEL2, 1, 330);
+  // channel_voice_frequency(CHANNEL2, 2, 392);
+  // // channel_voice_frequency(CHANNEL2, 0, 120);
+  // // channel_voice_frequency(CHANNEL2, 1, 240);
+  // // channel_voice_frequency(CHANNEL2, 2, 360);
+  // // channel_voice_on(CHANNEL2, 0);
+  // // channel_voice_on(CHANNEL2, 1);
+  // // channel_voice_on(CHANNEL2, 2);
+  // // channel_modulation(CHANNEL2, 0, 8196);
 
-  channel_voice_frequency(CHANNEL3, 0, 262);
-  channel_voice_frequency(CHANNEL3, 1, 330);
-  channel_voice_frequency(CHANNEL3, 2, 392);
-  channel_voice_on(CHANNEL3, 0);
-  channel_voice_on(CHANNEL3, 1);
-  channel_voice_on(CHANNEL3, 2);
-  // channel_modulation(CHANNEL3, 0, 8196);
+  // channel_voice_frequency(CHANNEL3, 0, 262);
+  // channel_voice_frequency(CHANNEL3, 1, 330);
+  // channel_voice_frequency(CHANNEL3, 2, 392);
+  // channel_voice_on(CHANNEL3, 0);
+  // channel_voice_on(CHANNEL3, 1);
+  // channel_voice_on(CHANNEL3, 2);
+  // // channel_modulation(CHANNEL3, 0, 8196);
 
-  channel_voice_frequency(CHANNEL4, 0, 192);
-  channel_voice_frequency(CHANNEL4, 1, 124);
-  channel_voice_frequency(CHANNEL4, 2, 246);
-  // channel_voice_on(CHANNEL4, 0);
-  // channel_voice_on(CHANNEL4, 1);
-  // channel_voice_on(CHANNEL4, 2);
-  // channel_modulation(CHANNEL4, 0, 8196);
+  // channel_voice_frequency(CHANNEL4, 0, 192);
+  // channel_voice_frequency(CHANNEL4, 1, 124);
+  // channel_voice_frequency(CHANNEL4, 2, 246);
+  // // channel_voice_on(CHANNEL4, 0);
+  // // channel_voice_on(CHANNEL4, 1);
+  // // channel_voice_on(CHANNEL4, 2);
+  // // channel_modulation(CHANNEL4, 0, 8196);
 
-  channel_voice_frequency(CHANNEL5, 0, 262);
-  channel_voice_on(CHANNEL5, 0);
+  // channel_voice_frequency(CHANNEL5, 0, 262);
+  // channel_voice_on(CHANNEL5, 0);
 
-  channel_voice_frequency(CHANNEL6, 0, 330);
-  channel_voice_on(CHANNEL6, 0);
+  // channel_voice_frequency(CHANNEL6, 0, 330);
+  // channel_voice_on(CHANNEL6, 0);
 
-  channel_voice_frequency(CHANNEL7, 0, 392);
-  channel_voice_on(CHANNEL7, 0);
+  // channel_voice_frequency(CHANNEL7, 0, 392);
+  // channel_voice_on(CHANNEL7, 0);
 
-  channel_voice_velocity(CHANNEL4, 0, 127);
-  channel_voice_velocity(CHANNEL4, 1, 127);
-  channel_voice_velocity(CHANNEL4, 2, 127);
-  uint16_t mod = 0;
+  // channel_voice_velocity(CHANNEL4, 0, 127);
+  // channel_voice_velocity(CHANNEL4, 1, 127);
+  // channel_voice_velocity(CHANNEL4, 2, 127);
+  // uint16_t mod = 0;
   // while (1)
   // {
   //   mod += 1000;
