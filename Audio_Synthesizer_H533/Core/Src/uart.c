@@ -24,6 +24,10 @@
 /* Private includes ----------------------------------------------------------*/
 #include <stm32h5xx_hal.h>
 
+//Timber Defines
+#define UART_TIMER_PSC (1)
+#define UART_TIMER_ARR (59999) // 480 us = 2083 Hz
+
 /* ========================================================================== */
 /*                                                                            */
 /*    Global Variables                                                        */
@@ -32,11 +36,14 @@
 
 // Global definitions for the global_receive_buffer (used in interrupts).
 volatile int global_receive_buffer_index = 0;
-volatile char global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
+volatile uint8_t global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
 
 // Variables that keep track of if the UART peripherals are configured.
 static int USER_UART_configured = 0;
 static int MIDI_UART_configured = 0;
+
+// UART Timer Flags
+volatile uint8_t uart_timer_expired;
 
 /* ========================================================================== */
 /*                                                                            */
@@ -60,16 +67,54 @@ void USART1_IRQHandler()
 
 void USART3_IRQHandler()
 {
-    // Add the received data to the global buffer.
-    global_receive_buffer[global_receive_buffer_index] = MIDI_UART->RDR;
+  UART_TIMER->SR = 0;
+  UART_TIMER->CNT = 0;
+  UART_TIMER->CR1 |= 0x1; // Start the Timer Counter
 
-    // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
-    global_receive_buffer_index++;
-    if (global_receive_buffer_index > GLOBAL_RECEIVE_BUFFER_SIZE)
+  uart_timer_expired = 0;
+
+  // Add the received data to the global buffer.
+  global_receive_buffer[global_receive_buffer_index] = MIDI_UART->RDR;
+
+  // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
+  global_receive_buffer_index++;
+  if (global_receive_buffer_index > GLOBAL_RECEIVE_BUFFER_SIZE)
+  {
+    // Loop indefinitely.  Later, change an LED once that is implemented.
+    while (1)
     {
-        // Loop indefinitely.  Later, change an LED once that is implemented.
-        while (1) { }
     }
+  }
+}
+
+void TIM5_IRQHandler()
+{
+  if (UART_TIMER->SR & 0x01)
+  {
+    uart_timer_expired = 1;
+    UART_TIMER->CR1 &= ~(0x1); // Stop the timeout timer
+  }
+
+  // Clear the interrupt request
+  UART_TIMER->SR = (0);
+}
+
+/* ========================================================================== */
+/*                                                                            */
+/*    MIDI UART Timer                                                         */
+/*                                                                            */
+/* ========================================================================== */
+
+void uart_timer_stop()
+{
+  // Disable the timer
+  UART_TIMER->CR1 &= ~(0x1);
+}
+
+void uart_timer_start()
+{
+  // Enable the timer
+  UART_TIMER->CR1 |= (0x1);
 }
 
 /* ========================================================================== */
@@ -163,6 +208,26 @@ void configure_MIDI_UART(unsigned int baud_rate, uint8_t enable_interrupts, uint
         NVIC_EnableIRQ(MIDI_UART_IRQn);
         NVIC_SetPriority(MIDI_UART_IRQn, interrupt_priority);
     }
+
+    // ==== TIMER ====
+
+    // Enable the RCC for the Timer
+    RCC_TIM5_CLK_Enable();
+
+    // Initialize the timer
+    UART_TIMER->PSC = UART_TIMER_PSC;
+    UART_TIMER->ARR = UART_TIMER_ARR;
+    UART_TIMER->CNT = 1;
+
+    UART_TIMER->CCMR1 = 0;
+
+    UART_TIMER->CR1 |= TIM_CR1_URS;
+    //UART_TIMER->CCR1 |= 
+
+    UART_TIMER->DIER |= (0x1); // Enable the UDE
+
+    uart_timer_expired = 0;
+    NVIC_EnableIRQ(UART_TIMER_IRQ);
 
     // Lastly, indicate that this peripheral has been configured
     MIDI_UART_configured = 1;

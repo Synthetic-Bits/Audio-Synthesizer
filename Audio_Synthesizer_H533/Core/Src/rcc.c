@@ -33,6 +33,8 @@ void RCC_GPIOC_CLK_Enable(void);
 
 void RCC_TIM2_CLK_Enable(void);
 void RCC_TIM3_CLK_Enable(void);
+void RCC_TIM4_CLK_Enable(void);
+void RCC_TIM5_CLK_Enable(void);
 
 void RCC_USART1_CLK_Enable(void);
 void RCC_USART3_CLK_Enable(void);
@@ -89,6 +91,14 @@ void RCC_TIM3_CLK_Enable()
 void RCC_TIM4_CLK_Enable()
 {
     RCC->APB1LENR |= RCC_APB1LENR_TIM4EN;
+}
+
+/**
+ * @brief Enable the RCC Clock for TIM4
+ */
+void RCC_TIM5_CLK_Enable()
+{
+    RCC->APB1LENR |= RCC_APB1LENR_TIM5EN;
 }
 
 /**
