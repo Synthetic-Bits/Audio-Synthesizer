@@ -344,9 +344,14 @@ static inline uint8_t find_max_freq_voice(uint16_t voices[], uint8_t num_voices)
 static inline void voice_add_freq(uint16_t freq, uint16_t voices[], uint8_t num_voices, channel_t channel)
 {
   uint8_t max_freq_voice = find_max_freq_voice(voices, num_voices); // find max freq index
-  voices[max_freq_voice] = freq;                                    // remove the higest freq
-  channel_voice_frequency(channel, max_freq_voice, freq);           // set voice freq
-  channel_voice_on(channel, max_freq_voice);                        // turn on voice
+  if (voices[max_freq_voice] != VOICE_MAX_FREQ)
+  {
+    return;
+    // channel_voice_off(channel, max_freq_voice);
+  }
+  voices[max_freq_voice] = freq;                          // remove the higest freq
+  channel_voice_frequency(channel, max_freq_voice, freq); // set voice freq
+  channel_voice_on(channel, max_freq_voice);              // turn on voice
 }
 
 static inline void voice_remove_freq(uint16_t freq, uint16_t voices[], uint8_t num_voices, channel_t channel)

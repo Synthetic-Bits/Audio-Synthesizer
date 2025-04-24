@@ -99,10 +99,11 @@ void midi_processer(void)
       NVIC_DisableIRQ(MIDI_UART_IRQn);
 
       // Extract the data from the buffer
-      for (int i = 0; i < global_receive_buffer_index; i++)
-      {
-        buffer[i] = global_receive_buffer[i];
-      }
+      // for (int i = 0; i < global_receive_buffer_index; i++)
+      //   buffer[i] = global_receive_buffer[i];
+
+      memcpy(buffer, global_receive_buffer, global_receive_buffer_index);
+
       // Reset the buffer index, we got the data we need
       global_receive_buffer_index = 0;
 
@@ -131,7 +132,7 @@ void audo_demo(void)
 
   channel_voice_on(CHANNEL8, 0); // Turn on the noise channel
 
-  channel_voice_frequency(CHANNEL1, 0, 30);
+  // channel_voice_frequency(CHANNEL1, 0, 30);
   // channel_voice_frequency(CHANNEL1, 1, 330);
   // channel_voice_frequency(CHANNEL1, 2, 392);
   channel_voice_on(CHANNEL1, 0);
@@ -378,7 +379,7 @@ void init_channel_driver()
 
   // Channel 1 Settings
   channel_enable(CHANNEL1);
-  channel_set_waveform(CHANNEL1, WAVEFORM_SINE);
+  channel_set_waveform(CHANNEL1, WAVEFORM_SQUARE);
   channel_volume(CHANNEL1, 127);
 
   // Channel 2 Settings
@@ -462,7 +463,7 @@ int main(void)
   start_audio_synthesis();
 
   // Run the third checkpoint
-  audo_demo();
+  // audo_demo();
 
   midi_processer();
 

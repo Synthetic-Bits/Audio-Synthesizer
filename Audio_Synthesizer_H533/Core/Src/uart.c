@@ -31,6 +31,7 @@
 /* ========================================================================== */
 
 // Global definitions for the global_receive_buffer (used in interrupts).
+volatile uint8_t immediate_byte;
 volatile int global_receive_buffer_index = 0;
 volatile char global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
 
@@ -67,14 +68,21 @@ void USART3_IRQHandler()
 {
     if (MIDI_UART->ISR & USART_ISR_IDLE)
     {
-        midi_idle_flag = 1;
+        if (global_receive_buffer_index != 0)
+            midi_idle_flag = 1;
+
         MIDI_UART->ICR |= USART_ICR_IDLECF;
     }
     else
     {
         midi_idle_flag = 0;
+
+        immediate_byte = MIDI_UART->RDR;
+        // if (immediate_byte == 0b11111110)
+        //     return;
+
         // Add the received data to the global buffer.
-        global_receive_buffer[global_receive_buffer_index] = MIDI_UART->RDR;
+        global_receive_buffer[global_receive_buffer_index] = immediate_byte;
 
         // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
         global_receive_buffer_index++;
