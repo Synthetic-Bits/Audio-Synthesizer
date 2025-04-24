@@ -303,8 +303,17 @@ void channel_voice_on(channel_t channel, uint8_t voice)
       channel2_state.voices[voice].mod_count = 0;
       channel2_state.voices[voice].env_count = 0;
       channel2_state.voices[voice].env_start = 0;
-      channel2_state.voices[voice].adsr_state = ADSR_ATTACK;
-      channel2_state.active_voices++;
+
+      // Only increment the active voice count if we aren't decaying
+      if (channel2_state.voices[voice].adsr_state == ADSR_RELEASE)
+      {
+        channel2_state.voices[voice].adsr_state = ADSR_ATTACK;
+      }
+      else
+      {
+        channel2_state.voices[voice].adsr_state = ADSR_ATTACK;
+        channel2_state.active_voices++;
+      }
       break;
     case CHANNEL3:
       if (channel3_state.voices[voice].velocity == 0)
@@ -317,8 +326,17 @@ void channel_voice_on(channel_t channel, uint8_t voice)
       channel3_state.voices[voice].mod_count = 0;
       channel3_state.voices[voice].env_count = 0;
       channel3_state.voices[voice].env_start = 0;
-      channel3_state.voices[voice].adsr_state = ADSR_ATTACK;
-      channel3_state.active_voices++;
+
+      // Only increment the active voice count if we aren't decaying
+      if (channel3_state.voices[voice].adsr_state == ADSR_RELEASE)
+      {
+        channel3_state.voices[voice].adsr_state = ADSR_ATTACK;
+      }
+      else
+      {
+        channel3_state.voices[voice].adsr_state = ADSR_ATTACK;
+        channel3_state.active_voices++;
+      }
       break;
     case CHANNEL4:
       if (channel4_state.voices[voice].velocity == 0)
@@ -331,8 +349,17 @@ void channel_voice_on(channel_t channel, uint8_t voice)
       channel4_state.voices[voice].mod_count = 0;
       channel4_state.voices[voice].env_count = 0;
       channel4_state.voices[voice].env_start = 0;
-      channel4_state.voices[voice].adsr_state = ADSR_ATTACK;
-      channel4_state.active_voices++;
+
+      // Only increment the active voice count if we aren't decaying
+      if (channel4_state.voices[voice].adsr_state == ADSR_RELEASE)
+      {
+        channel4_state.voices[voice].adsr_state = ADSR_ATTACK;
+      }
+      else
+      {
+        channel4_state.voices[voice].adsr_state = ADSR_ATTACK;
+        channel4_state.active_voices++;
+      }
       break;
     case CHANNEL5:
       if (channel5_state.voices[voice].velocity == 0)
@@ -345,8 +372,17 @@ void channel_voice_on(channel_t channel, uint8_t voice)
       channel5_state.voices[voice].mod_count = 0;
       channel5_state.voices[voice].env_count = 0;
       channel5_state.voices[voice].env_start = 0;
-      channel5_state.voices[voice].adsr_state = ADSR_ATTACK;
-      channel5_state.active_voices++;
+
+      // Only increment the active voice count if we aren't decaying
+      if (channel5_state.voices[voice].adsr_state == ADSR_RELEASE)
+      {
+        channel5_state.voices[voice].adsr_state = ADSR_ATTACK;
+      }
+      else
+      {
+        channel5_state.voices[voice].adsr_state = ADSR_ATTACK;
+        channel5_state.active_voices++;
+      }
       break;
     case CHANNEL6:
       if (channel6_state.voices[voice].velocity == 0)
@@ -359,8 +395,17 @@ void channel_voice_on(channel_t channel, uint8_t voice)
       channel6_state.voices[voice].mod_count = 0;
       channel6_state.voices[voice].env_count = 0;
       channel6_state.voices[voice].env_start = 0;
-      channel6_state.voices[voice].adsr_state = ADSR_ATTACK;
-      channel6_state.active_voices++;
+
+      // Only increment the active voice count if we aren't decaying
+      if (channel6_state.voices[voice].adsr_state == ADSR_RELEASE)
+      {
+        channel6_state.voices[voice].adsr_state = ADSR_ATTACK;
+      }
+      else
+      {
+        channel6_state.voices[voice].adsr_state = ADSR_ATTACK;
+        channel6_state.active_voices++;
+      }
       break;
     case CHANNEL7:
       if (channel7_state.voices[voice].velocity == 0)
@@ -373,8 +418,17 @@ void channel_voice_on(channel_t channel, uint8_t voice)
       channel7_state.voices[voice].mod_count = 0;
       channel7_state.voices[voice].env_count = 0;
       channel7_state.voices[voice].env_start = 0;
-      channel7_state.voices[voice].adsr_state = ADSR_ATTACK;
-      channel7_state.active_voices++;
+
+      // Only increment the active voice count if we aren't decaying
+      if (channel7_state.voices[voice].adsr_state == ADSR_RELEASE)
+      {
+        channel7_state.voices[voice].adsr_state = ADSR_ATTACK;
+      }
+      else
+      {
+        channel7_state.voices[voice].adsr_state = ADSR_ATTACK;
+        channel7_state.active_voices++;
+      }
       break;
     case CHANNEL8:
       if (channel8_state.voices[voice].velocity == 0)
@@ -387,8 +441,17 @@ void channel_voice_on(channel_t channel, uint8_t voice)
       channel8_state.voices[voice].mod_count = 0;
       channel8_state.voices[voice].env_count = 0;
       channel8_state.voices[voice].env_start = 0;
-      channel8_state.voices[voice].adsr_state = ADSR_ATTACK;
-      channel8_state.active_voices++;
+
+      // Only increment the active voice count if we aren't decaying
+      if (channel8_state.voices[voice].adsr_state == ADSR_RELEASE)
+      {
+        channel8_state.voices[voice].adsr_state = ADSR_ATTACK;
+      }
+      else
+      {
+        channel8_state.voices[voice].adsr_state = ADSR_ATTACK;
+        channel8_state.active_voices++;
+      }
       break;
     default:
       return;

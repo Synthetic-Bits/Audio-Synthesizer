@@ -382,12 +382,12 @@ void init_channel_driver()
 
   // Channel 2 Settings
   channel_enable(CHANNEL2);
-  channel_set_waveform(CHANNEL2, WAVEFORM_TRIG);
+  channel_set_waveform(CHANNEL2, WAVEFORM_RAMP);
   channel_volume(CHANNEL2, 127);
 
   // Channel 3 Settings
   channel_enable(CHANNEL3);
-  channel_set_waveform(CHANNEL3, WAVEFORM_RAMP);
+  channel_set_waveform(CHANNEL3, WAVEFORM_TRIG);
   channel_volume(CHANNEL3, 127);
 
   // Channel 4 Settings
@@ -397,12 +397,12 @@ void init_channel_driver()
 
   // Channel 5 Settings
   channel_enable(CHANNEL5);
-  channel_set_waveform(CHANNEL5, WAVEFORM_TRIG);
+  channel_set_waveform(CHANNEL5, WAVEFORM_RAMP);
   channel_volume(CHANNEL5, 127);
 
   // Channel 6 Settings
   channel_enable(CHANNEL6);
-  channel_set_waveform(CHANNEL6, WAVEFORM_RAMP);
+  channel_set_waveform(CHANNEL6, WAVEFORM_TRIG);
   channel_volume(CHANNEL6, 127);
 
   // Channel 7 Settings
@@ -458,11 +458,8 @@ int main(void)
   // -== UART MIDI SETUP ==
   configure_MIDI_UART(baud_rate, UART_ENABLE_INTERRUPTS, MIDI_IRQ_PRIORITY);
 
+  // -== AUDIO SYNTHESIS & MIDI PROCESSING ==--
   start_audio_synthesis();
-
-  // Run the third checkpoint
-  // audo_demo();
-
   midi_processer();
 
   // Loop indefinitely to prevent returning from main
