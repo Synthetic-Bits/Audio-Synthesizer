@@ -71,6 +71,15 @@ Maybe a flow-diagram of the process would be nice here?
 
 Showcase what needs to be connected on a picture of the PCB?
 
+## Setup Diagrams
+### Front Pannel
+![Front Pannel Diagram](./doc_imgs/Synthesizer-Front_pannel.drawio.svg)
+![Front Pannel Img](./doc_imgs/Synthesizer-Front_pannel.jpeg)
+
+### Top Down
+![Front Pannel Diagram](./doc_imgs/Synthesizer-top_pannel.svg)
+![Front Pannel Img](./doc_imgs/Synthesizer-top_pannel.png)
+
 ## Temporary
 
 This section is notes for us so we don't forget to include things in this document/the rest of the documentation.
