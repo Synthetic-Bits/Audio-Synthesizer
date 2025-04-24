@@ -1,113 +1,59 @@
+/**
+******************************************************************************
+* @file    midi.c
+* @brief   MIDI Interface
+* @author  Bryant Watson, Adrian Sucahyo
+******************************************************************************
+* @attention
+*
+* Copyright (c) 2025 Synthetic Bits.
+* All rights reserved.
+*
+* This software is licensed under terms that can be found in the LICENSE file
+* in the root directory of this software component.
+* If no LICENSE file comes with this software, it is provided AS-IS.
+*
+******************************************************************************
+*/
+
+/* Includes ------------------------------------------------------------------*/
+
 #include <stdint.h>
 #include <stdio.h>
-#include <channel_common.h>
 
 #include "uart.h"
 #include "midi.h"
+#include "midi_defs.h"
+#include "notes.h"
 
 #include "config.h"
 #include "sample_timer.h"
 #include "channel_common.h"
 #include "channel_driver.h"
 
-extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state;
+/* ========================================================================== */
+/*                                                                            */
+/*    Global Variables                                                        */
+/*                                                                            */
+/* ========================================================================== */
 
-// status codes------------------------------------------------------------------
-#define NOTE_ON_EVENT (0b1001)
-#define NOTE_OFF_EVENT (0b1000)
-#define POLYPHONIC_KEY_PRESSURE (0b1010)
-#define CONTROL_CHANGE (0b1011)
-#define PROGRAM_CHANGE (0b1100)
-#define CHANNEL_PRESSURE (0b1101)
-#define PITCH_BEND (0b1110)
-#define SYSTEM_MESSAGE (0b1111)
+extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state, channel8_state;
 
-// midi bit masks------------------------------------------------------------------
-#define MESSAGETYPE_msk (0xf0) // non 0x7f, 0d127
-#define CHANNEL_msk (0x0f)     // non 0x7f, 0d127
-#define KEYNUMBER_msk (0x7f)
-#define VELOCITY_msk (0x7f)
-#define FORCEONKEY_msk (0x7f)
-#define ADDRESS_OF_CONTROL_msk (0x7f)
-#define VALUE_OF_CONTROL_OUTPUT_msk (0x7f)
-#define PROGRAMME_SELECT_msk (0x7f)
-#define PRESSURE_VALUE_msk (0x7f)
-#define PITCH_BEND_LSB_msk (0x7f)
-#define PITCH_BEND_MSB_msk (0x7f)
-#define NUMBER_OF_CHANNELS_msk (0x7f)
-#define MANUFACTURERS_IDENTIFICATION_msk (0x7f)
-#define SYSTEM_EXCLUSIVE_MESSAGE_msk (0x7f)
-#define MIDI_TIME_CODE_QUARTER_FRAME_MESSAGE_D_msk (0x70)
-#define MIDI_TIME_CODE_QUARTER_FRAME_MESSAGE_T_msk (0x0f) // non 0x7f, 0d127
+extern volatile uint16_t midi_receive_head, midi_receive_tail;
+extern volatile uint8_t midi_receive_buffer[MIDI_RECEIVE_BUFFER_SIZE];
 
-// midi system message bit masks----------------------------------------------------
-#define BEGIN_SYSTEM_EXCLUSIVE (0b0000)
-#define MIDI_TIME_CODE (0b0001)
-#define SONG_POSITION_POINTER (0b0010)
-#define SONG_SELECT (0b0011)
-#define TUNE_REQUEST (0b0110)
-#define END_SYSTEM_EXCLUSIVE (0b0111)
-#define TIMING_CLOCK (0b1000)
-#define START (0b1010)
-#define CONTINUE (0b1011)
-#define STOP (0b1100)
-#define ACTIVE_SENSING (0b1110)
-#define SYSTEM_RESET (0b1111)
+static volatile midi_t current_midi;
+static volatile midi_state_t midi_state;
+static volatile uint8_t midi_step;
 
-// PORT AND PIN DEFINES----------------------------------------------------------------
-// Port Definitions
-#define PORT_LED GPIOC
-// Pin Definitions
-#define PIN_LED_RED GPIO_PIN_6
-#define PIN_LED_BLUE GPIO_PIN_7
-#define PIN_LED_ORANGE GPIO_PIN_8
-#define PIN_LED_GREEN GPIO_PIN_9
-
-// FREQUENCY DEFINES--------------------------------------------------------------------
-#define FREQ_DEFAULT 480
-#define FREQ_C2 65   // 0  C
-#define FREQ_Db2 69  // 1  Db
-#define FREQ_D2 73   // 2  D
-#define FREQ_Eb2 78  // 3  Eb
-#define FREQ_E2 82   // 4  E
-#define FREQ_F2 87   // 5  F
-#define FREQ_Gb2 93  // 6  Gb
-#define FREQ_G2 98   // 7  G
-#define FREQ_Ab2 104 // 8  Ab
-#define FREQ_A2 110  // 9  A
-#define FREQ_Bb2 117 // 10 Bb
-#define FREQ_B2 123  // 11 B
-
-// OTHER DEFINES
-#define ON 1  // ON
-#define OFF 0 // OFF
-
-// global variables and structs------------------------------------------------------------------
-static uint16_t index;
-typedef struct
+static inline uint8_t get_statuscode(uint8_t data)
 {
-  channel_t channel;
-  uint16_t keynumber;
-  uint16_t velocity;
-  uint16_t forceonkey;
-  uint16_t addressofcontrol;
-  uint16_t valueofcontroloutput;
-  uint16_t programmeselect;
-  uint16_t pressurevalue;
-  uint16_t pitchbendmsb;
-  uint16_t pitchbendlsb;
-  uint16_t number_of_channels;
-} MIDI;
-
-//------------------------------------------------------------------------------
-static uint16_t get_statuscode(uint8_t data[])
-{
-  return ((data[index] & MESSAGETYPE_msk) >> 4);
+  return ((data & MESSAGETYPE_msk) >> 4);
 }
 
 // helper functions--------------------------------------------------------------
 
-static void channel_mode_messages_handler(uint8_t data[], MIDI midi)
+static void channel_mode_messages_handler(uint8_t data)
 {
   // if((data[index + 1] == 0b01111010) && (data[index + 2] == 0b00000000))
   // {
@@ -142,16 +88,15 @@ static void channel_mode_messages_handler(uint8_t data[], MIDI midi)
   // }
 }
 
-static void system_message_handler(uint8_t data[])
+static void system_message_handler(uint8_t data)
 {
-  uint16_t message_type = data[index] & 0x0f;
-  switch (message_type)
+  switch (data & 0x0F)
   {
   case BEGIN_SYSTEM_EXCLUSIVE:
     // printf("BEGIN_SYSTEM_EXCLUSIVE\n");
     break;
   case MIDI_TIME_CODE:
-    // printf("MIDI_TIME_CODE\n");
+    // printf("midi_t_TIME_CODE\n");
     break;
   case SONG_POSITION_POINTER:
     // printf("SONG_POSITION_POINTER\n");
@@ -184,68 +129,62 @@ static void system_message_handler(uint8_t data[])
     // printf("SYSTEM_RESET\n");
     break;
   }
-  index++;
 }
 
-// MIDI Set functions--------------------------------------------------------------
-void set_channel(uint8_t data[], MIDI *midi)
+// midi_t Set functions--------------------------------------------------------------
+static inline void set_channel(uint8_t data)
 {
-  uint8_t midi_channel = (data[index] & CHANNEL_msk);
+  uint8_t midi_channel = (data & CHANNEL_msk);
 
   if (midi_channel > 8)
-  {
-    midi->channel = CHANNEL1; // default channel if channel is out of range
-  }
+    current_midi.channel = CHANNEL1; // default channel if channel is out of range
   else
-  {
-    midi->channel = midi_channel;
-  }
-  index++;
+    current_midi.channel = midi_channel;
 }
-void set_keynumber(uint8_t data[], MIDI *midi)
+
+static inline void set_keynumber(uint8_t data)
 {
-  midi->keynumber = (data[index] & KEYNUMBER_msk);
-  index++;
+  current_midi.keynumber = (data & KEYNUMBER_msk);
 }
-void set_velocity(uint8_t data[], MIDI *midi)
+
+static inline void set_velocity(uint8_t data)
 {
-  midi->velocity = (data[index] & VELOCITY_msk);
-  index++;
+  current_midi.velocity = (data & VELOCITY_msk);
 }
-void set_forceonkey(uint8_t data[], MIDI *midi)
+
+static inline void set_forceonkey(uint8_t data)
 {
-  midi->forceonkey = (data[index] & FORCEONKEY_msk);
-  index++;
+  current_midi.forceonkey = (data & FORCEONKEY_msk);
 }
-void set_addressofcontrol(uint8_t data[], MIDI *midi)
+
+static inline void set_addressofcontrol(uint8_t data)
 {
-  midi->addressofcontrol = (data[index] & ADDRESS_OF_CONTROL_msk);
-  index++;
+  current_midi.addressofcontrol = (data & ADDRESS_OF_CONTROL_msk);
 }
-void set_valueofcontroloutput(uint8_t data[], MIDI *midi)
+
+static inline void set_valueofcontroloutput(uint8_t data)
 {
-  midi->valueofcontroloutput = (data[index] & VALUE_OF_CONTROL_OUTPUT_msk);
-  index++;
+  current_midi.valueofcontroloutput = (data & VALUE_OF_CONTROL_OUTPUT_msk);
 }
-void set_programmeselect(uint8_t data[], MIDI *midi)
+
+static inline void set_programmeselect(uint8_t data)
 {
-  midi->programmeselect = (data[index] & PROGRAMME_SELECT_msk);
-  index++;
+  current_midi.programmeselect = (data & PROGRAMME_SELECT_msk);
 }
-void set_pressurevalue(uint8_t data[], MIDI *midi)
+
+static inline void set_pressurevalue(uint8_t data)
 {
-  midi->pressurevalue = (data[index] & PRESSURE_VALUE_msk);
-  index++;
+  current_midi.pressurevalue = (data & PRESSURE_VALUE_msk);
 }
-void set_pitchbendlsb(uint8_t data[], MIDI *midi)
+
+static inline void set_pitchbendlsb(uint8_t data)
 {
-  midi->pitchbendlsb = (data[index] & PITCH_BEND_LSB_msk);
-  index++;
+  current_midi.pitchbendlsb = (data & PITCH_BEND_LSB_msk);
 }
-void set_pitchbendmsb(uint8_t data[], MIDI *midi)
+
+static inline void set_pitchbendmsb(uint8_t data)
 {
-  midi->pitchbendmsb = (data[index] & PITCH_BEND_MSB_msk);
-  index++;
+  current_midi.pitchbendmsb = (data & PITCH_BEND_MSB_msk);
 }
 
 // note we start at C2 65hz if less then return 60hz
@@ -298,14 +237,14 @@ uint16_t midi_note_get_frequency(uint16_t key_num)
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// MIDI VOICES
+// midi_t VOICES
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #define MAX_NUM_VOICES 8
 #define VOICE_MAX_FREQ 0xFFFF
 
-uint16_t voice_channles[8][MAX_NUM_VOICES]; // double array for channle index vs map
-uint8_t voice_channle_map[8] = {1, 1, 1, 1, 1, 1, 1, 1};
+uint16_t voice_channels[8][MAX_NUM_VOICES]; // double array for channle index vs map
+uint8_t voice_channel_map[8] = {1, 1, 1, 1, 1, 1, 1, 1};
 
 void midi_channle_voice_init()
 {
@@ -313,17 +252,17 @@ void midi_channle_voice_init()
   {
     for (int i = 0; i < MAX_NUM_VOICES; i++)
     {
-      voice_channles[j][i] = VOICE_MAX_FREQ;
+      voice_channels[j][i] = VOICE_MAX_FREQ;
     }
   }
-  voice_channle_map[0] = channel1_state.num_voices;
-  voice_channle_map[1] = channel2_state.num_voices;
-  voice_channle_map[2] = channel3_state.num_voices;
-  voice_channle_map[3] = channel4_state.num_voices;
-  voice_channle_map[4] = channel5_state.num_voices;
-  voice_channle_map[5] = channel6_state.num_voices;
-  voice_channle_map[6] = channel7_state.num_voices;
-  voice_channle_map[7] = 1; // channel8_state.num_voices;
+  voice_channel_map[0] = channel1_state.num_voices;
+  voice_channel_map[1] = channel2_state.num_voices;
+  voice_channel_map[2] = channel3_state.num_voices;
+  voice_channel_map[3] = channel4_state.num_voices;
+  voice_channel_map[4] = channel5_state.num_voices;
+  voice_channel_map[5] = channel6_state.num_voices;
+  voice_channel_map[6] = channel7_state.num_voices;
+  voice_channel_map[7] = channel8_state.num_voices;
 }
 
 static inline uint8_t find_max_freq_voice(uint16_t voices[], uint8_t num_voices)
@@ -376,86 +315,278 @@ static uint8_t get_voice_num_from_freq(uint16_t freq, uint16_t voices[], uint8_t
       return voice;
     }
   }
+
+  return 0xFF;
 }
 
-// main function------------------------------------------------------------------
-void set_midi(uint8_t data[])
+/* ========================================================================== */
+/*                                                                            */
+/*    MIDI Processsor Functions                                               */
+/*                                                                            */
+/* ========================================================================== */
+static inline void process_state()
 {
-  MIDI midi;
-  uint16_t freq = 0;
-  uint8_t channel_num;
-  index = 0;
+  uint8_t data = midi_receive_buffer[midi_receive_tail];
 
-  while (data[index] != 0x00)
+  switch (midi_state)
   {
-    switch (get_statuscode(data))
+  case SYSTEM_MESSAGE_STATE:
+    if (midi_step == 0)
     {
-    case SYSTEM_MESSAGE:
       system_message_handler(data);
-      // TODO
-      break;
-    case NOTE_ON_EVENT:
-      set_channel(data, &midi);
-      set_keynumber(data, &midi);
-      set_velocity(data, &midi);
-      freq = midi_note_get_frequency(midi.keynumber);
-      channel_num = midi.channel;
-      voice_add_freq(freq, voice_channles[channel_num], voice_channle_map[channel_num], channel_num); // TODO fix num of voices
-      // channel1_4_on_off(midi.channel,ON);
-      // channel1_4_frequency(midi.channel, midi_note_get_frequency(midi.keynumber));
-      // channel1_4_volume(CHANNEL1,midi.velocity);
-      // printf("NOTE_ON_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity);
-      break;
-    case NOTE_OFF_EVENT:
-      set_channel(data, &midi);
-      set_keynumber(data, &midi);
-      set_velocity(data, &midi);
-      freq = midi_note_get_frequency(midi.keynumber);
-      channel_num = midi.channel;
-      voice_remove_freq(freq, voice_channles[channel_num], voice_channle_map[channel_num], channel_num);
-      // channel1_4_on_off(midi.channel, OFF);
-      // channel1_4_frequency(midi.channel, midi_note_get_frequency(midi.keynumber));
-      // channel1_4_volume(CHANNEL1, midi.velocity);
-      // printf("NOTE_OFF_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity);
-      break;
-    case POLYPHONIC_KEY_PRESSURE:
-      set_channel(data, &midi);
-      set_keynumber(data, &midi);
-      set_forceonkey(data, &midi);
-      freq = midi_note_get_frequency(midi.keynumber);
-      channel_num = midi.channel;
-      uint8_t voice_num = get_voice_num_from_freq(freq, voice_channles[channel_num], voice_channle_map[channel_num], channel_num); // untested function
-      channel_voice_velocity(channel_num, voice_num, midi.forceonkey);
-      // printf("POLYPHONIC_KEY_PRESSURE: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tforceonkey:0x%02X\n\n", channel, keynumber,forceonkey);
-      break;
-    case CONTROL_CHANGE:
-      set_channel(data, &midi);
-      channel_mode_messages_handler(data, midi); //
-      set_addressofcontrol(data, &midi);
-      set_valueofcontroloutput(data, &midi);
-      // printf("CONTROL_CHANGE: \n\tchannel:0x%02X\n\taddress of control:0x%02X\n\tvalue of controloutput:0x%02X\n\n", channel, addressofcontrol, forceonkey);
-    case PROGRAM_CHANGE:
-      set_channel(data, &midi);
-      set_programmeselect(data, &midi);
-      // printf("PROGRAM_CHANGE \n\tchannel:0x%02X\n\taddress of control:0x%02X\n\n", channel,programmeselect);
-      break;
-    case CHANNEL_PRESSURE:
-      set_channel(data, &midi);
-      set_pressurevalue(data, &midi);
-      // printf("PROGRAM_CHANGE: \n\tchannel:0x%02X\n\tpressurevalue:0x%02X\n\n", channel, pressurevalue);
-      break;
-    case PITCH_BEND:
-      set_channel(data, &midi);
-      set_pitchbendlsb(data, &midi);
-      set_pitchbendmsb(data, &midi);
-      uint16_t pitchbend = ((uint16_t)midi.pitchbendmsb << 7) | midi.pitchbendlsb;
-      channel_num = midi.channel;
-      // channel_voice_modulation(channel_num, pitchbend);
-      // printf("PITCH_BEND: \n\tchannel:0x%02X\n\tpitch bend lsb_msk:0x%02X\n\tpitch bend msb_msk:0x%02X\n\n", channel, pitchbendlsb, pitchbendmsb);
-      break;
-    default:
-      index++;
-      break;
+      midi_state = UNKNOWN_STATE;
     }
+    break;
+  case NOTE_ON_EVENT_STATE:
+    if (midi_step == 0)
+    {
+      set_channel(data);
+      midi_step++;
+    }
+    else if (midi_step == 1)
+    {
+      set_keynumber(data);
+      midi_step++;
+    }
+    else if (midi_step == 2)
+    {
+      set_velocity(data);
+      current_midi.frequency = midi_note_get_frequency(current_midi.keynumber);
+      voice_add_freq(current_midi.frequency, voice_channels[current_midi.channel], voice_channel_map[current_midi.channel], current_midi.channel);
+      midi_state = UNKNOWN_STATE;
+    }
+    break;
+  case NOTE_OFF_EVENT_STATE:
+    if (midi_step == 0)
+    {
+      set_channel(data);
+      midi_step++;
+    }
+    else if (midi_step == 1)
+    {
+      set_keynumber(data);
+      midi_step++;
+    }
+    else if (midi_step == 2)
+    {
+      set_velocity(data);
+      current_midi.frequency = midi_note_get_frequency(current_midi.keynumber);
+      voice_remove_freq(current_midi.frequency, voice_channels[current_midi.channel], voice_channel_map[current_midi.channel], current_midi.channel);
+      midi_state = UNKNOWN_STATE;
+    }
+    break;
+  case POLYPHONIC_KEY_PRESSURE_STATE:
+    if (midi_step == 0)
+    {
+      set_channel(data);
+      midi_step++;
+    }
+    else if (midi_step == 1)
+    {
+      set_keynumber(data);
+      midi_step++;
+    }
+    else if (midi_step == 2)
+    {
+      set_forceonkey(data);
+      current_midi.frequency = midi_note_get_frequency(current_midi.keynumber);
+      current_midi.voice = get_voice_num_from_freq(current_midi.frequency, voice_channels[current_midi.channel], voice_channel_map[current_midi.channel], current_midi.channel);
+      channel_voice_velocity(current_midi.channel, current_midi.voice, current_midi.forceonkey);
+      midi_state = UNKNOWN_STATE;
+    }
+    break;
+  case CONTROL_CHANGE_STATE:
+    if (midi_step == 0)
+    {
+      set_channel(data);
+      midi_step++;
+    }
+    else if (midi_step == 1)
+    {
+      channel_mode_messages_handler(data);
+      midi_step++;
+    }
+    else if (midi_step == 3)
+    {
+      set_addressofcontrol(data);
+      midi_step++;
+    }
+    else if (midi_step == 4)
+    {
+      set_valueofcontroloutput(data);
+      midi_state = UNKNOWN_STATE;
+    }
+    break;
+  case PROGRAM_CHANGE_STATE:
+    if (midi_step == 0)
+    {
+      set_channel(data);
+      midi_step++;
+    }
+    else if (midi_step == 1)
+    {
+      set_programmeselect(data);
+      midi_state = UNKNOWN_STATE;
+    }
+    break;
+  case CHANNEL_PRESSURE_STATE:
+    if (midi_step == 0)
+    {
+      set_channel(data);
+      midi_step++;
+    }
+    else if (midi_step == 1)
+    {
+      set_pressurevalue(data);
+      midi_state = UNKNOWN_STATE;
+    }
+    break;
+  case PITCH_BEND_STATE:
+    if (midi_step == 0)
+    {
+      set_channel(data);
+      midi_step++;
+    }
+    else if (midi_step == 1)
+    {
+      set_pitchbendlsb(data);
+      midi_step++;
+    }
+    else if (midi_step == 2)
+    {
+      set_pitchbendmsb(data);
+      // channel_voice_modulation(current_midi.channel, ((uint16_t)current_midi.pitchbendmsb << 7) | current_midi.pitchbendlsb));
+      midi_state = UNKNOWN_STATE;
+    }
+    break;
+  default:
+    midi_state = UNKNOWN_STATE;
+    midi_step = 0;
+    break;
   }
 }
+
+static void update_state()
+{
+  midi_step = 0;
+
+  switch (get_statuscode(midi_receive_tail))
+  {
+  case SYSTEM_MESSAGE:
+    midi_state = SYSTEM_MESSAGE_STATE;
+    break;
+  case NOTE_ON_EVENT:
+    midi_state = NOTE_OFF_EVENT_STATE;
+    break;
+  case NOTE_OFF_EVENT:
+    midi_state = NOTE_OFF_EVENT_STATE;
+    break;
+  case POLYPHONIC_KEY_PRESSURE:
+    midi_state = POLYPHONIC_KEY_PRESSURE_STATE;
+    break;
+  case CONTROL_CHANGE:
+    midi_state = CONTROL_CHANGE_STATE;
+    break;
+  case PROGRAM_CHANGE:
+    midi_state = PROGRAM_CHANGE_STATE;
+    break;
+  case CHANNEL_PRESSURE:
+    midi_state = CHANNEL_PRESSURE_STATE;
+    break;
+  case PITCH_BEND:
+    midi_state = PITCH_BEND_STATE;
+    break;
+  default:
+    midi_state = UNKNOWN_STATE;
+    break;
+  }
+}
+
+void midi_process()
+{
+  while (midi_receive_tail != midi_receive_head)
+  {
+    if (midi_state == UNKNOWN_STATE) // Try and find the current state
+    {
+      update_state();
+    }
+
+    process_state();
+
+    midi_receive_tail++;
+    midi_receive_tail &= MIDI_RECEIVE_BUFFER_MASK;
+  }
+}
+
+// === KEEP IN CASE ===
+// while (data[index] != 0x00)
+// {
+//   switch (get_statuscode(data))
+//   {
+//   case SYSTEM_MESSAGE:
+//     system_message_handler(data);
+//     // TODO
+//     break;
+//   case NOTE_ON_EVENT:
+//     set_channel(data, &midi);
+//     set_keynumber(data, &midi);
+//     set_velocity(data, &midi);
+//     freq = midi_note_get_frequency(midi.keynumber);
+//     channel_num = midi.channel;
+//     voice_add_freq(freq, voice_channels[channel_num], voice_channel_map[channel_num], channel_num); // TODO fix num of voices
+//     // channel1_4_on_off(midi.channel,ON);
+//     // channel1_4_frequency(midi.channel, midi_note_get_frequency(midi.keynumber));
+//     // channel1_4_volume(CHANNEL1,midi.velocity);
+//     // printf("NOTE_ON_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity);
+//     break;
+//   case NOTE_OFF_EVENT:
+//     set_channel(data, &midi);
+//     set_keynumber(data, &midi);
+//     set_velocity(data, &midi);
+//     freq = midi_note_get_frequency(midi.keynumber);
+//     channel_num = midi.channel;
+//     voice_remove_freq(freq, voice_channels[channel_num], voice_channel_map[channel_num], channel_num);
+//     // channel1_4_on_off(midi.channel, OFF);
+//     // channel1_4_frequency(midi.channel, midi_note_get_frequency(midi.keynumber));
+//     // channel1_4_volume(CHANNEL1, midi.velocity);
+//     // printf("NOTE_OFF_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity);
+//     break;
+//   case POLYPHONIC_KEY_PRESSURE:
+//     set_channel(data, &midi);
+//     set_keynumber(data, &midi);
+//     set_forceonkey(data, &midi);
+//     freq = midi_note_get_frequency(midi.keynumber);
+//     channel_num = midi.channel;
+//     uint8_t voice_num = get_voice_num_from_freq(freq, voice_channels[channel_num], voice_channel_map[channel_num], channel_num); // untested function
+//     channel_voice_velocity(channel_num, voice_num, midi.forceonkey);
+//     // printf("POLYPHONIC_KEY_PRESSURE: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tforceonkey:0x%02X\n\n", channel, keynumber,forceonkey);
+//     break;
+//   case CONTROL_CHANGE:
+//     set_channel(data, &midi);
+//     channel_mode_messages_handler(data, midi); //
+//     set_addressofcontrol(data, &midi);
+//     set_valueofcontroloutput(data, &midi);
+//     // printf("CONTROL_CHANGE: \n\tchannel:0x%02X\n\taddress of control:0x%02X\n\tvalue of controloutput:0x%02X\n\n", channel, addressofcontrol, forceonkey);
+//   case PROGRAM_CHANGE:
+//     set_channel(data, &midi);
+//     set_programmeselect(data, &midi);
+//     // printf("PROGRAM_CHANGE \n\tchannel:0x%02X\n\taddress of control:0x%02X\n\n", channel,programmeselect);
+//     break;
+//   case CHANNEL_PRESSURE:
+//     set_channel(data, &midi);
+//     set_pressurevalue(data, &midi);
+//     // printf("PROGRAM_CHANGE: \n\tchannel:0x%02X\n\tpressurevalue:0x%02X\n\n", channel, pressurevalue);
+//     break;
+//   case PITCH_BEND:
+//     set_channel(data, &midi);
+//     set_pitchbendlsb(data, &midi);
+//     set_pitchbendmsb(data, &midi);
+//     uint16_t pitchbend = ((uint16_t)midi.pitchbendmsb << 7) | midi.pitchbendlsb;
+//     channel_num = midi.channel;
+//     // channel_voice_modulation(channel_num, pitchbend);
+//     // printf("PITCH_BEND: \n\tchannel:0x%02X\n\tpitch bend lsb_msk:0x%02X\n\tpitch bend msb_msk:0x%02X\n\n", channel, pitchbendlsb, pitchbendmsb);
+//     break;
+//   default:
+//     index++;
+//     break;
+//   }

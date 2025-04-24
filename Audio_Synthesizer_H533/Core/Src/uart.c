@@ -21,6 +21,8 @@
 #include "rcc.h"
 #include "uart.h"
 
+#include <string.h>
+
 /* Private includes ----------------------------------------------------------*/
 #include <stm32h5xx_hal.h>
 
@@ -31,12 +33,16 @@
 /* ========================================================================== */
 
 // Global definitions for the global_receive_buffer (used in interrupts).
-volatile uint8_t immediate_byte;
 volatile int global_receive_buffer_index = 0;
 volatile char global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
 
-// Flag for data received to idle
-volatile uint8_t midi_idle_flag;
+volatile uint8_t midi_immediate_byte;
+volatile uint16_t midi_receive_head, midi_receive_tail;
+volatile uint8_t midi_receive_buffer[MIDI_RECEIVE_BUFFER_SIZE];
+
+// Flag for data received to idle and processing
+volatile uint8_t midi_data_ready_flag, midi_idle_flag;
+extern volatile uint8_t midi_processor_busy;
 
 // Variables that keep track of if the UART peripherals are configured.
 static int USER_UART_configured = 0;
@@ -66,32 +72,17 @@ void USART1_IRQHandler()
 
 void USART3_IRQHandler()
 {
-    if (MIDI_UART->ISR & USART_ISR_IDLE)
+    if (MIDI_UART->ISR & USART_ISR_RXNE)
     {
-        if (global_receive_buffer_index != 0)
-            midi_idle_flag = 1;
-
-        MIDI_UART->ICR |= USART_ICR_IDLECF;
-    }
-    else
-    {
-        midi_idle_flag = 0;
-
-        immediate_byte = MIDI_UART->RDR;
-        // if (immediate_byte == 0b11111110)
-        //     return;
-
         // Add the received data to the global buffer.
-        global_receive_buffer[global_receive_buffer_index] = immediate_byte;
+        midi_immediate_byte = MIDI_UART->RDR;
 
-        // Increment the buffer index by 1 and check that we haven't overflowed the buffer!
-        global_receive_buffer_index++;
-        if (global_receive_buffer_index > GLOBAL_RECEIVE_BUFFER_SIZE)
+        if (midi_immediate_byte != 0xFE)
         {
-            // Loop indefinitely.  Later, change an LED once that is implemented.
-            while (1)
-            {
-            }
+            midi_receive_buffer[midi_receive_head] = midi_immediate_byte;
+
+            midi_receive_head++;
+            midi_receive_head &= MIDI_RECEIVE_BUFFER_MASK;
         }
     }
 }
@@ -140,7 +131,7 @@ void configure_USER_UART(unsigned int baud_rate, uint8_t enable_interrupts, uint
     if (enable_interrupts == UART_ENABLE_INTERRUPTS)
     {
         NVIC_EnableIRQ(USER_UART_IRQn);
-        NVIC_SetPriority(USER_UART_IRQn, interrupt_priority);
+        // NVIC_SetPriority(USER_UART_IRQn, interrupt_priority);
     }
 
     // Lastly, indicate that this peripheral has been configured

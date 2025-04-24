@@ -21,7 +21,10 @@
 #define UART_ENABLE_INTERRUPTS 1
 
 // Define the size of the global_receive_buffer
-#define GLOBAL_RECEIVE_BUFFER_SIZE 1024
+#define GLOBAL_RECEIVE_BUFFER_SIZE (1024)
+
+#define MIDI_RECEIVE_BUFFER_SIZE (1024 * 8)
+#define MIDI_RECEIVE_BUFFER_MASK (MIDI_RECEIVE_BUFFER_SIZE - 1)
 
 /* ========================================================================== */
 /*                                                                            */
@@ -65,6 +68,8 @@ void send_USER_UART(char *send_buffer);
  */
 void send_MIDI_UART(char *send_buffer);
 
+void poll_midi_uart(uint8_t *buffer);
+
 /* ========================================================================== */
 /*                                                                            */
 /*    Blocking Receiving Functions                                            */
@@ -85,7 +90,7 @@ void receive_USER_UART_blocking(int n_bytes, char *receive_buffer);
  * @param receive_buffer The buffer to store received information in.
  * @retval None.
  */
-void receive_MIDI_UART_blocking(int n_bytes,  char *receive_buffer);
+void receive_MIDI_UART_blocking(int n_bytes, char *receive_buffer);
 
 /* ========================================================================== */
 /*                                                                            */

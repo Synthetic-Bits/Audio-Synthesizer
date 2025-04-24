@@ -43,7 +43,7 @@
 // Define for configuring the UART tests
 #define UART_INTERRUPT_TEST
 
-#define NIDI_UART_SIZE (512)
+#define MIDI_UART_SIZE (1024 * 8)
 #define MIDI_IRQ_PRIORITY (1)
 
 /* Private macro -------------------------------------------------------------*/
@@ -55,11 +55,10 @@ extern volatile int global_receive_buffer_index;
 extern volatile uint8_t global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
 
 // Flag for data received to idle
-extern volatile uint8_t midi_idle_flag;
+extern volatile uint8_t midi_data_ready_flag;
 
 extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state, channel8_state;
 
-static uint8_t buffer[NIDI_UART_SIZE];
 static const uint16_t baud_rate = 31250;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -84,40 +83,6 @@ void stop_audio_synthesis();
 /*        Demonstration Functions                                             */
 /*                                                                            */
 /* ========================================================================== */
-
-void midi_processer(void)
-{
-
-  midi_channle_voice_init();
-
-  while (1)
-  {
-    /* Start counter */
-    if (midi_idle_flag)
-    {
-      // Disable interrupts while we extract data from the buffer
-      NVIC_DisableIRQ(MIDI_UART_IRQn);
-
-      // Extract the data from the buffer
-      // for (int i = 0; i < global_receive_buffer_index; i++)
-      //   buffer[i] = global_receive_buffer[i];
-
-      memcpy(buffer, global_receive_buffer, global_receive_buffer_index);
-
-      // Reset the buffer index, we got the data we need
-      global_receive_buffer_index = 0;
-
-      // Clear the IDLE flag
-      midi_idle_flag = 0;
-
-      /* Counter reset*/
-      set_midi(buffer);
-
-      // Re-enable interrupts as we're done extracting data from the buffer
-      NVIC_EnableIRQ(MIDI_UART_IRQn);
-    }
-  }
-}
 
 /**
  * @brief This function demonstrates the synthesizer's third checkpoint.
@@ -465,10 +430,11 @@ int main(void)
   // Run the third checkpoint
   // audo_demo();
 
-  midi_processer();
+  midi_channle_voice_init();
 
-  // Loop indefinitely to prevent returning from main
+  // Main Processing Loop
   while (1)
   {
-  };
+    midi_process();
+  }
 }
