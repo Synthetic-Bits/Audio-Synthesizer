@@ -22,6 +22,7 @@
 #include "config.h"
 #include "main.h"
 #include "uart.h"
+#include "midi.h"
 #include <stm32h5xx_hal.h>
 
 /* Private includes ----------------------------------------------------------*/
@@ -47,7 +48,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 extern volatile int global_receive_buffer_index;
-extern volatile char global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
+extern volatile uint8_t global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
+extern volatile uint8_t uart_timer_expired;
 extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -70,6 +72,42 @@ void stop_audio_synthesis();
 /*        Demonstration Functions                                             */
 /*                                                                            */
 /* ========================================================================== */
+
+void test_MIDI_UART2(void)
+{
+  #define UART_SIZE 512
+  
+  char buffer[UART_SIZE];
+  unsigned int baud_rate = 31250;
+  uint8_t interrupt_priority = 1;
+
+  configure_MIDI_UART(baud_rate, UART_ENABLE_INTERRUPTS, interrupt_priority);
+  midi_channle_voice_init();
+
+  while (1)
+  {
+    /* Start counter */
+    if (uart_timer_expired)
+    {
+      // Disable interrupts while we extract data from the buffer
+      NVIC_DisableIRQ(MIDI_UART_IRQn);
+
+      // Extract the data from the buffer
+      for (int i = 0; i < global_receive_buffer_index; i++)
+      {
+        buffer[i] = global_receive_buffer[i];
+      }
+      // Reset the buffer index, we got the data we need
+      global_receive_buffer_index = 0;
+
+      // Re-enable interrupts as we're done extracting data from the buffer
+      NVIC_EnableIRQ(MIDI_UART_IRQn);
+
+      /* Counter reset*/
+      set_midi(buffer);
+    }
+  }
+}
 
 /**
  * @brief This function demonstrates the synthesizer's third checkpoint.
@@ -412,7 +450,13 @@ int main(void)
   start_audio_synthesis();
 
   // Run the third checkpoint
-  checkpoint_3();
+  //checkpoint_3();
+
+  // //Run MIDI UART test
+  // test_MIDI_UART();
+  
+    //Run MIDI UART test
+    test_MIDI_UART2();
 
   // Loop indefinitely to prevent returning from main
   while (1)
