@@ -71,14 +71,32 @@ Maybe a flow-diagram of the process would be nice here?
 
 Showcase what needs to be connected on a picture of the PCB?
 
-## Setup Diagrams
+## Board Info
 ### Front Pannel
-![Front Pannel Diagram](./doc_imgs/Synthesizer-Front_pannel.drawio.svg)
-![Front Pannel Img](./doc_imgs/Synthesizer-Front_pannel.jpeg)
+the left most connector is the 8 Ohm speaker connector. the left is negitive out and the right is positive out.
+
+The middle 4 connectors control the positive and negative voltage inputs. the connectors start with GND, -15V, GND, +15V. 
+
+the 2 right most connectors are the MIDI IN and MIDI OUT. the MIDI in is used for sending midi commands to the micro contorler for sysntheses, this can connect to a compatible keyboard or computer. The MIDI OUT is not used currently but with future code can be used to send MIDI data to other devices or pass through the MIDI IN.
+![Front Pannel Diagram](./Documentation/doc_imgs/Synthesizer-Front_pannel.svg)
+![Front Pannel Img](./Documentation/doc_imgs/Synthesizer-Front_pannel.jpeg)
 
 ### Top Down
-![Front Pannel Diagram](./doc_imgs/Synthesizer-top_pannel.svg)
-![Front Pannel Img](./doc_imgs/Synthesizer-top_pannel.png)
+The right-most device is the embedded board. This connects to to synthesizer board. The blue dots are where a jumper is set we use E5V connector to let the board know to use the external power. All other jumpers are standard and come with the board already in place. There is a Reset button to reset the program and a User button that is not used. Furthermore, the programming for this board uses a USB type C connector on the bottom of the STM32 board. If the user wants to use USB power for testing or MIDI-OUT the user can change the jumper to 15V-STLINK.
+
+The top left section contains Channel 1-8 models. This module is a low-pass filter and amplifier buffer. The ON/OFF controls the low-pass filter. There is a Volume nob that uses a POT. If the more expensive POTS are not available cheap POTs can be used. If cheaper pots are used the jumper must be moved down. 
+
+There is a master channel that mixes the above 8 channels and applies an amplifier buffer. There is also a Volume nob using a POT.
+
+Other Pins on this board were not mentioned above. Some of these are not Jumpers but Debug ports such as the pins near the capacitors near the +15V and -15V.
+
+On the bottom right there are 4 pins near the MIDI IN that can also be used to send MIDI data from a computer using UART. These pins are labeled 3V, RX, TX, and GND.
+
+![Front Pannel Diagram](./Documentation/doc_imgs/Synthesizer-top_pannel.svg)
+![Front Pannel Img](./Documentation/doc_imgs/Synthesizer-top_pannel.png)
+
+## Setup instructions
+To set up the synthesizer. First, connect an 8 Ohm speaker to the -OUT and +OUT. Next Connect the GND, -15V, and +15V to a duel rail power supply. Make sure the jumper on the embedded board is connected to E5V to use external power. Make sure the power supply is off and connected correctly before turning it on. Next, connect the MIDI-IN on our board to a MIDI-OUT on a keyboard or computer. If the board has not been flashed or programmed do so now using the STLK-USB to program the board. Depending on if a low pass filter is needed for each Channel to turn on and off, this will be unique for each MIDI file or MIDI datastream as each channel can represent different instruments.
 
 ## Temporary
 
