@@ -6,7 +6,7 @@
 #include "channel_common.h"
 
 void setup_midi(void);
-void set_midi(char data[]);
+void set_midi(uint8_t data[]);
 void midi_channle_voice_init(void);
 
 #endif

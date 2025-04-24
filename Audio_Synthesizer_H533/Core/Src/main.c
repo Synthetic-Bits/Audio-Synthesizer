@@ -43,20 +43,32 @@
 // Define for configuring the UART tests
 #define UART_INTERRUPT_TEST
 
+#define NIDI_UART_SIZE (512)
+#define MIDI_IRQ_PRIORITY (1)
+
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
 
+// MIDI UART Buffers
 extern volatile int global_receive_buffer_index;
 extern volatile uint8_t global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
-extern volatile uint8_t uart_timer_expired;
-extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state;
+
+// Flag for data received to idle
+extern volatile uint8_t midi_idle_flag;
+
+extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state, channel8_state;
+
+static uint8_t buffer[NIDI_UART_SIZE];
+static const uint16_t baud_rate = 31250;
 
 /* Private function prototypes -----------------------------------------------*/
 
-void checkpoint_3(void);
+void audo_demo(void);
 void test_USER_UART();
 void test_MIDI_UART();
+
+void midi_processer();
 
 void sample_timer_handler();
 
@@ -73,21 +85,15 @@ void stop_audio_synthesis();
 /*                                                                            */
 /* ========================================================================== */
 
-void test_MIDI_UART2(void)
+void midi_processer(void)
 {
-  #define UART_SIZE 512
-  
-  char buffer[UART_SIZE];
-  unsigned int baud_rate = 31250;
-  uint8_t interrupt_priority = 1;
 
-  configure_MIDI_UART(baud_rate, UART_ENABLE_INTERRUPTS, interrupt_priority);
   midi_channle_voice_init();
 
   while (1)
   {
     /* Start counter */
-    if (uart_timer_expired)
+    if (midi_idle_flag)
     {
       // Disable interrupts while we extract data from the buffer
       NVIC_DisableIRQ(MIDI_UART_IRQn);
@@ -114,7 +120,7 @@ void test_MIDI_UART2(void)
  * @param None
  * @retval None.
  */
-void checkpoint_3(void)
+void audo_demo(void)
 {
 
   // Test the MIDI_UART peripheral
@@ -170,44 +176,44 @@ void checkpoint_3(void)
   channel_voice_velocity(CHANNEL4, 1, 127);
   channel_voice_velocity(CHANNEL4, 2, 127);
   uint16_t mod = 0;
-  while (1)
-  {
-    mod += 1000;
-    mod &= (0b0011111111111111);
+  // while (1)
+  // {
+  //   mod += 1000;
+  //   mod &= (0b0011111111111111);
 
-    channel_modulation(CHANNEL5, mod);
-    channel_modulation(CHANNEL6, mod);
-    channel_modulation(CHANNEL7, mod);
-    // channel_modulation(CHANNEL4, 0, mod);
+  //   channel_modulation(CHANNEL5, mod);
+  //   channel_modulation(CHANNEL6, mod);
+  //   channel_modulation(CHANNEL7, mod);
+  //   // channel_modulation(CHANNEL4, 0, mod);
 
-    channel_voice_on(CHANNEL4, 0);
-    channel_voice_on(CHANNEL4, 1);
-    channel_voice_on(CHANNEL4, 2);
-    channel_voice_on(CHANNEL2, 0);
-    // channel_voice_on(CHANNEL2, 1);
-    // channel_voice_on(CHANNEL2, 2);
+  //   channel_voice_on(CHANNEL4, 0);
+  //   channel_voice_on(CHANNEL4, 1);
+  //   channel_voice_on(CHANNEL4, 2);
+  //   channel_voice_on(CHANNEL2, 0);
+  //   // channel_voice_on(CHANNEL2, 1);
+  //   // channel_voice_on(CHANNEL2, 2);
 
-    // Using the struct accesses
-    channel5_state.voices[0].frequency = 880;
-    channel6_state.voices[0].frequency = 880;
-    channel7_state.voices[0].frequency = 880;
+  //   // Using the struct accesses
+  //   channel5_state.voices[0].frequency = 880;
+  //   channel6_state.voices[0].frequency = 880;
+  //   channel7_state.voices[0].frequency = 880;
 
-    HAL_Delay(1200);
+  //   HAL_Delay(1200);
 
-    channel_voice_off(CHANNEL4, 0);
-    channel_voice_off(CHANNEL4, 1);
-    channel_voice_off(CHANNEL4, 2);
-    channel_voice_off(CHANNEL2, 0);
-    // channel_voice_off(CHANNEL2, 1);
-    // channel_voice_off(CHANNEL2, 2);
+  //   channel_voice_off(CHANNEL4, 0);
+  //   channel_voice_off(CHANNEL4, 1);
+  //   channel_voice_off(CHANNEL4, 2);
+  //   channel_voice_off(CHANNEL2, 0);
+  //   // channel_voice_off(CHANNEL2, 1);
+  //   // channel_voice_off(CHANNEL2, 2);
 
-    // Using the struct accesses
-    channel5_state.voices[0].frequency = 440;
-    channel6_state.voices[0].frequency = 440;
-    channel7_state.voices[0].frequency = 440;
+  //   // Using the struct accesses
+  //   channel5_state.voices[0].frequency = 440;
+  //   channel6_state.voices[0].frequency = 440;
+  //   channel7_state.voices[0].frequency = 440;
 
-    HAL_Delay(1200);
-  }
+  //   HAL_Delay(1200);
+  // }
 }
 
 /**
@@ -447,16 +453,15 @@ int main(void)
   init_sample_timer();
   init_channel_driver();
 
+  // -== UART MIDI SETUP ==
+  configure_MIDI_UART(baud_rate, UART_ENABLE_INTERRUPTS, MIDI_IRQ_PRIORITY);
+
   start_audio_synthesis();
 
   // Run the third checkpoint
-  //checkpoint_3();
+  audo_demo();
 
-  // //Run MIDI UART test
-  // test_MIDI_UART();
-  
-    //Run MIDI UART test
-    test_MIDI_UART2();
+  midi_processer();
 
   // Loop indefinitely to prevent returning from main
   while (1)
