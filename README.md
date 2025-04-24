@@ -95,8 +95,12 @@ On the bottom right there are 4 pins near the MIDI IN that can also be used to s
 ![Front Pannel Diagram](./Documentation/doc_imgs/Synthesizer-top_pannel.svg)
 ![Front Pannel Img](./Documentation/doc_imgs/Synthesizer-top_pannel.png)
 
-## Setup instructions
-To set up the synthesizer. First, connect an 8 Ohm speaker to the -OUT and +OUT. Next Connect the GND, -15V, and +15V to a duel rail power supply. Make sure the jumper on the embedded board is connected to E5V to use external power. Make sure the power supply is off and connected correctly before turning it on. Next, connect the MIDI-IN on our board to a MIDI-OUT on a keyboard or computer. If the board has not been flashed or programmed do so now using the STLK-USB to program the board. Depending on if a low pass filter is needed for each Channel to turn on and off, this will be unique for each MIDI file or MIDI datastream as each channel can represent different instruments. 
+## Board Schmatic and PCB
+### Schmatic
+![Front Pannel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-schematic.png)
+![Front Pannel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-schematic2.png)
+### PCB
+![Front Pannel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-PCB.png)
 
 ## Temporary
 
