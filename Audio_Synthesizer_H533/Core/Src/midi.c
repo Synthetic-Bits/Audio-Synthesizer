@@ -304,26 +304,23 @@ uint16_t midi_note_get_frequency(uint16_t key_num)
 #define MAX_NUM_VOICES 8
 #define VOICE_MAX_FREQ 0xFFFF
 
-uint16_t voice_channles[8][MAX_NUM_VOICES]; // double array for channle index vs map
-uint8_t voice_channle_map[8] = {1, 1, 1, 1, 1, 1, 1, 1};
+uint16_t voice_channels[8][MAX_NUM_VOICES]; // double array for channel index vs map
+uint8_t voice_channel_map[8] = {1, 1, 1, 1, 1, 1, 1, 1};
 
-void midi_channle_voice_init()
+void midi_channel_voice_init()
 {
   for (int j = 0; j < 8; j++)
-  {
     for (int i = 0; i < MAX_NUM_VOICES; i++)
-    {
-      voice_channles[j][i] = VOICE_MAX_FREQ;
-    }
-  }
-  voice_channle_map[0] = channel1_state.num_voices;
-  voice_channle_map[1] = channel2_state.num_voices;
-  voice_channle_map[2] = channel3_state.num_voices;
-  voice_channle_map[3] = channel4_state.num_voices;
-  voice_channle_map[4] = channel5_state.num_voices;
-  voice_channle_map[5] = channel6_state.num_voices;
-  voice_channle_map[6] = channel7_state.num_voices;
-  voice_channle_map[7] = 1; // channel8_state.num_voices;
+      voice_channels[j][i] = VOICE_MAX_FREQ;
+
+  voice_channel_map[0] = channel1_state.num_voices;
+  voice_channel_map[1] = channel2_state.num_voices;
+  voice_channel_map[2] = channel3_state.num_voices;
+  voice_channel_map[3] = channel4_state.num_voices;
+  voice_channel_map[4] = channel5_state.num_voices;
+  voice_channel_map[5] = channel6_state.num_voices;
+  voice_channel_map[6] = channel7_state.num_voices;
+  voice_channel_map[7] = 1; // channel8_state.num_voices;
 }
 
 static inline uint8_t find_max_freq_voice(uint16_t voices[], uint8_t num_voices)
@@ -344,12 +341,12 @@ static inline uint8_t find_max_freq_voice(uint16_t voices[], uint8_t num_voices)
 static inline void voice_add_freq(uint16_t freq, uint16_t voices[], uint8_t num_voices, channel_t channel)
 {
   uint8_t max_freq_voice = find_max_freq_voice(voices, num_voices); // find max freq index
+
+  // If there are no empty voices, return
   if (voices[max_freq_voice] != VOICE_MAX_FREQ)
-  {
     return;
-    // channel_voice_off(channel, max_freq_voice);
-  }
-  voices[max_freq_voice] = freq;                          // remove the higest freq
+  
+  voices[max_freq_voice] = freq;                          // remove the highest freq
   channel_voice_frequency(channel, max_freq_voice, freq); // set voice freq
   channel_voice_on(channel, max_freq_voice);              // turn on voice
 }
@@ -370,12 +367,8 @@ static inline void voice_remove_freq(uint16_t freq, uint16_t voices[], uint8_t n
 static uint8_t get_voice_num_from_freq(uint16_t freq, uint16_t voices[], uint8_t num_voices, channel_t channel)
 {
   for (uint8_t voice = 0; voice < num_voices; voice++)
-  {
     if (voices[voice] == freq)
-    {
       return voice;
-    }
-  }
 }
 
 // main function------------------------------------------------------------------
@@ -400,10 +393,8 @@ void set_midi(uint8_t data[])
       set_velocity(data, &midi);
       freq = midi_note_get_frequency(midi.keynumber);
       channel_num = midi.channel;
-      voice_add_freq(freq, voice_channles[channel_num], voice_channle_map[channel_num], channel_num); // TODO fix num of voices
-      // channel1_4_on_off(midi.channel,ON);
-      // channel1_4_frequency(midi.channel, midi_note_get_frequency(midi.keynumber));
-      // channel1_4_volume(CHANNEL1,midi.velocity);
+      voice_add_freq(freq, voice_channels[channel_num], voice_channel_map[channel_num], channel_num); // TODO fix num of voices
+
       // printf("NOTE_ON_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity);
       break;
     case NOTE_OFF_EVENT:
@@ -412,10 +403,8 @@ void set_midi(uint8_t data[])
       set_velocity(data, &midi);
       freq = midi_note_get_frequency(midi.keynumber);
       channel_num = midi.channel;
-      voice_remove_freq(freq, voice_channles[channel_num], voice_channle_map[channel_num], channel_num);
-      // channel1_4_on_off(midi.channel, OFF);
-      // channel1_4_frequency(midi.channel, midi_note_get_frequency(midi.keynumber));
-      // channel1_4_volume(CHANNEL1, midi.velocity);
+      voice_remove_freq(freq, voice_channels[channel_num], voice_channel_map[channel_num], channel_num);
+
       // printf("NOTE_OFF_EVENT: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tvelocity:0x%02X\n\n", channel, keynumber, velocity);
       break;
     case POLYPHONIC_KEY_PRESSURE:
@@ -424,8 +413,9 @@ void set_midi(uint8_t data[])
       set_forceonkey(data, &midi);
       freq = midi_note_get_frequency(midi.keynumber);
       channel_num = midi.channel;
-      uint8_t voice_num = get_voice_num_from_freq(freq, voice_channles[channel_num], voice_channle_map[channel_num], channel_num); // untested function
+      uint8_t voice_num = get_voice_num_from_freq(freq, voice_channels[channel_num], voice_channel_map[channel_num], channel_num); // untested function
       channel_voice_velocity(channel_num, voice_num, midi.forceonkey);
+
       // printf("POLYPHONIC_KEY_PRESSURE: \n\tchannel:0x%02X\n\tKey Number:0x%02X\n\tforceonkey:0x%02X\n\n", channel, keynumber,forceonkey);
       break;
     case CONTROL_CHANGE:
@@ -433,23 +423,28 @@ void set_midi(uint8_t data[])
       channel_mode_messages_handler(data, midi); //
       set_addressofcontrol(data, &midi);
       set_valueofcontroloutput(data, &midi);
+
       // printf("CONTROL_CHANGE: \n\tchannel:0x%02X\n\taddress of control:0x%02X\n\tvalue of controloutput:0x%02X\n\n", channel, addressofcontrol, forceonkey);
+      break;
     case PROGRAM_CHANGE:
       set_channel(data, &midi);
       set_programmeselect(data, &midi);
+
       // printf("PROGRAM_CHANGE \n\tchannel:0x%02X\n\taddress of control:0x%02X\n\n", channel,programmeselect);
       break;
     case CHANNEL_PRESSURE:
       set_channel(data, &midi);
       set_pressurevalue(data, &midi);
+      
       // printf("PROGRAM_CHANGE: \n\tchannel:0x%02X\n\tpressurevalue:0x%02X\n\n", channel, pressurevalue);
       break;
     case PITCH_BEND:
       set_channel(data, &midi);
       set_pitchbendlsb(data, &midi);
       set_pitchbendmsb(data, &midi);
-      uint16_t pitchbend = ((uint16_t)midi.pitchbendmsb << 7) | midi.pitchbendlsb;
       channel_num = midi.channel;
+
+      // uint16_t pitchbend = ((uint16_t)midi.pitchbendmsb << 7) | midi.pitchbendlsb;
       // channel_voice_modulation(channel_num, pitchbend);
       // printf("PITCH_BEND: \n\tchannel:0x%02X\n\tpitch bend lsb_msk:0x%02X\n\tpitch bend msb_msk:0x%02X\n\n", channel, pitchbendlsb, pitchbendmsb);
       break;

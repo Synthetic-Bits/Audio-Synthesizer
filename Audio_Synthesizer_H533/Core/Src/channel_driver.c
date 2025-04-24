@@ -269,112 +269,129 @@ void channel_voice_on(channel_t channel, uint8_t voice)
 
   switch (channel)
   {
-  case CHANNEL1:
-    if (channel1_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-    channel1_state.voices[voice].on_off = 1;
-    channel1_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-    channel1_state.voices[voice].mod_count = 0;
-    channel1_state.voices[voice].env_count = 0;
-    channel1_state.voices[voice].env_start = 0;
-    channel1_state.voices[voice].adsr_state = ADSR_ATTACK;
-    channel1_state.active_voices++;
-    break;
-  case CHANNEL2:
-    if (channel2_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-    channel2_state.voices[voice].on_off = 1;
-    channel2_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-    channel2_state.voices[voice].mod_count = 0;
-    channel2_state.voices[voice].env_count = 0;
-    channel2_state.voices[voice].env_start = 0;
-    channel2_state.voices[voice].adsr_state = ADSR_ATTACK;
-    channel2_state.active_voices++;
-    break;
-  case CHANNEL3:
-    if (channel3_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-    channel3_state.voices[voice].on_off = 1;
-    channel3_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-    channel3_state.voices[voice].mod_count = 0;
-    channel3_state.voices[voice].env_count = 0;
-    channel3_state.voices[voice].env_start = 0;
-    channel3_state.voices[voice].adsr_state = ADSR_ATTACK;
-    channel3_state.active_voices++;
-    break;
-  case CHANNEL4:
-    if (channel4_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-    channel4_state.voices[voice].on_off = 1;
-    channel4_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-    channel4_state.voices[voice].mod_count = 0;
-    channel4_state.voices[voice].env_count = 0;
-    channel4_state.voices[voice].env_start = 0;
-    channel4_state.voices[voice].adsr_state = ADSR_ATTACK;
-    channel4_state.active_voices++;
-    break;
-  case CHANNEL5:
-    if (channel5_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-    channel5_state.voices[voice].on_off = 1;
-    channel5_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-    channel5_state.voices[voice].mod_count = 0;
-    channel5_state.voices[voice].env_count = 0;
-    channel5_state.voices[voice].env_start = 0;
-    channel5_state.voices[voice].adsr_state = ADSR_ATTACK;
-    channel5_state.active_voices++;
-    break;
-  case CHANNEL6:
-    if (channel6_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-    channel6_state.voices[voice].on_off = 1;
-    channel6_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-    channel6_state.voices[voice].mod_count = 0;
-    channel6_state.voices[voice].env_count = 0;
-    channel6_state.voices[voice].env_start = 0;
-    channel6_state.voices[voice].adsr_state = ADSR_ATTACK;
-    channel6_state.active_voices++;
-    break;
-  case CHANNEL7:
-    if (channel7_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-    channel7_state.voices[voice].on_off = 1;
-    channel7_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-    channel7_state.voices[voice].mod_count = 0;
-    channel7_state.voices[voice].env_count = 0;
-    channel7_state.voices[voice].env_start = 0;
-    channel7_state.voices[voice].adsr_state = ADSR_ATTACK;
-    channel7_state.active_voices++;
-    break;
-  case CHANNEL8:
-    if (channel8_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-    channel8_state.voices[voice].on_off = 1;
-    channel8_state.voices[voice].count = 0; // Reset the counter when starting a new tone
-    channel8_state.voices[voice].mod_count = 0;
-    channel8_state.voices[voice].env_count = 0;
-    channel8_state.voices[voice].env_start = 0;
-    channel8_state.voices[voice].adsr_state = ADSR_ATTACK;
-    channel8_state.active_voices++;
-    break;
-  default:
-    return;
+    case CHANNEL1:
+      if (channel1_state.voices[voice].velocity == 0)
+      {
+        channel_voice_off(channel, voice);
+      }
+
+      channel1_state.voices[voice].on_off = 1;
+      channel1_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+      channel1_state.voices[voice].mod_count = 0;
+      channel1_state.voices[voice].env_count = 0;
+      channel1_state.voices[voice].env_start = 0;
+
+      // Only increment the active voice count if we aren't decaying
+      if (channel1_state.voices[voice].adsr_state == ADSR_RELEASE)
+      {
+        channel1_state.voices[voice].adsr_state = ADSR_ATTACK;
+      }
+      else
+      {
+        channel1_state.voices[voice].adsr_state = ADSR_ATTACK;
+        channel1_state.active_voices++;
+      }
+      break;
+    case CHANNEL2:
+      if (channel2_state.voices[voice].velocity == 0)
+      {
+        channel_voice_off(channel, voice);
+      }
+
+      channel2_state.voices[voice].on_off = 1;
+      channel2_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+      channel2_state.voices[voice].mod_count = 0;
+      channel2_state.voices[voice].env_count = 0;
+      channel2_state.voices[voice].env_start = 0;
+      channel2_state.voices[voice].adsr_state = ADSR_ATTACK;
+      channel2_state.active_voices++;
+      break;
+    case CHANNEL3:
+      if (channel3_state.voices[voice].velocity == 0)
+      {
+        channel_voice_off(channel, voice);
+      }
+
+      channel3_state.voices[voice].on_off = 1;
+      channel3_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+      channel3_state.voices[voice].mod_count = 0;
+      channel3_state.voices[voice].env_count = 0;
+      channel3_state.voices[voice].env_start = 0;
+      channel3_state.voices[voice].adsr_state = ADSR_ATTACK;
+      channel3_state.active_voices++;
+      break;
+    case CHANNEL4:
+      if (channel4_state.voices[voice].velocity == 0)
+      {
+        channel_voice_off(channel, voice);
+      }
+
+      channel4_state.voices[voice].on_off = 1;
+      channel4_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+      channel4_state.voices[voice].mod_count = 0;
+      channel4_state.voices[voice].env_count = 0;
+      channel4_state.voices[voice].env_start = 0;
+      channel4_state.voices[voice].adsr_state = ADSR_ATTACK;
+      channel4_state.active_voices++;
+      break;
+    case CHANNEL5:
+      if (channel5_state.voices[voice].velocity == 0)
+      {
+        channel_voice_off(channel, voice);
+      }
+
+      channel5_state.voices[voice].on_off = 1;
+      channel5_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+      channel5_state.voices[voice].mod_count = 0;
+      channel5_state.voices[voice].env_count = 0;
+      channel5_state.voices[voice].env_start = 0;
+      channel5_state.voices[voice].adsr_state = ADSR_ATTACK;
+      channel5_state.active_voices++;
+      break;
+    case CHANNEL6:
+      if (channel6_state.voices[voice].velocity == 0)
+      {
+        channel_voice_off(channel, voice);
+      }
+
+      channel6_state.voices[voice].on_off = 1;
+      channel6_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+      channel6_state.voices[voice].mod_count = 0;
+      channel6_state.voices[voice].env_count = 0;
+      channel6_state.voices[voice].env_start = 0;
+      channel6_state.voices[voice].adsr_state = ADSR_ATTACK;
+      channel6_state.active_voices++;
+      break;
+    case CHANNEL7:
+      if (channel7_state.voices[voice].velocity == 0)
+      {
+        channel_voice_off(channel, voice);
+      }
+
+      channel7_state.voices[voice].on_off = 1;
+      channel7_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+      channel7_state.voices[voice].mod_count = 0;
+      channel7_state.voices[voice].env_count = 0;
+      channel7_state.voices[voice].env_start = 0;
+      channel7_state.voices[voice].adsr_state = ADSR_ATTACK;
+      channel7_state.active_voices++;
+      break;
+    case CHANNEL8:
+      if (channel8_state.voices[voice].velocity == 0)
+      {
+        channel_voice_off(channel, voice);
+      }
+
+      channel8_state.voices[voice].on_off = 1;
+      channel8_state.voices[voice].count = 0; // Reset the counter when starting a new tone
+      channel8_state.voices[voice].mod_count = 0;
+      channel8_state.voices[voice].env_count = 0;
+      channel8_state.voices[voice].env_start = 0;
+      channel8_state.voices[voice].adsr_state = ADSR_ATTACK;
+      channel8_state.active_voices++;
+      break;
+    default:
+      return;
   }
 }
 
@@ -388,42 +405,34 @@ void channel_voice_off(channel_t channel, uint8_t voice)
   case CHANNEL1:
     channel1_state.voices[voice].on_off = 0;
     channel1_state.voices[voice].adsr_state = ADSR_RELEASE;
-    // channel1_state.active_voices--;
     break;
   case CHANNEL2:
     channel2_state.voices[voice].on_off = 0;
     channel2_state.voices[voice].adsr_state = ADSR_RELEASE;
-    // channel2_state.active_voices--;
     break;
   case CHANNEL3:
     channel3_state.voices[voice].on_off = 0;
     channel3_state.voices[voice].adsr_state = ADSR_RELEASE;
-    // channel3_state.active_voices--;
     break;
   case CHANNEL4:
     channel4_state.voices[voice].on_off = 0;
     channel4_state.voices[voice].adsr_state = ADSR_RELEASE;
-    // channel4_state.active_voices--;
     break;
   case CHANNEL5:
     channel5_state.voices[voice].on_off = 0;
     channel5_state.voices[voice].adsr_state = ADSR_RELEASE;
-    // channel5_state.active_voices--;
     break;
   case CHANNEL6:
     channel6_state.voices[voice].on_off = 0;
     channel6_state.voices[voice].adsr_state = ADSR_RELEASE;
-    // channel6_state.active_voices--;
     break;
   case CHANNEL7:
     channel7_state.voices[voice].on_off = 0;
     channel7_state.voices[voice].adsr_state = ADSR_RELEASE;
-    // channel7_state.active_voices--;
     break;
   case CHANNEL8:
     channel8_state.voices[voice].on_off = 0;
     channel8_state.voices[voice].adsr_state = ADSR_RELEASE;
-    // channel8_state.active_voices--;
     break;
   default:
     return;
@@ -638,7 +647,8 @@ static inline uint32_t calculate_voice_timer_output(volatile channel_state_t *ch
     envelope = ADSR_MID;
     break;
   case ADSR_RELEASE:
-    cur_voice->env_count++; // Increment the current envelope counter
+    // Increment the current envelope counter
+    cur_voice->env_count++;
 
     // Calculate the envelope (and scale: 10 bits + 10 bits - 10 bits)
     envelope = ((cur_voice->env_start) * decay_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF] >> 10);

@@ -88,7 +88,7 @@ void stop_audio_synthesis();
 void midi_processer(void)
 {
 
-  midi_channle_voice_init();
+  midi_channel_voice_init();
 
   while (1)
   {
@@ -99,10 +99,8 @@ void midi_processer(void)
       NVIC_DisableIRQ(MIDI_UART_IRQn);
 
       // Extract the data from the buffer
-      // for (int i = 0; i < global_receive_buffer_index; i++)
-      //   buffer[i] = global_receive_buffer[i];
-
-      memcpy(buffer, global_receive_buffer, global_receive_buffer_index);
+      for (int i = 0; i < global_receive_buffer_index; i++)
+        buffer[i] = global_receive_buffer[i];
 
       // Reset the buffer index, we got the data we need
       global_receive_buffer_index = 0;
