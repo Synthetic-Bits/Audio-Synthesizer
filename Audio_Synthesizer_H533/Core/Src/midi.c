@@ -193,13 +193,10 @@ void set_channel(uint8_t data[], MIDI *midi)
   uint8_t midi_channel = (data[index] & CHANNEL_msk);
 
   if (midi_channel > 8)
-  {
-    midi->channel = CHANNEL1; // default channel if channel is out of range
-  }
+    midi->channel = CHANNEL8; // default channel if channel is out of range
   else
-  {
     midi->channel = midi_channel;
-  }
+
   index++;
 }
 void set_keynumber(uint8_t data[], MIDI *midi)

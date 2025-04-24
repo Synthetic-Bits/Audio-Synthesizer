@@ -271,9 +271,7 @@ void channel_voice_on(channel_t channel, uint8_t voice)
   {
     case CHANNEL1:
       if (channel1_state.voices[voice].velocity == 0)
-      {
         channel_voice_off(channel, voice);
-      }
 
       channel1_state.voices[voice].on_off = 1;
       channel1_state.voices[voice].count = 0; // Reset the counter when starting a new tone

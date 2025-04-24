@@ -35,47 +35,48 @@
 
 /* Private define ------------------------------------------------------------*/
 
-// Checkpoint 3 Defines (only use 1!)
-// #define DEMO_100Hz_SWEEP
-// #define DEMO_C_MAJOR
-// #define DEMO_C_MAJOR_CHORDS
-
 // Define for configuring the UART tests
 #define UART_INTERRUPT_TEST
 
-#define NIDI_UART_SIZE (512)
+// Defines for configuring MIDI_UART
+#define MIDI_UART_SIZE (512)
 #define MIDI_IRQ_PRIORITY (1)
 
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
 
-// MIDI UART Buffers
+// UART Global Buffers
 extern volatile int global_receive_buffer_index;
 extern volatile uint8_t global_receive_buffer[GLOBAL_RECEIVE_BUFFER_SIZE];
 
 // Flag for data received to idle
 extern volatile uint8_t midi_idle_flag;
 
+// What are these
 extern volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state, channel8_state;
 
-static uint8_t buffer[NIDI_UART_SIZE];
+// MIDI UART Buffer + Configuration
+static uint8_t buffer[MIDI_UART_SIZE];
 static const uint16_t baud_rate = 31250;
 
 /* Private function prototypes -----------------------------------------------*/
 
-void audo_demo(void);
-void test_USER_UART();
-void test_MIDI_UART();
+// Testing functions for UART
+void test_USER_UART(void);
+void test_MIDI_UART(void);
 
-void midi_processer();
+// Initialization functions
+void init_sample_timer(void);
+void init_channel_driver(void);
 
-void sample_timer_handler();
+// Handler for when samples need to be updated
+void sample_timer_handler(void);
 
-void init_sample_timer();
-void init_channel_driver();
-void start_audio_synthesis();
-void stop_audio_synthesis();
+// Synthesis functions
+void midi_processer(void);
+void start_audio_synthesis(void);
+void stop_audio_synthesis(void);
 
 /* Private user code ---------------------------------------------------------*/
 
@@ -87,13 +88,12 @@ void stop_audio_synthesis();
 
 void midi_processer(void)
 {
-
+  // Initialize the voice channels on the MIDI side of things
   midi_channel_voice_init();
 
   while (1)
   {
-    /* Start counter */
-    if (midi_idle_flag)
+    if (midi_idle_flag) // Only proceed once we have an idle UART line
     {
       // Disable interrupts while we extract data from the buffer
       NVIC_DisableIRQ(MIDI_UART_IRQn);
@@ -108,114 +108,13 @@ void midi_processer(void)
       // Clear the IDLE flag
       midi_idle_flag = 0;
 
-      /* Counter reset*/
+      // Set the output of the synthesizer depending on the MIDI data received
       set_midi(buffer);
 
       // Re-enable interrupts as we're done extracting data from the buffer
       NVIC_EnableIRQ(MIDI_UART_IRQn);
     }
   }
-}
-
-/**
- * @brief This function demonstrates the synthesizer's third checkpoint.
- * @param None
- * @retval None.
- */
-void audo_demo(void)
-{
-
-  // Test the MIDI_UART peripheral
-  // test_MIDI_UART();
-
-  channel_voice_on(CHANNEL8, 0); // Turn on the noise channel
-
-  // channel_voice_frequency(CHANNEL1, 0, 30);
-  // channel_voice_frequency(CHANNEL1, 1, 330);
-  // channel_voice_frequency(CHANNEL1, 2, 392);
-  channel_voice_on(CHANNEL1, 0);
-  // channel_voice_on(CHANNEL1, 1);
-  // channel_voice_on(CHANNEL1, 2);
-  // // channel_modulation(CHANNEL1, 0, 8196);
-
-  // channel_voice_frequency(CHANNEL2, 0, 262);
-  // channel_voice_frequency(CHANNEL2, 1, 330);
-  // channel_voice_frequency(CHANNEL2, 2, 392);
-  // // channel_voice_frequency(CHANNEL2, 0, 120);
-  // // channel_voice_frequency(CHANNEL2, 1, 240);
-  // // channel_voice_frequency(CHANNEL2, 2, 360);
-  // // channel_voice_on(CHANNEL2, 0);
-  // // channel_voice_on(CHANNEL2, 1);
-  // // channel_voice_on(CHANNEL2, 2);
-  // // channel_modulation(CHANNEL2, 0, 8196);
-
-  // channel_voice_frequency(CHANNEL3, 0, 262);
-  // channel_voice_frequency(CHANNEL3, 1, 330);
-  // channel_voice_frequency(CHANNEL3, 2, 392);
-  // channel_voice_on(CHANNEL3, 0);
-  // channel_voice_on(CHANNEL3, 1);
-  // channel_voice_on(CHANNEL3, 2);
-  // // channel_modulation(CHANNEL3, 0, 8196);
-
-  // channel_voice_frequency(CHANNEL4, 0, 192);
-  // channel_voice_frequency(CHANNEL4, 1, 124);
-  // channel_voice_frequency(CHANNEL4, 2, 246);
-  // // channel_voice_on(CHANNEL4, 0);
-  // // channel_voice_on(CHANNEL4, 1);
-  // // channel_voice_on(CHANNEL4, 2);
-  // // channel_modulation(CHANNEL4, 0, 8196);
-
-  // channel_voice_frequency(CHANNEL5, 0, 262);
-  // channel_voice_on(CHANNEL5, 0);
-
-  // channel_voice_frequency(CHANNEL6, 0, 330);
-  // channel_voice_on(CHANNEL6, 0);
-
-  // channel_voice_frequency(CHANNEL7, 0, 392);
-  // channel_voice_on(CHANNEL7, 0);
-
-  // channel_voice_velocity(CHANNEL4, 0, 127);
-  // channel_voice_velocity(CHANNEL4, 1, 127);
-  // channel_voice_velocity(CHANNEL4, 2, 127);
-  // uint16_t mod = 0;
-  // while (1)
-  // {
-  //   mod += 1000;
-  //   mod &= (0b0011111111111111);
-
-  //   channel_modulation(CHANNEL5, mod);
-  //   channel_modulation(CHANNEL6, mod);
-  //   channel_modulation(CHANNEL7, mod);
-  //   // channel_modulation(CHANNEL4, 0, mod);
-
-  //   channel_voice_on(CHANNEL4, 0);
-  //   channel_voice_on(CHANNEL4, 1);
-  //   channel_voice_on(CHANNEL4, 2);
-  //   channel_voice_on(CHANNEL2, 0);
-  //   // channel_voice_on(CHANNEL2, 1);
-  //   // channel_voice_on(CHANNEL2, 2);
-
-  //   // Using the struct accesses
-  //   channel5_state.voices[0].frequency = 880;
-  //   channel6_state.voices[0].frequency = 880;
-  //   channel7_state.voices[0].frequency = 880;
-
-  //   HAL_Delay(1200);
-
-  //   channel_voice_off(CHANNEL4, 0);
-  //   channel_voice_off(CHANNEL4, 1);
-  //   channel_voice_off(CHANNEL4, 2);
-  //   channel_voice_off(CHANNEL2, 0);
-  //   // channel_voice_off(CHANNEL2, 1);
-  //   // channel_voice_off(CHANNEL2, 2);
-
-  //   // Using the struct accesses
-  //   channel5_state.voices[0].frequency = 440;
-  //   channel6_state.voices[0].frequency = 440;
-  //   channel7_state.voices[0].frequency = 440;
-
-  //   HAL_Delay(1200);
-  // }
 }
 
 /**
@@ -372,7 +271,7 @@ void init_sample_timer()
  */
 void init_channel_driver()
 {
-  // Channels 1 - 7
+  // Channels 1-7
   channel_timer_init();
 
   // Channel 1 Settings
@@ -439,6 +338,7 @@ void stop_audio_synthesis()
 /*        Main Loop                                                           */
 /*                                                                            */
 /* ========================================================================== */
+
 /**
  * @brief  The application entry point.
  * @retval int
