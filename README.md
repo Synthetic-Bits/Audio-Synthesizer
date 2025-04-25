@@ -57,6 +57,14 @@ Configurable Voice Channels
 - Channels 1-7 capable of 8 voices
 - Channels 8 capable of 1 voice
 
+## System Block Diagram
+
+### Software Block Diagram
+![Software Block Diagram](./Documentation/doc_imgs/SynthesizerBlockDiagramSW.png)
+
+### Hardware Block Diagram
+![Hardware Block Diagram](./Documentation/doc_imgs/SynthesizerBlockDiagramHW.png)
+
 ## Setup Guide
 
 1. Put the STM32H533RE (NUCLEO) board (white) on the synthesizer PCB (black) as seen in the below diagrams.
@@ -84,7 +92,7 @@ The middle four connectors on the board control the positive and negative voltag
 
 The rightmost two connectors are the MIDI IN and MIDI OUT connectors. The MIDI IN is used for sending midi commands to the microcontroller for synthesis. The MIDI IN line can connect to a compatible keyboard or computer for sound synthesis. The MIDI OUT is current not used but was included as future code can be written to send MIDI data to other devices from the synthesizer.
 
-![Front Panel Diagram](./Documentation/doc_imgs/Synthesizer-Front_panel.svg)
+![Front Panel Diagram](./Documentation/doc_imgs/Synthesizer-Front_panel.png)
 
 ![Front Panel Image](./Documentation/doc_imgs/Synthesizer-Front_panel.jpeg)
 
