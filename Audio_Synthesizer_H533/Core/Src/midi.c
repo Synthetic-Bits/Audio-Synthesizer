@@ -137,7 +137,7 @@ static inline void set_channel(uint8_t data)
   uint8_t midi_channel = (data & CHANNEL_msk);
 
   if (midi_channel > 8)
-    current_midi.channel = CHANNEL1; // default channel if channel is out of range
+    current_midi.channel = CHANNEL8; // default channel if channel is out of range
   else
     current_midi.channel = midi_channel;
 }
@@ -243,10 +243,10 @@ uint16_t midi_note_get_frequency(uint16_t key_num)
 #define MAX_NUM_VOICES 8
 #define VOICE_MAX_FREQ 0xFFFF
 
-uint16_t voice_channels[8][MAX_NUM_VOICES]; // double array for channle index vs map
+uint16_t voice_channels[8][MAX_NUM_VOICES]; // double array for channel index vs map
 uint8_t voice_channel_map[8] = {1, 1, 1, 1, 1, 1, 1, 1};
 
-void midi_channle_voice_init()
+void midi_channel_voice_init()
 {
   for (int j = 0; j < 8; j++)
   {
@@ -255,6 +255,7 @@ void midi_channle_voice_init()
       voice_channels[j][i] = VOICE_MAX_FREQ;
     }
   }
+
   voice_channel_map[0] = channel1_state.num_voices;
   voice_channel_map[1] = channel2_state.num_voices;
   voice_channel_map[2] = channel3_state.num_voices;
@@ -283,12 +284,12 @@ static inline uint8_t find_max_freq_voice(uint16_t voices[], uint8_t num_voices)
 static inline void voice_add_freq(uint16_t freq, uint16_t voices[], uint8_t num_voices, channel_t channel)
 {
   uint8_t max_freq_voice = find_max_freq_voice(voices, num_voices); // find max freq index
+
+  // If there are no empty voices, return
   if (voices[max_freq_voice] != VOICE_MAX_FREQ)
-  {
     return;
-    // channel_voice_off(channel, max_freq_voice);
-  }
-  voices[max_freq_voice] = freq;                          // remove the higest freq
+
+  voices[max_freq_voice] = freq;                          // remove the highest freq
   channel_voice_frequency(channel, max_freq_voice, freq); // set voice freq
   channel_voice_on(channel, max_freq_voice);              // turn on voice
 }
@@ -309,12 +310,8 @@ static inline void voice_remove_freq(uint16_t freq, uint16_t voices[], uint8_t n
 static uint8_t get_voice_num_from_freq(uint16_t freq, uint16_t voices[], uint8_t num_voices, channel_t channel)
 {
   for (uint8_t voice = 0; voice < num_voices; voice++)
-  {
     if (voices[voice] == freq)
-    {
       return voice;
-    }
-  }
 
   return 0xFF;
 }
