@@ -74,8 +74,9 @@ void channel_timer_init();
 #define CHANNEL_TIMER_PSC (1 - 1)
 #define CHANNEL_TIMER_ARR ((0x1 << 10) - 1) // ~240 kHz (244 kHz)
 
-#define CHANNEL_SAMPLING_VS_RESOLUTION_DIFF (6) // 65536 -> 1024 (RSH 6)
+#define CHANNEL_SAMPLING_VS_RESOLUTION_DIFF (5) // 65536 -> 1024 (RSH 6)
 #define CHANNEL_SAMPLING_VS_ENVELOPE_DIFF (4)   // 65536 -> 4096 (RSH 4)
+#define CHANNEL_SAMPLING_VS_MODULATION_DIFF (3)
 
 volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state, channel8_state;
 
@@ -703,7 +704,7 @@ static inline uint32_t calculate_voice_timer_output(volatile channel_state_t *ch
     cur_voice->mod_count &= SAMPLE_MODULATION_MASK;
 
     // Add the modulation (calculate the +2 semitone and scale - scaled by: 9 bits + 10 bits + 10 bits - 9 bits - 10 bits)
-    frequency_delta += ((cur_voice->frequency) * (((modulation_base[cur_voice->mod_count >> 4] - 256) * (TWO_SEMITONE_SCALAR >> 5)) >> (9))) >> 10;
+    frequency_delta += ((cur_voice->frequency) * (((modulation_base[cur_voice->mod_count >> CHANNEL_SAMPLING_VS_MODULATION_DIFF] - 256) * (TWO_SEMITONE_SCALAR >> 5)) >> (9))) >> 10;
   }
 
   // Advance the lookup counter (and mask (faster modulo))
@@ -740,7 +741,8 @@ static inline void channel_update(volatile channel_state_t *channel)
     }
 
     // Scale all the channels down
-    uint32_t ccr = output / channel->active_voices;
+    uint8_t scalar = (12 - channel->num_voices) + channel->active_voices;
+    uint32_t ccr = (output * scalar / (12 * channel->active_voices));
     // uint16_t ccr = channel->waveform_data[channel->voices[0].count >> 6];
 
     // Update the resultant value in the CCR (modulate timer PWM)

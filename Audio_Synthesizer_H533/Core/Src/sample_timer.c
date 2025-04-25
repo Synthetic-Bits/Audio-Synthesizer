@@ -47,7 +47,7 @@ void sample_timer_init();
 /*                                                                            */
 /* ========================================================================== */
 
-#define SAMPLE_TIMER_PSC (0)
+#define SAMPLE_TIMER_PSC (1)
 #define SAMPLE_TIMER_ARR (3813) // 65536 kHz
 
 static sample_timer_cb_t event_cb = __sample_timer_handler;
