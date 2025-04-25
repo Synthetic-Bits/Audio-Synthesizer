@@ -17,8 +17,10 @@ from mido import MidiFile, bpm2tempo
 from mido.ports import BaseOutput
 
 # Global variables
-SONG_PATH = "./songs/bones.mid"
-UART_PORT = "COM12"
+SONG_PATH = "./songs/fields.mid"
+UART_PORT = "COM5"
+CONSOLE_LOGGING = False
+CHANGE_BPM = False
 BPM = 120
 
 class UARTPort(BaseOutput):
@@ -106,23 +108,29 @@ def main():
     mid = MidiFile(filename=SONG_PATH, clip=True)
 
     # Re-write the tempo
-    for track in mid.tracks:
-        for msg in track:
-            if msg.type == 'set_tempo':
-                msg.tempo = bpm2tempo(BPM)  # New BPM
-                break  # Exit after first tempo found
+    if (CHANGE_BPM):
+        for track in mid.tracks:
+            for msg in track:
+                if msg.type == 'set_tempo':
+                    msg.tempo = bpm2tempo(BPM)  # New BPM
+                    break  # Exit after first tempo found
     
     time.sleep(1)
     print("Starting MIDI!")
 
-    log = io.StringIO() # Prevent Printing
-    with redirect_stdout(log):
-        sent_messages = 0
+    sent_messages = 0
+    if (CONSOLE_LOGGING):
         for msg in mid.play():
             sent_messages += 1
             port.send(msg)
-        port.lose()
-
+    else:
+        log = io.StringIO() # Prevent Printing
+        with redirect_stdout(log):
+            for msg in mid.play():
+                sent_messages += 1
+                port.send(msg)
+    
+    port.close()
     print(f"We sent a total of {sent_messages} messages!")
 
 if __name__ == "__main__":
