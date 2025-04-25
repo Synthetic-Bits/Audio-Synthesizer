@@ -9,12 +9,15 @@
 
 # Python imports
 import serial
+import time
+import io
+from contextlib import redirect_stdout
 
 from mido import MidiFile, bpm2tempo
 from mido.ports import BaseOutput
 
 # Global variables
-SONG_PATH = "./songs/fields.mid"
+SONG_PATH = "./songs/bones.mid"
 UART_PORT = "COM12"
 BPM = 120
 
@@ -108,12 +111,17 @@ def main():
             if msg.type == 'set_tempo':
                 msg.tempo = bpm2tempo(BPM)  # New BPM
                 break  # Exit after first tempo found
+    
+    time.sleep(1)
+    print("Starting MIDI!")
 
-    sent_messages = 0
-    for msg in mid.play():
-        sent_messages += 1
-        port.send(msg)
-    port.close()
+    log = io.StringIO() # Prevent Printing
+    with redirect_stdout(log):
+        sent_messages = 0
+        for msg in mid.play():
+            sent_messages += 1
+            port.send(msg)
+        port.lose()
 
     print(f"We sent a total of {sent_messages} messages!")
 

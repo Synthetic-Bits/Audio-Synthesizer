@@ -74,9 +74,32 @@ void channel_timer_init();
 #define CHANNEL_TIMER_PSC (1 - 1)
 #define CHANNEL_TIMER_ARR ((0x1 << 10) - 1) // ~240 kHz (244 kHz)
 
-#define CHANNEL_SAMPLING_VS_RESOLUTION_DIFF (5) // 65536 -> 1024 (RSH 6)
-#define CHANNEL_SAMPLING_VS_ENVELOPE_DIFF (4)   // 65536 -> 4096 (RSH 4)
-#define CHANNEL_SAMPLING_VS_MODULATION_DIFF (3)
+#define CHANNEL_SAMPLING_VS_ENVELOPE_DIFF (4) // 65536 -> 4096 (RSH 4)
+#define CHANNEL_SAMPLING_VS_MODULATION_DIFF (4)
+
+// Define if need less channels for debugging
+// #define DEBUG_CHANNELS
+
+// Channel Configuration
+#ifdef DEBUG_CHANNELS
+#define CHANNEL1_VOICES 4
+#define CHANNEL2_VOICES 4
+#define CHANNEL3_VOICES 4
+#define CHANNEL4_VOICES 4
+#define CHANNEL5_VOICES 1
+#define CHANNEL6_VOICES 1
+#define CHANNEL7_VOICES 1
+#define CHANNEL8_VOICES 1
+#else
+#define CHANNEL1_VOICES 8
+#define CHANNEL2_VOICES 8
+#define CHANNEL3_VOICES 8
+#define CHANNEL4_VOICES 8
+#define CHANNEL5_VOICES 8
+#define CHANNEL6_VOICES 8
+#define CHANNEL7_VOICES 8
+#define CHANNEL8_VOICES 1
+#endif
 
 volatile channel_state_t channel1_state, channel2_state, channel3_state, channel4_state, channel5_state, channel6_state, channel7_state, channel8_state;
 
@@ -276,6 +299,7 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel1_state.voices[voice].mod_count = 0;
     channel1_state.voices[voice].env_count = 0;
     channel1_state.voices[voice].env_start = 0;
+    channel1_state.voices[voice].env_target = ((ADSR_RANGE * 1016 * (channel1_state.voices[voice].velocity)) >> 17) + ADSR_MIN; // Calculate the target endpoint
 
     // Only increment the active voice count if we aren't decaying
     if (channel1_state.voices[voice].adsr_state == ADSR_RELEASE)
@@ -294,6 +318,7 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel2_state.voices[voice].mod_count = 0;
     channel2_state.voices[voice].env_count = 0;
     channel2_state.voices[voice].env_start = 0;
+    channel2_state.voices[voice].env_target = ((ADSR_RANGE * 1016 * (channel2_state.voices[voice].velocity)) >> 17) + ADSR_MIN; // Calculate the target endpoint
 
     // Only increment the active voice count if we aren't decaying
     if (channel2_state.voices[voice].adsr_state == ADSR_RELEASE)
@@ -312,6 +337,7 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel3_state.voices[voice].mod_count = 0;
     channel3_state.voices[voice].env_count = 0;
     channel3_state.voices[voice].env_start = 0;
+    channel3_state.voices[voice].env_target = ((ADSR_RANGE * 1016 * (channel3_state.voices[voice].velocity)) >> 17) + ADSR_MIN; // Calculate the target endpoint
 
     // Only increment the active voice count if we aren't decaying
     if (channel3_state.voices[voice].adsr_state == ADSR_RELEASE)
@@ -330,6 +356,7 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel4_state.voices[voice].mod_count = 0;
     channel4_state.voices[voice].env_count = 0;
     channel4_state.voices[voice].env_start = 0;
+    channel4_state.voices[voice].env_target = ((ADSR_RANGE * 1016 * (channel4_state.voices[voice].velocity)) >> 17) + ADSR_MIN; // Calculate the target endpoint
 
     // Only increment the active voice count if we aren't decaying
     if (channel4_state.voices[voice].adsr_state == ADSR_RELEASE)
@@ -348,6 +375,7 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel5_state.voices[voice].mod_count = 0;
     channel5_state.voices[voice].env_count = 0;
     channel5_state.voices[voice].env_start = 0;
+    channel5_state.voices[voice].env_target = ((ADSR_RANGE * 1016 * (channel5_state.voices[voice].velocity)) >> 17) + ADSR_MIN; // Calculate the target endpoint
 
     // Only increment the active voice count if we aren't decaying
     if (channel5_state.voices[voice].adsr_state == ADSR_RELEASE)
@@ -366,6 +394,7 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel6_state.voices[voice].mod_count = 0;
     channel6_state.voices[voice].env_count = 0;
     channel6_state.voices[voice].env_start = 0;
+    channel6_state.voices[voice].env_target = ((ADSR_RANGE * 1016 * (channel6_state.voices[voice].velocity)) >> 17) + ADSR_MIN; // Calculate the target endpoint
 
     // Only increment the active voice count if we aren't decaying
     if (channel6_state.voices[voice].adsr_state == ADSR_RELEASE)
@@ -384,6 +413,7 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel7_state.voices[voice].mod_count = 0;
     channel7_state.voices[voice].env_count = 0;
     channel7_state.voices[voice].env_start = 0;
+    channel7_state.voices[voice].env_target = ((ADSR_RANGE * 1016 * (channel7_state.voices[voice].velocity)) >> 17) + ADSR_MIN; // Calculate the target endpoint
 
     // Only increment the active voice count if we aren't decaying
     if (channel7_state.voices[voice].adsr_state == ADSR_RELEASE)
@@ -402,6 +432,7 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     channel8_state.voices[voice].mod_count = 0;
     channel8_state.voices[voice].env_count = 0;
     channel8_state.voices[voice].env_start = 0;
+    channel8_state.voices[voice].env_target = ((ADSR_RANGE * 1016 * (channel8_state.voices[voice].velocity)) >> 17) + ADSR_MIN; // Calculate the target endpoint
 
     // Only increment the active voice count if we aren't decaying
     if (channel8_state.voices[voice].adsr_state == ADSR_RELEASE)
@@ -635,11 +666,11 @@ static inline uint32_t calculate_voice_timer_output(volatile channel_state_t *ch
   switch (cur_voice->adsr_state)
   {
   case ADSR_ATTACK:
-    cur_voice->env_target = ((ADSR_RANGE * 1016 * (cur_voice->velocity)) >> 17) + ADSR_MIN; // Calculate the target endpoint
-    cur_voice->env_count++;                                                                 // Increment the current envelope counter
+    cur_voice->env_count += ((cur_voice->velocity >> 1) + 1); // Increment the current envelope counter
+    cur_voice->env_count &= SAMPLE_FREQUENCY_MASK;
 
     // Calculate the envelope (and scale: 10 bits + 10 bits - 17 bits)
-    envelope = ((cur_voice->env_target * attack_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF]) >> 10);
+    envelope = ((cur_voice->env_target * attack_base[cur_voice->env_count]) >> 10);
 
     // Advance to next stage if complete
     if (cur_voice->env_count > SAMPLE_VELOCITY_MASK)
@@ -647,24 +678,16 @@ static inline uint32_t calculate_voice_timer_output(volatile channel_state_t *ch
       cur_voice->adsr_state = ADSR_SUSTAIN;
       cur_voice->env_count = 0;
       cur_voice->env_start = cur_voice->env_target;
+      cur_voice->env_target = ADSR_MID;
     }
 
     break;
   case ADSR_DECAY:
-    cur_voice->env_target = ADSR_MID;
-
-    cur_voice->env_count++; // Increment the current envelope counter
+    cur_voice->env_count += ((cur_voice->velocity >> 1) + 1); // Increment the current envelope counter
+    cur_voice->env_count &= SAMPLE_FREQUENCY_MASK;
 
     // Calculate the envelope (and scale: 10 bits + 10 bits - 10 bits)
-    envelope = (((int32_t)(cur_voice->env_start - cur_voice->env_target)) * decay_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF] >> 10) + ADSR_MID;
-
-    // Advance to next stage if complete
-    if (cur_voice->env_count > SAMPLE_VELOCITY_MASK)
-    {
-      cur_voice->adsr_state = ADSR_SUSTAIN;
-      cur_voice->env_count = 0;
-      cur_voice->env_start = cur_voice->env_target;
-    }
+    envelope = (((int32_t)(cur_voice->env_start - cur_voice->env_target)) * decay_base[cur_voice->env_count] >> 10) + ADSR_MID;
 
     break;
   case ADSR_SUSTAIN:
@@ -672,10 +695,11 @@ static inline uint32_t calculate_voice_timer_output(volatile channel_state_t *ch
     break;
   case ADSR_RELEASE:
     // Increment the current envelope counter
-    cur_voice->env_count++;
+    cur_voice->env_count += ((cur_voice->velocity >> 1) + 1);
+    cur_voice->env_count &= SAMPLE_FREQUENCY_MASK;
 
     // Calculate the envelope (and scale: 10 bits + 10 bits - 10 bits)
-    envelope = ((cur_voice->env_start) * decay_base[cur_voice->env_count >> CHANNEL_SAMPLING_VS_ENVELOPE_DIFF] >> 10);
+    envelope = ((cur_voice->env_start) * decay_base[cur_voice->env_count] >> 10);
 
     // Advance to next stage if complete
     if (cur_voice->env_count > SAMPLE_VELOCITY_MASK)
@@ -703,7 +727,7 @@ static inline uint32_t calculate_voice_timer_output(volatile channel_state_t *ch
     cur_voice->mod_count += (channel->mod >> 9);
     cur_voice->mod_count &= SAMPLE_MODULATION_MASK;
 
-    // Add the modulation (calculate the +2 semitone and scale - scaled by: 9 bits + 10 bits + 10 bits - 9 bits - 10 bits)
+    // Add the modulation (calculate the +2 semitone and scale - scaled by: 9 bits + 10 bits + 10 bits - 9 bits - 20 bits)
     frequency_delta += ((cur_voice->frequency) * (((modulation_base[cur_voice->mod_count >> CHANNEL_SAMPLING_VS_MODULATION_DIFF] - 256) * (TWO_SEMITONE_SCALAR >> 5)) >> (9))) >> 10;
   }
 
@@ -713,7 +737,9 @@ static inline uint32_t calculate_voice_timer_output(volatile channel_state_t *ch
   cur_voice->count += freq;
   cur_voice->count &= SAMPLE_FREQUENCY_MASK;
 
-  output = channel->waveform_data[cur_voice->count >> CHANNEL_SAMPLING_VS_RESOLUTION_DIFF] * envelope;
+  channel->effective_env += envelope;
+
+  output = channel->waveform_data[cur_voice->count] * envelope;
   output >>= 10;
 
   return output;
@@ -734,15 +760,24 @@ static inline void channel_update(volatile channel_state_t *channel)
   else
   {
     uint32_t output = 0;
+    channel->effective_env = 0;
 
     for (uint8_t i = 0; i < channel->num_voices; i++)
     {
       output += calculate_voice_timer_output(channel, i);
     }
 
-    // Scale all the channels down
-    uint8_t scalar = (12 - channel->num_voices) + channel->active_voices;
-    uint32_t ccr = (output * scalar / (12 * channel->active_voices));
+    // ==== Scale all the channels down ====
+    // == Scale By Active Voices ==
+    // uint8_t scalar = (12 - channel->num_voices) + channel->active_voices;
+    // uint32_t ccr = (output * scalar / (12 * channel->active_voices));
+    // == Scale By Envelope
+    // uint32_t ccr = output * channel->effective_env / (ADSR_MAX * channel->active_voices);
+
+    // == Scale By Total Voices ==
+    uint32_t ccr = output / channel->num_voices;
+
+    // ccr = (ccr * channel->volume) / 127;
     // uint16_t ccr = channel->waveform_data[channel->voices[0].count >> 6];
 
     // Update the resultant value in the CCR (modulate timer PWM)
@@ -837,14 +872,14 @@ void channel_timer_init()
   channel_timer_gpio_init();
 
   // Reset all channel structs
-  reset_channel(&channel1_state, CHANNEL1, 8);
-  reset_channel(&channel2_state, CHANNEL2, 4);
-  reset_channel(&channel3_state, CHANNEL3, 4);
-  reset_channel(&channel4_state, CHANNEL4, 4);
-  reset_channel(&channel5_state, CHANNEL5, 4);
-  reset_channel(&channel6_state, CHANNEL6, 4);
-  reset_channel(&channel7_state, CHANNEL7, 4);
-  reset_channel(&channel8_state, CHANNEL8, 1);
+  reset_channel(&channel1_state, CHANNEL1, CHANNEL1_VOICES);
+  reset_channel(&channel2_state, CHANNEL2, CHANNEL2_VOICES);
+  reset_channel(&channel3_state, CHANNEL3, CHANNEL3_VOICES);
+  reset_channel(&channel4_state, CHANNEL4, CHANNEL4_VOICES);
+  reset_channel(&channel5_state, CHANNEL5, CHANNEL5_VOICES);
+  reset_channel(&channel6_state, CHANNEL6, CHANNEL6_VOICES);
+  reset_channel(&channel7_state, CHANNEL7, CHANNEL7_VOICES);
+  reset_channel(&channel8_state, CHANNEL8, CHANNEL8_VOICES);
 
   // Configure Channels 1-4
   CHANNEL1_4_TIMER->PSC = CHANNEL_TIMER_PSC;

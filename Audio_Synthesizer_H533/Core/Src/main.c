@@ -56,6 +56,16 @@ extern volatile channel_state_t channel1_state, channel2_state, channel3_state, 
 
 static const uint16_t baud_rate = 31250;
 
+// Channel Definitions
+#define CHANNEL1_WAVE WAVEFORM_SQUARE
+#define CHANNEL2_WAVE WAVEFORM_RAMP
+#define CHANNEL3_WAVE WAVEFORM_TRIG
+#define CHANNEL4_WAVE WAVEFORM_SINE
+#define CHANNEL5_WAVE WAVEFORM_SQUARE
+#define CHANNEL6_WAVE WAVEFORM_RAMP
+#define CHANNEL7_WAVE WAVEFORM_TRIG
+#define CHANNEL8_WAVE WAVEFORM_NOISE
+
 /* Private function prototypes -----------------------------------------------*/
 
 // Testing functions for UART
@@ -241,42 +251,42 @@ void init_channel_driver()
 
   // Channel 1 Settings
   channel_enable(CHANNEL1);
-  channel_set_waveform(CHANNEL1, WAVEFORM_SQUARE);
+  channel_set_waveform(CHANNEL1, CHANNEL1_WAVE);
   channel_volume(CHANNEL1, 127);
 
   // Channel 2 Settings
   channel_enable(CHANNEL2);
-  channel_set_waveform(CHANNEL2, WAVEFORM_RAMP);
+  channel_set_waveform(CHANNEL2, CHANNEL2_WAVE);
   channel_volume(CHANNEL2, 127);
 
   // Channel 3 Settings
   channel_enable(CHANNEL3);
-  channel_set_waveform(CHANNEL3, WAVEFORM_TRIG);
+  channel_set_waveform(CHANNEL3, CHANNEL3_WAVE);
   channel_volume(CHANNEL3, 127);
 
   // Channel 4 Settings
   channel_enable(CHANNEL4);
-  channel_set_waveform(CHANNEL4, WAVEFORM_SINE);
+  channel_set_waveform(CHANNEL4, CHANNEL4_WAVE);
   channel_volume(CHANNEL4, 127);
 
   // Channel 5 Settings
   channel_enable(CHANNEL5);
-  channel_set_waveform(CHANNEL5, WAVEFORM_SQUARE);
+  channel_set_waveform(CHANNEL5, CHANNEL5_WAVE);
   channel_volume(CHANNEL5, 127);
 
   // Channel 6 Settings
   channel_enable(CHANNEL6);
-  channel_set_waveform(CHANNEL6, WAVEFORM_RAMP);
+  channel_set_waveform(CHANNEL6, CHANNEL6_WAVE);
   channel_volume(CHANNEL6, 127);
 
   // Channel 7 Settings
   channel_enable(CHANNEL7);
-  channel_set_waveform(CHANNEL7, WAVEFORM_TRIG);
+  channel_set_waveform(CHANNEL7, CHANNEL7_WAVE);
   channel_volume(CHANNEL7, 127);
 
   // Channel 8 Settings
   channel_enable(CHANNEL8);
-  channel_set_waveform(CHANNEL8, WAVEFORM_NOISE);
+  channel_set_waveform(CHANNEL8, CHANNEL8_WAVE);
   channel_volume(CHANNEL8, 127);
 }
 

@@ -93,6 +93,8 @@ typedef struct
   uint8_t active_voices;              // Number of active voices
   voice_t voices[MAX_CHANNEL_VOICES]; // Voices for the channel
 
+  uint32_t effective_env; // Effective envelope for the full channel
+
   const unsigned short *waveform_data; // Pointer to the waveform data LUT
 } channel_state_t;
 
