@@ -123,6 +123,3 @@ On the bottom right of the synthesizer board, there are four pins near the MIDI 
 ### PCB Design
 
 ![Front Panel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-PCB.png)
-
-Wiring diagrams
-Flow charts
