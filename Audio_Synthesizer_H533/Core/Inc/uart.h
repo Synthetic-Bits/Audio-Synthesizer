@@ -20,10 +20,12 @@
 #define UART_DISABLE_INTERRUPTS 0
 #define UART_ENABLE_INTERRUPTS 1
 
+#define UART_IQR
+
 // Define the size of the global_receive_buffer
 #define GLOBAL_RECEIVE_BUFFER_SIZE (1024)
 
-#define MIDI_RECEIVE_BUFFER_SIZE (1024 * 8)
+#define MIDI_RECEIVE_BUFFER_SIZE (1024)
 #define MIDI_RECEIVE_BUFFER_MASK (MIDI_RECEIVE_BUFFER_SIZE - 1)
 
 /* ========================================================================== */

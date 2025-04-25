@@ -77,6 +77,7 @@
 #define MIDI_UART_TX_PIN GPIO_PIN_10 // PB10
 #define MIDI_UART_RX_PIN GPIO_PIN_1  // PB1
 #define MIDI_UART_IRQn USART3_IRQn
+#define MIDI_IRQ_PRIORITY 1
 
 /* ========================================================================== */
 /*                                                                            */
