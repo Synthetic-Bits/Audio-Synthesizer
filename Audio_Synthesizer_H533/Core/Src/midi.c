@@ -169,8 +169,19 @@ static void system_message_handler(uint8_t data)
 static inline void set_channel(uint8_t data)
 {
   uint8_t midi_channel = (data & CHANNEL_msk);
-
-  if (midi_channel == 9)
+  if (midi_channel == 15)
+    current_midi.channel = CHANNEL7;
+  else if (midi_channel == 14)
+    current_midi.channel = CHANNEL7;
+  else if (midi_channel == 13)
+    current_midi.channel = CHANNEL7;
+  else if (midi_channel == 12)
+    current_midi.channel = CHANNEL6;
+  else if (midi_channel == 11)
+    current_midi.channel = CHANNEL6;
+  else if (midi_channel == 10)
+    current_midi.channel = CHANNEL6;
+  else if (midi_channel == 9)
     current_midi.channel = CHANNEL8;
   else if (midi_channel > 8)
     current_midi.channel = CHANNEL1; // default channel if channel is out of range
