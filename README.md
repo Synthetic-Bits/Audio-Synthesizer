@@ -51,7 +51,7 @@ Configurable Channel Waveforms
  - Triangle
  - Ramp
  - Square
- - Noise (Restricted to Channel 8)
+ - Noise (restricted to channel 8)
 
 Configurable Voice Channels
 - Channels 1-7 capable of 8 voices
@@ -83,38 +83,35 @@ The rightmost two connectors are the MIDI IN and MIDI OUT connectors. The MIDI I
 
 ![Front Panel Diagram](./Documentation/doc_imgs/Synthesizer-Front_panel.svg)
 
-![Front Panel Img](./Documentation/doc_imgs/Synthesizer-Front_panel.jpeg)
+![Front Panel Image](./Documentation/doc_imgs/Synthesizer-Front_panel.jpeg)
 
 ### Top Down
 
 The rightmost device is the the microcontroller board.  This board connects with the main synthesizer board. The blue dots are where a jumper is set.  The E5V connector is used to let the board know to use the external power. All other jumpers are standard and come with the NUCLEO board and the synthesizer board. The NUCLEO board contains a reset button to reset the program and a User button that is currently not used for the synthesizer. Furthermore, the programming for the NUCLEO board uses a USB type C connector on the bottom of the STM32 board. If the user wants to use USB power for testing or MIDI-OUT the user can change the jumper to 5V-STLINK.
 
-The top left section contains Channel 1-8 models. This module is a low-pass filter and amplifier buffer. The ON/OFF controls the low-pass filter. There is a Volume nob that uses a POT. If the more expensive POTS are not available cheap POTs can be used. If cheaper pots are used the jumper must be moved down. 
+The top left section of the board contains the modules for channels 1-8. Each module consists of a low-pass filter and amplifier buffer. The ON/OFF switch controls the low-pass filter. There is a volume nob that uses a potentiometer to control the channel's volume. If the more expensive potentiometers are not available, cheap potentiometers can be used. If cheaper potentiometers are used, the jumper must be moved down. 
 
-There is a master channel that mixes the above 8 channels and applies an amplifier buffer. There is also a Volume nob using a POT.
+The board also has a master channel that mixes and mixes the eight synthesizer channels. The master channel also contains a volume nob using a potentiometer.
 
-Other Pins on this board were not mentioned above. Some of these are not Jumpers but Debug ports such as the pins near the capacitors near the +15V and -15V.
+There are pins on the main synthesizer board not mentioned above (such as the pins near the capacitors near the +15V and -15V.)  These pins are used for debugging the board.
 
-On the bottom right there are 4 pins near the MIDI IN that can also be used to send MIDI data from a computer using UART. These pins are labeled 3V, RX, TX, and GND.
+On the bottom right of the synthesizer board, there are four pins near the MIDI IN that can also be used to send MIDI data from a computer using MIDI-over-UART. These pins are labeled 3V, RX, TX, and GND.
 
-![Front panel Diagram](./Documentation/doc_imgs/Synthesizer-top_panel.svg)
-![Front panel Img](./Documentation/doc_imgs/Synthesizer-top_panel.png)
+![Front Panel Diagram](./Documentation/doc_imgs/Synthesizer-top_panel.svg)
+
+![Front Panel Image](./Documentation/doc_imgs/Synthesizer-top_panel.png)
 
 ## Board Schematic and PCB
 
 ### Schematics
-![Front panel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-schematic.png)
-![Front panel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-schematic2.png)
+
+![Front Panel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-schematic.png)
+
+![Front Panel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-schematic2.png)
 
 ### PCB Design
-![Front panel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-PCB.png)
 
-## Temporary
+![Front Panel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-PCB.png)
 
-This section is notes for us so we don't forget to include things in this document/the rest of the documentation.
-
-Basic instructions on how to set it up
 Wiring diagrams
-Schematics
 Flow charts
-Make sure it's organized and written such that it could be of use to an internet stranger interested in the project.
