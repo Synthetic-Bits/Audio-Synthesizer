@@ -86,9 +86,9 @@ void channel_timer_init();
 #define CHANNEL2_VOICES 4
 #define CHANNEL3_VOICES 4
 #define CHANNEL4_VOICES 4
-#define CHANNEL5_VOICES 1
-#define CHANNEL6_VOICES 1
-#define CHANNEL7_VOICES 1
+#define CHANNEL5_VOICES 4
+#define CHANNEL6_VOICES 4
+#define CHANNEL7_VOICES 4
 #define CHANNEL8_VOICES 1
 #else
 #define CHANNEL1_VOICES 8
@@ -782,6 +782,37 @@ static inline void channel_update(volatile channel_state_t *channel)
 
     // Update the resultant value in the CCR (modulate timer PWM)
     channel_update_CCR(channel->channel, ccr);
+
+    switch (channel->channel)
+    {
+    case CHANNEL1:
+      HAL_GPIO_WritePin(DEBUG_LED_PORT1, DEBUG_LED0_PIN, channel->active_voices);
+      break;
+    case CHANNEL2:
+      HAL_GPIO_WritePin(DEBUG_LED_PORT1, DEBUG_LED1_PIN, channel->active_voices);
+      break;
+    case CHANNEL3:
+      HAL_GPIO_WritePin(DEBUG_LED_PORT2, DEBUG_LED2_PIN, channel->active_voices);
+      break;
+    case CHANNEL4:
+      HAL_GPIO_WritePin(DEBUG_LED_PORT1, DEBUG_LED3_PIN, channel->active_voices);
+      break;
+    case CHANNEL5:
+      HAL_GPIO_WritePin(DEBUG_LED_PORT1, DEBUG_LED4_PIN, channel->active_voices);
+      break;
+    case CHANNEL6:
+      HAL_GPIO_WritePin(DEBUG_LED_PORT3, DEBUG_LED5_PIN, channel->active_voices);
+      break;
+    case CHANNEL7:
+      HAL_GPIO_WritePin(DEBUG_LED_PORT3, DEBUG_LED6_PIN, channel->active_voices);
+      break;
+    case CHANNEL8:
+      HAL_GPIO_WritePin(DEBUG_LED_PORT1, DEBUG_LED7_PIN, channel->active_voices);
+      break;
+    default:
+
+      break;
+    }
   }
 }
 
@@ -860,6 +891,31 @@ static void channel_timer_gpio_init()
       GPIO_SPEED_FREQ_HIGH};
 
   HAL_GPIO_Init(CHANNEL8_GPIO_PORT, &initChannel8);
+
+  // LEDs
+  GPIO_InitTypeDef initLEDC = {
+      DEBUG_LED0_PIN | DEBUG_LED1_PIN | DEBUG_LED3_PIN | DEBUG_LED4_PIN | DEBUG_LED5_PIN | DEBUG_LED8_PIN | DEBUG_LED9_PIN | DEBUG_LED10_PIN | DEBUG_LED11_PIN,
+      GPIO_MODE_OUTPUT_OD,
+      GPIO_NOPULL,
+      GPIO_SPEED_FREQ_HIGH};
+
+  HAL_GPIO_Init(DEBUG_LED_PORT1, &initLEDC);
+
+  GPIO_InitTypeDef initLEDA = {
+      DEBUG_LED2_PIN,
+      GPIO_MODE_OUTPUT_OD,
+      GPIO_NOPULL,
+      GPIO_SPEED_FREQ_HIGH};
+
+  HAL_GPIO_Init(DEBUG_LED_PORT2, &initLEDA);
+
+  GPIO_InitTypeDef initLEDF = {
+      DEBUG_LED6_PIN | DEBUG_LED7_PIN,
+      GPIO_MODE_OUTPUT_OD,
+      GPIO_NOPULL,
+      GPIO_SPEED_FREQ_HIGH};
+
+  HAL_GPIO_Init(DEBUG_LED_PORT3, &initLEDF);
 }
 
 void channel_timer_init()

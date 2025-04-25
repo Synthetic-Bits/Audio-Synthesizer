@@ -85,9 +85,9 @@
 /*                                                                            */
 /* ========================================================================== */
 
-#define DEBUG_LED_PORT1 PORTC
-#define DEBUG_LED_PORT2 PORTA
-#define DEBUG_LED_PORT3 PORTF
+#define DEBUG_LED_PORT1 GPIOC
+#define DEBUG_LED_PORT2 GPIOA
+#define DEBUG_LED_PORT3 GPIOF
 
 #define DEBUG_LED0_PIN GPIO_PIN_10 // PC10
 #define DEBUG_LED1_PIN GPIO_PIN_12 // PC11
