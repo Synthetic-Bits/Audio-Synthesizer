@@ -383,7 +383,14 @@ static inline void process_state()
     {
       set_velocity(data);
       current_midi.frequency = midi_note_get_frequency(current_midi.keynumber);
-      voice_add_freq(current_midi.frequency, voice_channels[current_midi.channel], voice_channel_map[current_midi.channel], current_midi.channel);
+      if (current_midi.velocity == 0)
+      {
+        voice_remove_freq(current_midi.frequency, voice_channels[current_midi.channel], voice_channel_map[current_midi.channel], current_midi.channel);
+      }
+      else
+      {
+        voice_add_freq(current_midi.frequency, voice_channels[current_midi.channel], voice_channel_map[current_midi.channel], current_midi.channel);
+      }
       midi_state = UNKNOWN_STATE;
     }
     break;
@@ -483,7 +490,7 @@ static inline void process_state()
     else if (midi_step == 2)
     {
       set_pitchbendmsb(data);
-      // channel_voice_modulation(current_midi.channel, ((uint16_t)current_midi.pitchbendmsb << 7) | current_midi.pitchbendlsb));
+      channel_modulation(current_midi.channel, ((uint16_t)current_midi.pitchbendmsb << 7) | current_midi.pitchbendlsb);
       midi_state = UNKNOWN_STATE;
     }
     break;
