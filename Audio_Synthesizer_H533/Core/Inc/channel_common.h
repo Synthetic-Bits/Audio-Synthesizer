@@ -22,6 +22,8 @@
 
 #define MAX_CHANNEL_VOICES 8
 
+#define CHANNEL_VOICE_AVERAGES 1024
+
 #define ADSR_MIN (uint16_t)(0.4 * 1024)
 #define ADSR_MID (uint16_t)(0.7 * 1024)
 #define ADSR_MAX (uint16_t)(1024)

@@ -740,7 +740,7 @@ static inline void channel_update(volatile channel_state_t *channel)
     }
 
     // Scale all the channels down
-    uint16_t ccr = output / channel->active_voices;
+    uint32_t ccr = output / channel->active_voices;
     // uint16_t ccr = channel->waveform_data[channel->voices[0].count >> 6];
 
     // Update the resultant value in the CCR (modulate timer PWM)
