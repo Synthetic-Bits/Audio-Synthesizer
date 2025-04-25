@@ -44,48 +44,82 @@ extern volatile uint8_t midi_receive_buffer[MIDI_RECEIVE_BUFFER_SIZE];
 
 static volatile midi_t current_midi;
 static volatile midi_state_t midi_state;
-static volatile uint8_t midi_step;
 
-static inline uint8_t get_statuscode(uint8_t data)
+static volatile uint8_t midi_step;
+static volatile midi_mode_state_t control_mode;
+
+static inline uint8_t
+get_statuscode(uint8_t data)
 {
   return ((data & MESSAGETYPE_msk) >> 4);
 }
 
 // helper functions--------------------------------------------------------------
 
-static void channel_mode_messages_handler(uint8_t data)
+static inline void channel_mode_messages_handler_0(uint8_t data)
 {
-  // if((data[index + 1] == 0b01111010) && (data[index + 2] == 0b00000000))
-  // {
-  //     //printf("Local Control  Off\n");
-  //     //Local Control  Off
-  // }
-  // if((data[index + 1] == 0b01111010) && (data[index + 2] == 0b01111111))
-  // {
-  //     //printf("Local Control  On\n");
-  //     //Local Control  On
-  // }
-  // if((data[index + 1] == 0b01111011) && (data[index + 2] == 0b00000000))
-  // {
-  //     //printf("All Notes Off\n");
-  //     //All Notes Off
-  // }
-  // if((data[index + 1] == 0b01111100) && (data[index + 2] == 0b00000000))
-  // {
-  //     //printf("Omni Mode Off\n");
-  //     //Omni Mode Off
-  // }
-  // if((data[index + 1] == 0b01111101) && (data[index + 2] == 0b00000000))
-  // {
-  //     //printf("Omni Mode ON\n");
-  //     //Omni Mode ON
-  // }
-  // if(data[index + 1] == 0b01111110)
-  // {
-  //     number_of_channels = (data[index + 2] & NUMBER_OF_CHANNELS_msk);
-  //     //printf("Mono mode On\n\tnumber of channels:0x%02X\n", number_of_channels);
-  //     //Mono mode On
-  // }
+  switch (data)
+  {
+  case LOCAL_CONTROL_ON_OFF:
+    control_mode = LOCAL_CONTROL_ON_OFF_STATE;
+    break;
+  case ALL_NOTES_OFF_0:
+    control_mode = ALL_NOTES_OFF_STATE;
+    break;
+  case OMNI_MODE_OFF_0:
+    control_mode = OMNI_MODE_OFF_STATE;
+    break;
+  case OMNI_MODE_ON_0:
+    control_mode = OMNI_MODE_ON_STATE;
+    break;
+  case MONO_MODE_ON_0:
+    control_mode = MONO_MODE_ON_STATE;
+    break;
+  case POLY_MODE_ON_0:
+    control_mode = POLY_MODE_ON_STATE;
+    break;
+  default:
+    break;
+  }
+}
+
+static inline void channel_mode_message_handler_1(uint8_t data)
+{
+  switch (control_mode)
+  {
+  case LOCAL_CONTROL_ON_OFF_STATE:
+    if (data == LOCAL_CONTROL_OFF)
+    {
+    }
+    else if (data == LOCAL_CONTROL_ON)
+    {
+    }
+    break;
+  case ALL_NOTES_OFF_STATE:
+    if (data == ALL_NOTES_OFF_1)
+    {
+    }
+    break;
+  case OMNI_MODE_OFF_STATE:
+    if (data == OMNI_MODE_OFF_1)
+    {
+    }
+    break;
+  case OMNI_MODE_ON_STATE:
+    if (data == OMNI_MODE_ON_1)
+    {
+    }
+    break;
+  case MONO_MODE_ON_STATE:
+    // number_of_channels = (data & NUMBER_OF_CHANNELS_msk);
+  case POLY_MODE_ON_STATE:
+    if (data == POLY_MODE_ON_1)
+    {
+    }
+    break;
+  default:
+    break;
+  }
 }
 
 static void system_message_handler(uint8_t data)
@@ -392,25 +426,21 @@ static inline void process_state()
       midi_state = UNKNOWN_STATE;
     }
     break;
-  case CONTROL_CHANGE_STATE:
+  case CONTROL_MODE_STATE:
     if (midi_step == 0)
     {
       set_channel(data);
-      channel_mode_messages_handler(data);
       midi_step++;
     }
     else if (midi_step == 1)
     {
-      channel_mode_messages_handler(data);
+      channel_mode_messages_handler_0(data);
+      set_addressofcontrol(data);
       midi_step++;
     }
     else if (midi_step == 2)
     {
-      set_addressofcontrol(data);
-      midi_step++;
-    }
-    else if (midi_step == 3)
-    {
+      channel_mode_messages_handler_1(data);
       set_valueofcontroloutput(data);
       midi_state = UNKNOWN_STATE;
     }
@@ -482,8 +512,8 @@ static void update_state()
   case POLYPHONIC_KEY_PRESSURE:
     midi_state = POLYPHONIC_KEY_PRESSURE_STATE;
     break;
-  case CONTROL_CHANGE:
-    midi_state = CONTROL_CHANGE_STATE;
+  case CONTROL_MODE:
+    midi_state = CONTROL_MODE_STATE;
     break;
   case PROGRAM_CHANGE:
     midi_state = PROGRAM_CHANGE_STATE;

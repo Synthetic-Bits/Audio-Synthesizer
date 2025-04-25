@@ -16,11 +16,30 @@
 #define NOTE_ON_EVENT (0b1001)
 #define NOTE_OFF_EVENT (0b1000)
 #define POLYPHONIC_KEY_PRESSURE (0b1010)
-#define CONTROL_CHANGE (0b1011)
+#define CONTROL_MODE (0b1011)
 #define PROGRAM_CHANGE (0b1100)
 #define CHANNEL_PRESSURE (0b1101)
 #define PITCH_BEND (0b1110)
 #define SYSTEM_MESSAGE (0b1111)
+
+// Channel Voice
+#define LOCAL_CONTROL_ON_OFF (0b01111010)
+#define LOCAL_CONTROL_OFF (0b00000000)
+#define LOCAL_CONTROL_ON (0b01111111)
+
+#define ALL_NOTES_OFF_0 (0b01111011)
+#define ALL_NOTES_OFF_1 (0b00000000)
+
+#define OMNI_MODE_OFF_0 (0b01111100)
+#define OMNI_MODE_OFF_1 (0b00000000)
+
+#define OMNI_MODE_ON_0 (0b01111101)
+#define OMNI_MODE_ON_1 (0b00000000)
+
+#define MONO_MODE_ON_0 (0b01111110)
+
+#define POLY_MODE_ON_0 (0b01111111)
+#define POLY_MODE_ON_1 (0b00000000)
 
 // midi bit masks------------------------------------------------------------------
 #define MESSAGETYPE_msk (0xf0) // non 0x7f, 0d127
