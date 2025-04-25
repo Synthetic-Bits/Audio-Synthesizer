@@ -20,7 +20,7 @@
 #ifndef _CHANNEL_COMMON_H_
 #define _CHANNEL_COMMON_H_
 
-#define MAX_CHANNEL_VOICES 4
+#define MAX_CHANNEL_VOICES 8
 
 #define ADSR_MIN (uint16_t)(0.4 * 1024)
 #define ADSR_MID (uint16_t)(0.7 * 1024)

@@ -83,7 +83,7 @@ static inline void channel_mode_messages_handler_0(uint8_t data)
   }
 }
 
-static inline void channel_mode_message_handler_1(uint8_t data)
+static inline void channel_mode_messages_handler_1(uint8_t data)
 {
   switch (control_mode)
   {
@@ -170,8 +170,10 @@ static inline void set_channel(uint8_t data)
 {
   uint8_t midi_channel = (data & CHANNEL_msk);
 
-  if (midi_channel > 8)
-    current_midi.channel = CHANNEL8; // default channel if channel is out of range
+  if (midi_channel == 9)
+    current_midi.channel = CHANNEL8;
+  else if (midi_channel > 8)
+    current_midi.channel = CHANNEL1; // default channel if channel is out of range
   else
     current_midi.channel = midi_channel;
 }

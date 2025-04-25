@@ -835,13 +835,13 @@ void channel_timer_init()
   channel_timer_gpio_init();
 
   // Reset all channel structs
-  reset_channel(&channel1_state, CHANNEL1, 4);
+  reset_channel(&channel1_state, CHANNEL1, 8);
   reset_channel(&channel2_state, CHANNEL2, 4);
   reset_channel(&channel3_state, CHANNEL3, 4);
   reset_channel(&channel4_state, CHANNEL4, 4);
-  reset_channel(&channel5_state, CHANNEL5, 1);
-  reset_channel(&channel6_state, CHANNEL6, 1);
-  reset_channel(&channel7_state, CHANNEL7, 1);
+  reset_channel(&channel5_state, CHANNEL5, 4);
+  reset_channel(&channel6_state, CHANNEL6, 4);
+  reset_channel(&channel7_state, CHANNEL7, 4);
   reset_channel(&channel8_state, CHANNEL8, 1);
 
   // Configure Channels 1-4
