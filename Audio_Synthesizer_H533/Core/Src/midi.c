@@ -460,7 +460,7 @@ static inline void process_state()
     else if (midi_step == 2)
     {
       set_pitchbendmsb(data);
-      // channel_voice_modulation(current_midi.channel, ((uint16_t)current_midi.pitchbendmsb << 7) | current_midi.pitchbendlsb));
+      channel_modulation(current_midi.channel, ((uint16_t)current_midi.pitchbendmsb << 7) | current_midi.pitchbendlsb);
       midi_state = UNKNOWN_STATE;
     }
     break;
