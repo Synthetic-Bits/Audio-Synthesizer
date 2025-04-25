@@ -326,7 +326,7 @@ int main(void)
   // -== AUDIO SYNTHESIS & MIDI PROCESSING ==--
   start_audio_synthesis();
 
-  midi_channle_voice_init();
+  midi_channel_voice_init();
 
   // Main Processing Loop
   while (1)

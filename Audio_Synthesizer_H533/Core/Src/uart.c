@@ -160,8 +160,6 @@ void configure_MIDI_UART(unsigned int baud_rate, uint8_t enable_interrupts, uint
     {
         MIDI_UART->CR1 &= ~(USART_CR1_RXNEIE);
         MIDI_UART->CR1 |= (USART_CR1_RXNEIE);
-        MIDI_UART->CR1 &= ~(USART_CR1_IDLEIE);
-        MIDI_UART->CR1 |= (USART_CR1_IDLEIE);
     }
 
     // Enable the transmitter and receiver hardware in MIDI_UART

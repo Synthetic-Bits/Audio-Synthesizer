@@ -7,7 +7,7 @@
 
 void setup_midi(void);
 void midi_process();
-void midi_channle_voice_init(void);
+void midi_channel_voice_init(void);
 
 typedef struct
 {

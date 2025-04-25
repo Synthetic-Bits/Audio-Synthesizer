@@ -396,6 +396,7 @@ static inline void process_state()
     if (midi_step == 0)
     {
       set_channel(data);
+      channel_mode_messages_handler(data);
       midi_step++;
     }
     else if (midi_step == 1)
@@ -403,12 +404,12 @@ static inline void process_state()
       channel_mode_messages_handler(data);
       midi_step++;
     }
-    else if (midi_step == 3)
+    else if (midi_step == 2)
     {
       set_addressofcontrol(data);
       midi_step++;
     }
-    else if (midi_step == 4)
+    else if (midi_step == 3)
     {
       set_valueofcontroloutput(data);
       midi_state = UNKNOWN_STATE;
@@ -467,13 +468,13 @@ static void update_state()
 {
   midi_step = 0;
 
-  switch (get_statuscode(midi_receive_tail))
+  switch (get_statuscode(midi_receive_buffer[midi_receive_tail]))
   {
   case SYSTEM_MESSAGE:
     midi_state = SYSTEM_MESSAGE_STATE;
     break;
   case NOTE_ON_EVENT:
-    midi_state = NOTE_OFF_EVENT_STATE;
+    midi_state = NOTE_ON_EVENT_STATE;
     break;
   case NOTE_OFF_EVENT:
     midi_state = NOTE_OFF_EVENT_STATE;
