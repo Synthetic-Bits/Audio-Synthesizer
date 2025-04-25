@@ -95,8 +95,8 @@ On the bottom right there are 4 pins near the MIDI IN that can also be used to s
 ![Front Pannel Diagram](./Documentation/doc_imgs/Synthesizer-top_pannel.svg)
 ![Front Pannel Img](./Documentation/doc_imgs/Synthesizer-top_pannel.png)
 
-## Board Schmatic and PCB
-### Schmatic
+## Board Schematic and PCB
+### Schematic
 ![Front Pannel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-schematic.png)
 ![Front Pannel Diagram](./Documentation/doc_imgs/MIDI-Synthesizer-schematic2.png)
 ### PCB
