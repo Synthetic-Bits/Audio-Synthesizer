@@ -17,11 +17,11 @@ from mido import MidiFile, bpm2tempo
 from mido.ports import BaseOutput
 
 # Global variables
-SONG_PATH = "./songs/garden.mid"
+SONG_PATH = "./songs/gusty.mid"
 UART_PORT = "COM5"
 CONSOLE_LOGGING = True
 CHANGE_BPM = False
-BPM = 180
+BPM = 120
 
 class UARTPort(BaseOutput):
     '''
