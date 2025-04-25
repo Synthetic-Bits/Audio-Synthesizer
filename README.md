@@ -59,21 +59,20 @@ Configurable Voice Channels
 
 ## Setup Guide
 
-1. Put the NUCLEO on the PCB.
-2. Make sure the jumper on the NUCLEO is set to E5V to use external power.
-3. Hook up the +15V, GND, -15V, GND from the power supply to the board. Make sure the power supply is off and to double check wiring is correct, before turning it on.
-4. Hook up an 8 Ohm Speaker to the board.
-5. Configure your low-pass filters as desired, per channel instrument.
-6. it is recommended to turn off the volume of each channel and set the master to 50%. Turn up the volume per channel to mix the audio to sound good.
-7. Connect MIDI (either with the keyboard or other MIDI-compliant devices or through the pin headers)
-8. if using a computer you can connect a USB to a MIDI adapter or use an FTDI with the Python code with a MIDI file. Connect the TX of the FTDI to the RX pin on the board, and connect GND to GND from the FTDI and the board. See the below picture to see what pins are.
-9. Flash the NUCLEO, using the USB-C STLK connector.
-10. Send MIDI to the board. Mix each of the channels as well as the master channel as desired.
-11. _Caution_, the class AB amplifier gets really hot, really quickly. Don't burn yourself or the board! It is highly recommended to have a large heat sink.
-
-Maybe a flow-diagram of the process would be nice here?
-
-Showcase what needs to be connected on a picture of the PCB?
+1. Put the STM32H533RE (NUCLEO) board (white) on the synthesizer PCB (black) as seen in the below diagrams.
+2. Make sure that the jumper cable on the STM32H533RE (NUCLEO) board is set to the E5V to use external power for the board and PCB system.
+3. Connect the +15V, GND, -15V, GND from the power supply to the board. Ensure that the power supply is off and to double check wiring is correct, before turning it on.
+4. Connect an 8 Ohm speaker to the board.
+5. Configure your low-pass filters as desired, per channel.
+    - It's recommended to turn off the volume of each channel and set the master to 50%. 
+    - Mix the audio as desired by turning up the volume per channel.
+6. Connect the MIDI input to the PCB (either with a MIDI-compliant devices or through the pin headers)
+    - If a computer is being used to stream MIDI over UART, you can use the provided Python code to stream a MIDI file to the synthesizer. See the below diagram for what pins should be connected.
+7. Flash the NUCLEO board using the USB-C STLINK connector.
+8. Send your MIDI input to the board. 
+    - Mix each of the channels as well as the master channel as desired.
+9. _Caution_, the class AB amplifier gets really hot, really quickly. Don't burn yourself or the board! 
+    - It is highly recommended to have a large heat sink.
 
 ## Board 
 
