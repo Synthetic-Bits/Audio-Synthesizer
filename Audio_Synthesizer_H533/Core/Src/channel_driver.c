@@ -270,9 +270,6 @@ void channel_voice_on(channel_t channel, uint8_t voice)
   switch (channel)
   {
   case CHANNEL1:
-    if (channel1_state.voices[voice].velocity == 0)
-      channel_voice_off(channel, voice);
-
     channel1_state.voices[voice].on_off = 1;
     channel1_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel1_state.voices[voice].mod_count = 0;
@@ -291,11 +288,6 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     }
     break;
   case CHANNEL2:
-    if (channel2_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-
     channel2_state.voices[voice].on_off = 1;
     channel2_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel2_state.voices[voice].mod_count = 0;
@@ -314,11 +306,6 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     }
     break;
   case CHANNEL3:
-    if (channel3_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-
     channel3_state.voices[voice].on_off = 1;
     channel3_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel3_state.voices[voice].mod_count = 0;
@@ -337,11 +324,6 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     }
     break;
   case CHANNEL4:
-    if (channel4_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-
     channel4_state.voices[voice].on_off = 1;
     channel4_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel4_state.voices[voice].mod_count = 0;
@@ -360,11 +342,6 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     }
     break;
   case CHANNEL5:
-    if (channel5_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-
     channel5_state.voices[voice].on_off = 1;
     channel5_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel5_state.voices[voice].mod_count = 0;
@@ -383,11 +360,6 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     }
     break;
   case CHANNEL6:
-    if (channel6_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-
     channel6_state.voices[voice].on_off = 1;
     channel6_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel6_state.voices[voice].mod_count = 0;
@@ -406,11 +378,6 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     }
     break;
   case CHANNEL7:
-    if (channel7_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-
     channel7_state.voices[voice].on_off = 1;
     channel7_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel7_state.voices[voice].mod_count = 0;
@@ -429,11 +396,6 @@ void channel_voice_on(channel_t channel, uint8_t voice)
     }
     break;
   case CHANNEL8:
-    if (channel8_state.voices[voice].velocity == 0)
-    {
-      channel_voice_off(channel, voice);
-    }
-
     channel8_state.voices[voice].on_off = 1;
     channel8_state.voices[voice].count = 0; // Reset the counter when starting a new tone
     channel8_state.voices[voice].mod_count = 0;

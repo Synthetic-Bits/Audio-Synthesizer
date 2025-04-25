@@ -256,22 +256,22 @@ void init_channel_driver()
 
   // Channel 4 Settings
   channel_enable(CHANNEL4);
-  channel_set_waveform(CHANNEL4, WAVEFORM_SQUARE);
+  channel_set_waveform(CHANNEL4, WAVEFORM_SINE);
   channel_volume(CHANNEL4, 127);
 
   // Channel 5 Settings
   channel_enable(CHANNEL5);
-  channel_set_waveform(CHANNEL5, WAVEFORM_RAMP);
+  channel_set_waveform(CHANNEL5, WAVEFORM_SQUARE);
   channel_volume(CHANNEL5, 127);
 
   // Channel 6 Settings
   channel_enable(CHANNEL6);
-  channel_set_waveform(CHANNEL6, WAVEFORM_TRIG);
+  channel_set_waveform(CHANNEL6, WAVEFORM_RAMP);
   channel_volume(CHANNEL6, 127);
 
   // Channel 7 Settings
   channel_enable(CHANNEL7);
-  channel_set_waveform(CHANNEL7, WAVEFORM_SQUARE);
+  channel_set_waveform(CHANNEL7, WAVEFORM_TRIG);
   channel_volume(CHANNEL7, 127);
 
   // Channel 8 Settings
